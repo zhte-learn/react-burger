@@ -1,0 +1,41 @@
+.container {
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  --scrollbar-color-thumb: #8585AD;
+  --scrollbar-color-track: #2F2F37;
+  --scrollbar-width: thin;
+  --scrollbar-width-legacy: 10px;
+  overflow: auto;
+  overflow-x: hidden;
+  scrollbar-color: #8585AD #2F2F37; 
+  scrollbar-width: thin; 
+  scrollbar-gutter: stable;
+
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+}
+
+.options {
+  
+  color: red;
+  
+}
+
+.order {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 40px;
+}
+

@@ -1,0 +1,23 @@
+.content {
+  width: 520px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.detailsItem {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+}

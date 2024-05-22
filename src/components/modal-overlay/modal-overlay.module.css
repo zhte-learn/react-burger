@@ -1,0 +1,11 @@
+.overlay {
+  background-color: rgb(92, 92, 92, .9);
+  width: 100vw;
+  height: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  z-index: 9;
+}
+

@@ -1,0 +1,34 @@
+.block {
+  width: 536px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 20px;
+  background-color: #1c1c21;
+}
+
+.subBlock {
+  display: flex;
+  align-items: center;
+}
+
+.image {
+  width: 80px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.name {
+  width: 220px;
+  height: 48px;
+  cursor: pointer;
+}
+
+.dotsHidden {
+  visibility: hidden;
+}
+
+.dotsActive {
+  visibility: initial;
+}

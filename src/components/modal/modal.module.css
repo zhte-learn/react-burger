@@ -1,0 +1,39 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  width: 720px;
+  height: fit-content;
+  margin: auto;
+  background-color: #000;
+  border-radius: 30px;
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerHidden {
+  visibility: hidden;
+}
+
+.image {
+  display: block;
+  width: 520px;
+  margin: 0 auto;
+}
+
+.orderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.orderNumber {
+  text-shadow: 0 0 32px rgb(51, 51, 255);
+}
