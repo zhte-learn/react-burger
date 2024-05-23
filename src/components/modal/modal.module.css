@@ -18,22 +18,3 @@
   align-items: center;
 }
 
-.headerHidden {
-  visibility: hidden;
-}
-
-.image {
-  display: block;
-  width: 520px;
-  margin: 0 auto;
-}
-
-.orderContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.orderNumber {
-  text-shadow: 0 0 32px rgb(51, 51, 255);
-}

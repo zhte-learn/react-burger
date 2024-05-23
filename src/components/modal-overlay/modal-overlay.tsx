@@ -1,7 +1,5 @@
 import React from "react";
-import Modal from "../modal/modal";
 import overlayStyles from './modal-overlay.module.css';
-import BurgerIngredient from "../../utils/ingredient-interface";
 
 interface ModalOverlayProps {
   onClose: () => void,
@@ -13,7 +11,6 @@ function ModalOverlay(props: ModalOverlayProps) {
     <div className={ overlayStyles.overlay } onClick={ props.onClose }>
       {props.children}
     </div>    
-    
   )
 }
 

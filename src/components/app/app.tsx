@@ -1,16 +1,16 @@
 import React from 'react';
-/*import data from '../../utils/data';*/
 import BurgerIngredient from "../../utils/ingredient-interface";
 import styles from './app.module.css';
 import AppHeader from '../header/header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
+import IngredientDetails from "../ingredient-details/ingredient-details";
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import Modal from '../modal/modal';
 import Loader from '../loader/loader';
+import successSign from "../../images/success.png";
 
 const url = "https://norma.nomoreparties.space/api/ingredients";
-
 
 function App() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -145,72 +145,79 @@ function App() {
     <>
       <AppHeader />
 
-      {error ? (
-        <>
-          <div>Что-то пошло не так</div>
-          <div>{error}</div> 
-        </>
-      ) : isLoading ? (
-          <Loader />
-          ) : ingredients && ingredients.length ? (
-            <main>
-              <div className={ styles.mainContainer }>
-                <BurgerIngredients 
-                  ingredients = { ingredients }
-                  onIngredientClick={ handleIngredientClick }
-                />
-                <BurgerConstructor 
-                  ingredients = { order }
-                  onIngredientClick={ handleIngredientClick }
-                  onMakeOrderClick={ handleMakeOrderClick }
-                />
-              </div>
-            </main>
-            ) : (
-              <p>No ingredients...</p>
-            )
+      {error 
+        ? (
+            <>
+              <div>Что-то пошло не так</div>
+              <div>{error}</div> 
+            </>
+          ) : isLoading ? (
+              <Loader />
+              ) : ingredients && ingredients.length ? (
+                <main>
+                  <div className={ styles.mainContainer }>
+                    <BurgerIngredients 
+                      ingredients = { ingredients }
+                      onIngredientClick={ handleIngredientClick }
+                    />
+                    <BurgerConstructor 
+                      ingredients = { order }
+                      onIngredientClick={ handleIngredientClick }
+                      onMakeOrderClick={ handleMakeOrderClick }
+                    />
+                  </div>
+                </main>
+                ) 
+        : (<p>No ingredients...</p>)
       }
       
       {isModalOpen &&
         <ModalOverlay onClose={ closeModal }>
-          <Modal 
-            ingredient={ clickedIngredient } 
-            onClose={ closeModal }
-            orderNumber={ orderNumber }
-          />
+          {
+            clickedIngredient 
+            ?
+            <Modal 
+              ingredient={ clickedIngredient } 
+              onClose={ closeModal }
+              orderNumber={ "" }
+              title={"Детали ингредиента"}>
+                <>
+                  <img 
+                    className={ styles.modalImage }
+                    src={ clickedIngredient.image_large } 
+                    alt={ clickedIngredient.name } 
+                  />
+
+                  <IngredientDetails 
+                    name={clickedIngredient.name}
+                    fat={clickedIngredient.fat}
+                    carbohydrates={clickedIngredient.carbohydrates}
+                    calories={clickedIngredient.calories}
+                    proteins={clickedIngredient.proteins}
+                  />
+                </>
+            </Modal>
+            :
+            <Modal 
+              ingredient={ null } 
+              onClose={ closeModal }
+              orderNumber={ orderNumber }
+              title={""}>
+                <div className={ styles.orderContainer }>
+                  <p className={`${ styles.orderNumber } text text_type_digits-large`}>
+                    { orderNumber }
+                  </p>
+                  <p className="text text_type_main-medium">идентификатор заказа</p>
+                  <img className="mt-15" src={ successSign } alt={ "Подтверждение заказа" } />
+                  <p className="mt-15 text text_type_main-small">Ваш заказ начали готовить заказа</p>
+                  <p className="mt-2 text text_type_main-small text_color_inactive">Дождитесь готовности на орбитальной станции</p>
+                </div>
+            </Modal>
+          }
         </ModalOverlay>
-      }
-        
+      }  
     </>
-    
   );
 }
 
 export default App;
-
-
-
-/*<div className={ styles.page }>
-        {error ? (
-          <div>Что-то пошло не так</div>
-          <div>{error.message}</div>
-
-        ) : isLoading ? (
-          <div>Поиск...</div>
-        )
-        ingredients && ingredients.length ? (
-          <main>
-            <div className={ styles.mainContainer }>
-              <BurgerIngredients 
-                ingredients = { ingredients }
-                onIngredientClick={ handleIngredientClick }
-              />
-              <BurgerConstructor 
-                ingredients = { order }
-                onIngredientClick={ handleIngredientClick }
-                onMakeOrderClick={ handleMakeOrderClick }
-              />
-            </div>
-          </main>
-        )
-        }*/
