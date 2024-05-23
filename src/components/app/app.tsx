@@ -5,7 +5,6 @@ import AppHeader from '../header/header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import ModalOverlay from '../modal-overlay/modal-overlay';
 import Modal from '../modal/modal';
 import Loader from '../loader/loader';
 import order from '../../utils/order';
@@ -92,38 +91,32 @@ function App() {
         : (<p>No ingredients...</p>)
       }
       
-      {isModalOpen &&
-        <ModalOverlay onClose={ closeModal }>
-          {
-            clickedIngredient 
-            ?
-            <Modal 
-              ingredient={ clickedIngredient } 
-              onClose={ closeModal }
-              orderNumber={ "" }
-              title={"Детали ингредиента"}>
-                
-                <IngredientDetails 
-                  image={clickedIngredient.image_large}
-                  name={clickedIngredient.name}
-                  fat={clickedIngredient.fat}
-                  carbohydrates={clickedIngredient.carbohydrates}
-                  calories={clickedIngredient.calories}
-                  proteins={clickedIngredient.proteins}
-                />
-                
-            </Modal>
-            :
-            <Modal 
-              ingredient={ null } 
-              onClose={ closeModal }
-              orderNumber={ orderNumber }
-              title={""}>
-                <OrderDetails orderNumber={orderNumber}/>
-            </Modal>
-          }
-        </ModalOverlay>
-      }  
+      {isModalOpen && (
+        clickedIngredient 
+        ? (
+          <Modal 
+            ingredient={ clickedIngredient } 
+            onClose={ closeModal }
+            orderNumber={ "" }
+            title={"Детали ингредиента"}>
+              <IngredientDetails 
+                image={clickedIngredient.image_large}
+                name={clickedIngredient.name}
+                fat={clickedIngredient.fat}
+                carbohydrates={clickedIngredient.carbohydrates}
+                calories={clickedIngredient.calories}
+                proteins={clickedIngredient.proteins}
+              />
+          </Modal>) 
+        : (
+          <Modal 
+            ingredient={ null } 
+            onClose={ closeModal }
+            orderNumber={ orderNumber }
+            title={""}>
+              <OrderDetails orderNumber={orderNumber}/>
+          </Modal>)
+      )}  
     </>
   );
 }
