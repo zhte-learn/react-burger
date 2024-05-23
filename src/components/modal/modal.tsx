@@ -3,13 +3,15 @@ import modalStyles from './modal.module.css';
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import BurgerIngredient from "../../utils/ingredient-interface";
 import successSign from "../../images/success.png";
-
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
+const KEY_NAME_ESC = 'Escape';
+const KEY_EVENT_TYPE = 'keyup';
 
 interface ModalProps {
   onClose: () => void;
   ingredient: BurgerIngredient | null,
-  orderNumber: string,
+  orderNumber: string
 }
 
 function Modal(props: ModalProps) {
@@ -17,6 +19,17 @@ function Modal(props: ModalProps) {
     props.ingredient 
     ? `text text_type_main-large`
     : `${ modalStyles.headerHidden }`;
+
+  React.useEffect(() => {
+    function handleEscapeKey(event: KeyboardEvent) {
+      if (event.code === KEY_NAME_ESC) {
+        props.onClose();
+      }
+    }
+  
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, [props.onClose]);
 
   return(
     <div className={ modalStyles.modal }>

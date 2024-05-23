@@ -1,13 +1,9 @@
 .container {
-  width: 600px;
+  width: 48%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 15px;
-}
-
-.container:first-child {
-  background-color: red;
 }
 
 .list {
