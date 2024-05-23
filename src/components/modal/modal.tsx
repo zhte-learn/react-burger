@@ -1,7 +1,10 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 import modalStyles from './modal.module.css';
 import BurgerIngredient from "../../utils/ingredient-interface";
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
+const modalRoot = document.getElementById("modal-root");
 
 const KEY_NAME_ESC = 'Escape';
 
@@ -14,11 +17,6 @@ interface ModalProps {
 }
 
 function Modal(props: ModalProps) {
-  const headerContainerStyle = 
-    props.ingredient 
-    ? `text text_type_main-large`
-    : `${ modalStyles.headerHidden }`;
-
   React.useEffect(() => {
     function handleEscapeKey(event: KeyboardEvent) {
       if (event.code === KEY_NAME_ESC) {
@@ -30,15 +28,17 @@ function Modal(props: ModalProps) {
     return () => document.removeEventListener('keydown', handleEscapeKey);
   }, [props.onClose]);
 
-  return(
-    <div className={`${modalStyles.modal} pt-10 pb-10`}>
-      <div className={ modalStyles.headerContainer }>
-        <h2 className="text text_type_main-large">{ props.title }</h2>
-        <CloseIcon type="primary" onClick={ props.onClose }/>
+  return ReactDOM.createPortal(
+    (
+      <div className={`${modalStyles.modal} pt-10 pb-10 pr-8 pl-8`}>
+        <div className={ modalStyles.headerContainer }>
+          <h2 className="text text_type_main-large">{ props.title }</h2>
+          <CloseIcon type="primary" onClick={ props.onClose }/>
+        </div>
+        {props.children} 
       </div>
-      {props.children} 
-    </div>
-  )
+    ), modalRoot!
+  );
 }
 
 export default Modal;
