@@ -3,10 +3,18 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 15px;
+}
+
+.container:first-child {
+  background-color: red;
 }
 
 .list {
   list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   margin: 0;
   padding: 0;
   --scrollbar-color-thumb: #8585AD;
@@ -24,12 +32,7 @@
 .listItem {
   display: flex;
   align-items: center;
-}
-
-.options {
-  
-  color: red;
-  
+  justify-content: space-between;
 }
 
 .order {
@@ -37,5 +40,10 @@
   align-items: center;
   justify-content: end;
   gap: 40px;
+}
+
+.bunContainer {
+  display: flex;
+  justify-content: end;
 }
 

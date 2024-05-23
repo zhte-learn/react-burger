@@ -1,11 +1,22 @@
-.block {
+.item {
   width: 536px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 20px;
   background-color: #1c1c21;
+}
+
+.shapeMid {
+  border-radius: 40px;
+}
+
+.shapeTop {
+  border-radius: 70px 70px 40px 40px;
+}
+
+.shapeBottom {
+  border-radius: 40px 40px 70px 70px;
 }
 
 .subBlock {
@@ -23,12 +34,4 @@
   width: 220px;
   height: 48px;
   cursor: pointer;
-}
-
-.dotsHidden {
-  visibility: hidden;
-}
-
-.dotsActive {
-  visibility: initial;
 }

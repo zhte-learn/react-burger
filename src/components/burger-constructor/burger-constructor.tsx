@@ -2,7 +2,7 @@ import React from 'react';
 import constructorStyles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
 import PriceBlock from '../price-block/price-block';
-import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredient from "../../utils/ingredient-interface";
 
 interface BurgerConstructorProps {
@@ -30,29 +30,38 @@ function BurgerConstructor(props: BurgerConstructorProps) {
   return(
     <section className={`${ constructorStyles.container } pt-25 pl-4 pr-4 mb-15`}>
       <>
-        <ConstructorItem 
-          ingredient={bun} 
-          name={`${bun.name} (верх)`}
-          onIngredientClick={props.onIngredientClick}
-        />
-
+        <div className={`${constructorStyles.bunContainer} pr-5`}>
+          <ConstructorItem 
+            ingredient={bun} 
+            name={`${bun.name} (верх)`}
+            onIngredientClick={props.onIngredientClick}
+            position={"top"}
+          />
+        </div>
+        
+      
         <ul className={constructorStyles.list}>
           {filling.map((ingredient) => (
             <li key={ingredient._id} className={`${ constructorStyles.listItem }`}>
+              <DragIcon type="primary" />
               <ConstructorItem  
                 ingredient = {ingredient} 
                 name={ingredient.name}
                 onIngredientClick={props.onIngredientClick}
+                position={"middle"}
               />
             </li>
           ))}
         </ul>  
 
-        <ConstructorItem 
-          ingredient={bun} 
-          name={`${bun.name} (низ)`} 
-          onIngredientClick={props.onIngredientClick}
-        />
+        <div className={`${constructorStyles.bunContainer} pr-5`}>
+          <ConstructorItem 
+            ingredient={bun} 
+            name={`${bun.name} (низ)`} 
+            onIngredientClick={props.onIngredientClick}
+            position={"bottom"}
+          />
+        </div>
       </>
 
       <div className={`${ constructorStyles.order } mt-10 pr-8`}>
@@ -70,3 +79,11 @@ function BurgerConstructor(props: BurgerConstructorProps) {
 }
 
 export default BurgerConstructor;
+
+/*
+const dotsState = (props.ingredient.type !== 'bun')
+    ? item.dotsActive
+    : item.dotsHidden;
+<div className={ `${ dotsState }` }>
+            <DragIcon type="primary" />
+          </div>*/
