@@ -7,6 +7,12 @@
   text-align: center;
 }
 
+.image {
+  display: block;
+  width: 520px;
+  margin: 0 auto;
+}
+
 .details {
   display: flex;
   justify-content: space-between;
