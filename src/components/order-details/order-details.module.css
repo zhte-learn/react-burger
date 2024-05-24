@@ -1,0 +1,9 @@
+.orderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.orderNumber {
+  text-shadow: 0 0 32px rgb(51, 51, 255);
+}
