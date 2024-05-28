@@ -15,18 +15,12 @@ import { getIngredients } from '../../services/ingredients/actions';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 //import { IngredientState } from '../../utils/ingredient-state';
 
-const url = "https://norma.nomoreparties.space/api/ingredients";
-
 function App() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [clickedIngredient, setClickedIngredient] = React.useState<BurgerIngredient | null>(null);
   const orderNumber = "034536";
 
-  //const [ingredients, setIngredients] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-
-  const { ingredients } = useAppSelector(state => state.ingredients);
+  const { ingredients, ingredientsLoading, ingredientsRequestFailed, errorMessage } = useAppSelector(state => state.ingredients);
   const dispatch = useAppDispatch();
 
   function handleIngredientClick(ingredient: BurgerIngredient) {
@@ -43,25 +37,21 @@ function App() {
     setIsModalOpen(false);
   }
   
-  
-
   React.useEffect(() => {
-    dispatch(getIngredients(url))
-    //setError(null);
-    //setIsLoading(true);
+    dispatch(getIngredients())
   }, []);
 
   return (  
     <>
       <AppHeader />
 
-      {error 
+      { ingredientsRequestFailed 
         ? (
             <>
               <div>Что-то пошло не так</div>
-              <div>{error}</div> 
+              <div>{ errorMessage }</div>
             </>
-          ) : isLoading ? (
+          ) : ingredientsLoading ? (
               <Loader />
               ) : ingredients && ingredients.length ? (
                 <main>

@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from '../src/components/app/app';
 import { Provider } from 'react-redux';
-import { rootReducer } from './services/reducers';
 import reportWebVitals from './reportWebVitals';
 import { store } from './services/store';
+import App from '../src/components/app/app';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

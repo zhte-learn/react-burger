@@ -1,5 +1,3 @@
-import { IngredientState } from '../../utils/ingredient-state';
-
 import {
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_REQUEST_SUCCESS,
@@ -8,31 +6,36 @@ import {
 
 const initialState = {
   ingredients: [],
-  ingredientsRequest: false,
+  ingredientsLoading: false,
   ingredientsRequestFailed: false,
-} as IngredientState;
+  errorMessage: "",
+};
 
 export const ingredientsReducer = (state = initialState, action: any) => {
   switch(action.type) {
     case GET_INGREDIENTS_REQUEST: {
       return {
         ...state,
-        ingredientsRequest: true,
+        ingredientsLoading: true,
+        ingredientsRequestFailed: false,
+        errorMessage: "",
       };
     }
     case GET_INGREDIENTS_REQUEST_SUCCESS: {
       return {
         ...state,
+        ingredients: action.payload,
+        ingredientsLoading: false,
         ingredientsRequestFailed: false,
-        ingredients: action.ingredients,
-        ingredientsRequest: false,
+        errorMessage: "",
       }
     }
     case GET_INGREDIENTS_REQUEST_FAILED: {
       return {
         ...state,
         ingredientsRequestFailed: true,
-        ingredientsRequest: false,
+        ingredientsLoading: false,
+        errorMessage: action.payload,
       }
     }
     default: {
