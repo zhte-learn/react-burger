@@ -14,17 +14,21 @@ import { getIngredients } from '../../services/ingredients/actions';
 //import { useDispatch, useSelector } from 'react-redux';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 //import { IngredientState } from '../../utils/ingredient-state';
+import { selectIngredient } from '../../services/selected-ingredient/actions';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [clickedIngredient, setClickedIngredient] = React.useState<BurgerIngredient | null>(null);
+  //const [clickedIngredient, setClickedIngredient] = React.useState<BurgerIngredient | null>(null);
   const orderNumber = "034536";
 
-  const { ingredients, ingredientsLoading, ingredientsRequestFailed, errorMessage } = useAppSelector(state => state.ingredients);
   const dispatch = useAppDispatch();
+  const { ingredients, ingredientsLoading, ingredientsRequestFailed, errorMessage } = useAppSelector(state => state.ingredients);
+  const { selectedIngredient } = useAppSelector(state => state.selectedIngredient);
 
-  function handleIngredientClick(ingredient: BurgerIngredient) {
-    setClickedIngredient(ingredient);
+  function handleIngredientClick() {
+    //console.log(selectedIngredient);
+    //dispatch(selectIngredient(selectedIngredient));
+    //setClickedIngredient(ingredient);
     setIsModalOpen(true);
   }
 
@@ -32,13 +36,18 @@ function App() {
     setIsModalOpen(true);
   }
 
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
   function closeModal() {
-    setClickedIngredient(null);
+    //dispatch(selectIngredient({}));
+    //setClickedIngredient(null);
     setIsModalOpen(false);
   }
   
   React.useEffect(() => {
-    dispatch(getIngredients())
+    dispatch(getIngredients());
   }, []);
 
   return (  
@@ -58,11 +67,10 @@ function App() {
                   <div className={ styles.mainContainer }>
                     <BurgerIngredients 
                       ingredients = { ingredients }
-                      onIngredientClick={ handleIngredientClick }
+                      onIngredientClick={ openModal }
                     />
                     <BurgerConstructor 
                       ingredients = { order }
-                      onIngredientClick={ handleIngredientClick }
                       onMakeOrderClick={ handleMakeOrderClick }
                     />
                   </div>
@@ -71,22 +79,25 @@ function App() {
         : (<p>No ingredients...</p>)
       }
       
+      
       {isModalOpen && (
-        clickedIngredient 
+        selectedIngredient 
         ? (
           <Modal 
-            ingredient={ clickedIngredient } 
+            ingredient={ selectedIngredient } 
             onClose={ closeModal }
             orderNumber={ "" }
             title={"Детали ингредиента"}>
+              
               <IngredientDetails 
-                image={clickedIngredient.image_large}
-                name={clickedIngredient.name}
-                fat={clickedIngredient.fat}
-                carbohydrates={clickedIngredient.carbohydrates}
-                calories={clickedIngredient.calories}
-                proteins={clickedIngredient.proteins}
+                image={selectedIngredient.image_large}
+                name={selectedIngredient.name}
+                fat={selectedIngredient.fat}
+                carbohydrates={selectedIngredient.carbohydrates}
+                calories={selectedIngredient.calories}
+                proteins={selectedIngredient.proteins}
               />
+
           </Modal>) 
         : (
           <Modal 
@@ -96,7 +107,7 @@ function App() {
             title={""}>
               <OrderDetails orderNumber={orderNumber}/>
           </Modal>)
-      )}  
+      )}
     </>
   );
 }

@@ -6,7 +6,7 @@ import IngredientItem from "../ingredient-item/ingredient-item";
 interface IngredientsGroupProps {
   groupTitle: string,
   ingredients: BurgerIngredient[],
-  onIngredientClick: (ingredient: BurgerIngredient) => void,
+  onIngredientClick: () => void,
 }
 
 function IngredientsGroup(props: IngredientsGroupProps) {

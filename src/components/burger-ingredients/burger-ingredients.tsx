@@ -2,13 +2,17 @@ import React from "react";
 import ingredientsStyles from './burger-ingredients.module.css';
 import IngredientsGroup from "./ingredients-group/ingredients-group";
 import BurgerIngredient from "../../utils/ingredient-interface";
+import { useAppSelector, useAppDispatch } from '../../services/hooks';
 
 interface BurgerIngredientsProps {
   ingredients: BurgerIngredient[],
-  onIngredientClick: (ingredient: BurgerIngredient) => void
+  onIngredientClick: () => void
 }
 
 function BurgerIngredients( props: BurgerIngredientsProps ) {
+  const { selectedIngredient } = useAppSelector(state => state.selectedIngredient);
+  const dispatch = useAppDispatch();
+
   const ingredientsByType = React.useMemo(() => {
     return { 
       bun: getItemsByType(props.ingredients, "bun"),

@@ -1,18 +1,26 @@
 import React from "react";
+
 import itemStyles from './ingredient-item.module.css';
 import PriceBlock from "../../price-block/price-block";
 import BurgerIngredient from "../../../utils/ingredient-interface";
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useAppSelector, useAppDispatch } from '../../../services/hooks';
+import { selectIngredient } from "../../../services/selected-ingredient/actions";
+
 
 interface IngredientItemProps {
   ingredient: BurgerIngredient,
-  onIngredientClick: (ingredient: BurgerIngredient) => void
+  onIngredientClick: () => void
 }
 
 function IngredientItem(props: IngredientItemProps) {
+  const dispatch = useAppDispatch();
   
   function handleClick() {
-    props.onIngredientClick(props.ingredient);
+    
+    //console.log(props.ingredient);
+    dispatch(selectIngredient(props.ingredient));
+    props.onIngredientClick();
   };
 
   return (

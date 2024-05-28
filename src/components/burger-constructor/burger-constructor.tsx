@@ -7,7 +7,6 @@ import BurgerIngredient from "../../utils/ingredient-interface";
 
 interface BurgerConstructorProps {
   ingredients: BurgerIngredient[],
-  onIngredientClick: (ingredient: BurgerIngredient) => void,
   onMakeOrderClick: () => void
 }
 
@@ -34,7 +33,6 @@ function BurgerConstructor(props: BurgerConstructorProps) {
           <ConstructorItem 
             ingredient={bun} 
             name={`${bun.name} (верх)`}
-            onIngredientClick={props.onIngredientClick}
             position={"top"}
           />
         </div>
@@ -47,7 +45,6 @@ function BurgerConstructor(props: BurgerConstructorProps) {
               <ConstructorItem  
                 ingredient = {ingredient} 
                 name={ingredient.name}
-                onIngredientClick={props.onIngredientClick}
                 position={"middle"}
               />
             </li>
@@ -58,7 +55,6 @@ function BurgerConstructor(props: BurgerConstructorProps) {
           <ConstructorItem 
             ingredient={bun} 
             name={`${bun.name} (низ)`} 
-            onIngredientClick={props.onIngredientClick}
             position={"bottom"}
           />
         </div>
