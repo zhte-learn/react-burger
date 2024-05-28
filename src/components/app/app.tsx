@@ -10,6 +10,11 @@ import Loader from '../loader/loader';
 import order from '../../utils/order';
 import OrderDetails from '../order-details/order-details';
 
+import { getIngredients } from '../../services/ingredients/actions';
+//import { useDispatch, useSelector } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../services/hooks';
+//import { IngredientState } from '../../utils/ingredient-state';
+
 const url = "https://norma.nomoreparties.space/api/ingredients";
 
 function App() {
@@ -17,10 +22,12 @@ function App() {
   const [clickedIngredient, setClickedIngredient] = React.useState<BurgerIngredient | null>(null);
   const orderNumber = "034536";
 
-  const [ingredients, setIngredients] = React.useState([]);
+  //const [ingredients, setIngredients] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
 
+  const { ingredients } = useAppSelector(state => state.ingredients);
+  const dispatch = useAppDispatch();
 
   function handleIngredientClick(ingredient: BurgerIngredient) {
     setClickedIngredient(ingredient);
@@ -36,29 +43,12 @@ function App() {
     setIsModalOpen(false);
   }
   
-  function getIngredients(link: string) {
-    fetch(link)
-      .then(res => {
-        if(!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
-      .then(data => {
-        setIngredients(data.data);
-      })
-      .catch(err => {
-        setError(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+  
 
   React.useEffect(() => {
-    setError(null);
-    setIsLoading(true);
-    getIngredients(url);
+    dispatch(getIngredients(url))
+    //setError(null);
+    //setIsLoading(true);
   }, []);
 
   return (  
@@ -122,3 +112,23 @@ function App() {
 }
 
 export default App;
+
+
+/*function getIngredients(link: string) {
+    fetch(link)
+      .then(res => {
+        if(!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then(data => {
+        setIngredients(data.data);
+      })
+      .catch(err => {
+        setError(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };*/
