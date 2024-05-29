@@ -10,6 +10,7 @@ import Loader from '../loader/loader';
 //import order from '../../utils/order';
 import OrderDetails from '../order-details/order-details';
 
+import { selectIngredient } from '../../services/selected-ingredient/actions';
 import { getIngredients } from '../../services/ingredients/actions';
 //import { useDispatch, useSelector } from 'react-redux';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
@@ -46,6 +47,7 @@ function App() {
 
   function closeModal() {
     setIsModalOpen(false);
+    dispatch(selectIngredient(null));
   }
   
   React.useEffect(() => {
@@ -72,11 +74,13 @@ function App() {
                       onIngredientClick={ openModal }
                     />
 
+
+
                     {
-                      //<BurgerConstructor 
-                      //  ingredients = { order }
-                      //  onMakeOrderClick={ openModal }
-                      ///>
+                      <BurgerConstructor 
+                      //items = { order }
+                        onMakeOrderClick={ openModal }
+                      />
                     }
                     
                   </div>
