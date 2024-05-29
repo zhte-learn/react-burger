@@ -30,7 +30,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
     <section className={`${ constructorStyles.container } pt-25 pl-4 pr-4 mb-15`}>
       <>
         <div className={`${constructorStyles.bunContainer} pr-5`}>
-          <ConstructorItem 
+          {/*<ConstructorItem 
             ingredient={bun} 
             name={`${bun.name} (верх)`}
             position={"top"}
@@ -57,7 +57,10 @@ function BurgerConstructor(props: BurgerConstructorProps) {
             name={`${bun.name} (низ)`} 
             position={"bottom"}
           />
+          */}
         </div>
+
+        
       </>
 
       <div className={`${ constructorStyles.order } mt-10 pr-8`}>

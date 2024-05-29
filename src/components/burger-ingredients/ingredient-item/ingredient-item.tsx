@@ -6,6 +6,7 @@ import BurgerIngredient from "../../../utils/ingredient-interface";
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppSelector, useAppDispatch } from '../../../services/hooks';
 import { selectIngredient } from "../../../services/selected-ingredient/actions";
+import { addBun, addIngredient } from '../../../services/constructor/actions';
 
 
 interface IngredientItemProps {
@@ -14,14 +15,25 @@ interface IngredientItemProps {
 }
 
 function IngredientItem(props: IngredientItemProps) {
+  const { selectedIngredient } = useAppSelector(state => state.selectedIngredient);
   const dispatch = useAppDispatch();
   
   function handleClick() {
-    
-    //console.log(props.ingredient);
     dispatch(selectIngredient(props.ingredient));
+    console.log(props.ingredient.type);
+
+    if(props.ingredient.type === 'bun') {
+      dispatch(addBun(props.ingredient));
+    } else {
+      dispatch(addIngredient(props.ingredient));
+    }
+
+
+
     props.onIngredientClick();
   };
+
+  
 
   return (
     <>

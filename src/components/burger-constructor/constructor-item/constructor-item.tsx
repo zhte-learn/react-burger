@@ -15,9 +15,11 @@ function ConstructorItem(props: IngredientItemProps) {
     props.position === 'top' ? itemStyles.shapeTop :
     props.position === 'bottom' ? itemStyles.shapeBottom :
     itemStyles.shapeMid;
-
+  
+  
   return(
     <>
+    {/*
       <div className={`${ itemStyles.item } ${shapeStyle} pl-6 pt-4 pb-4 pr-8 ml-1`} >
         <div className={`${itemStyles.subBlock}`}>
           <img className={`${ itemStyles.image }`} src={ props.ingredient.image_mobile } alt={ props.ingredient.name } />
@@ -34,6 +36,7 @@ function ConstructorItem(props: IngredientItemProps) {
         </div>
         
       </div>
+      */}
     </>
   )
 }

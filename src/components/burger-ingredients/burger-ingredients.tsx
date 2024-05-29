@@ -10,7 +10,7 @@ interface BurgerIngredientsProps {
 }
 
 function BurgerIngredients( props: BurgerIngredientsProps ) {
-  const { selectedIngredient } = useAppSelector(state => state.selectedIngredient);
+  
   const dispatch = useAppDispatch();
 
   const ingredientsByType = React.useMemo(() => {

@@ -34,4 +34,6 @@
   width: 220px;
   height: 48px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }

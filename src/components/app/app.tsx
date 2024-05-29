@@ -7,42 +7,44 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from '../modal/modal';
 import Loader from '../loader/loader';
-import order from '../../utils/order';
+//import order from '../../utils/order';
 import OrderDetails from '../order-details/order-details';
 
 import { getIngredients } from '../../services/ingredients/actions';
 //import { useDispatch, useSelector } from 'react-redux';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 //import { IngredientState } from '../../utils/ingredient-state';
-import { selectIngredient } from '../../services/selected-ingredient/actions';
+
 
 function App() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   //const [clickedIngredient, setClickedIngredient] = React.useState<BurgerIngredient | null>(null);
   const orderNumber = "034536";
+  const order: BurgerIngredient[] = [];
+  order[0] = {
+    "_id":"60666c42cc7b410027a1a9b2",
+     "name":"Флюоресцентная булка R2-D3",
+     "type":"bun",
+     "proteins":44,
+     "fat":26,
+     "carbohydrates":85,
+     "calories":643,
+     "price":988,
+     "image":"https://code.s3.yandex.net/react/code/bun-01.png",
+     "image_mobile":"https://code.s3.yandex.net/react/code/bun-01-mobile.png",
+     "image_large":"https://code.s3.yandex.net/react/code/bun-01-large.png",
+     "__v":0
+  }
 
   const dispatch = useAppDispatch();
   const { ingredients, ingredientsLoading, ingredientsRequestFailed, errorMessage } = useAppSelector(state => state.ingredients);
   const { selectedIngredient } = useAppSelector(state => state.selectedIngredient);
-
-  function handleIngredientClick() {
-    //console.log(selectedIngredient);
-    //dispatch(selectIngredient(selectedIngredient));
-    //setClickedIngredient(ingredient);
-    setIsModalOpen(true);
-  }
-
-  function handleMakeOrderClick() {
-    setIsModalOpen(true);
-  }
 
   function openModal() {
     setIsModalOpen(true);
   }
 
   function closeModal() {
-    //dispatch(selectIngredient({}));
-    //setClickedIngredient(null);
     setIsModalOpen(false);
   }
   
@@ -69,10 +71,14 @@ function App() {
                       ingredients = { ingredients }
                       onIngredientClick={ openModal }
                     />
-                    <BurgerConstructor 
-                      ingredients = { order }
-                      onMakeOrderClick={ handleMakeOrderClick }
-                    />
+
+                    {
+                      //<BurgerConstructor 
+                      //  ingredients = { order }
+                      //  onMakeOrderClick={ openModal }
+                      ///>
+                    }
+                    
                   </div>
                 </main>
                 ) 
