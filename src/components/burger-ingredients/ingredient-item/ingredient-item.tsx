@@ -20,7 +20,6 @@ function IngredientItem(props: IngredientItemProps) {
   
   function handleClick() {
     dispatch(selectIngredient(props.ingredient));
-    console.log(props.ingredient.type);
 
     if(props.ingredient.type === 'bun') {
       dispatch(addBun(props.ingredient));
@@ -32,8 +31,6 @@ function IngredientItem(props: IngredientItemProps) {
 
     props.onIngredientClick();
   };
-
-  
 
   return (
     <>

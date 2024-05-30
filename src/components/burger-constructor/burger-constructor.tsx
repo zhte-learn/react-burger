@@ -33,7 +33,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
   return(
     <section className={`${constructorStyles.container} pt-25 pl-4 pr-4 mb-15`}>
       <>
-        <div className={`${constructorStyles.itemContainer} ${constructorStyles.bunTop} pr-5 mr-4`}>
+        <div className={`${constructorStyles.itemContainer} ${constructorStyles.bunTop} pr-5 pl-6 mr-4`}>
           { bun 
             ? (
               <ConstructorItem 
@@ -47,9 +47,9 @@ function BurgerConstructor(props: BurgerConstructorProps) {
           }
         </div>
 
-        { fillings.length === 0
+        { fillings.length == 0
           ? (
-            <div className={`${constructorStyles.itemContainer} ${constructorStyles.filling} pr-5 mr-4`}>
+            <div className={`${constructorStyles.itemContainer} ${constructorStyles.filling} pr-5 pl-6 mr-4`}>
               <p className={`${constructorStyles.text} text text_type_main-small pt-6 pb-6`}>Выберите начинку</p>
             </div>
           )
@@ -59,7 +59,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
                 <>
                   <li key={uuidv4()} className={constructorStyles.listItem}>
                     <DragIcon type="primary" />
-                    <div className={`${constructorStyles.itemContainer} ${constructorStyles.filling} pr-5 ml-1`}>
+                    <div className={`${constructorStyles.itemContainer} ${constructorStyles.filling} pr-5 pl-6 ml-1`}>
                       <ConstructorItem  
                         item = {elem} 
                         name={elem.name}
@@ -73,7 +73,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
           )
         }
 
-        <div className={`${constructorStyles.itemContainer} ${constructorStyles.bunBottom} pr-5 mr-4`}>
+        <div className={`${constructorStyles.itemContainer} ${constructorStyles.bunBottom} pr-5 pl-6 mr-4`}>
           { bun 
             ? (
               <ConstructorItem 
@@ -86,38 +86,6 @@ function BurgerConstructor(props: BurgerConstructorProps) {
               )
           }
         </div>
-        
-          {/*<ConstructorItem 
-            ingredient={bun} 
-            name={`${bun.name} (верх)`}
-            position={"top"}
-          />
-        </div>
-        
-      
-        <ul className={constructorStyles.list}>
-          {filling.map((ingredient) => (
-            <li key={ingredient._id} className={`${ constructorStyles.listItem }`}>
-              <DragIcon type="primary" />
-              <ConstructorItem  
-                ingredient = {ingredient} 
-                name={ingredient.name}
-                position={"middle"}
-              />
-            </li>
-          ))}
-        </ul>  
-
-        <div className={`${constructorStyles.bunContainer} pr-5`}>
-          <ConstructorItem 
-            ingredient={bun} 
-            name={`${bun.name} (низ)`} 
-            position={"bottom"}
-          />
-          */}
-        
-
-        
       </>
 
       <div className={`${ constructorStyles.order } mt-10 pr-8`}>
