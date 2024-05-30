@@ -12,19 +12,31 @@ interface BurgerConstructorProps {
   onMakeOrderClick: () => void
 }
 
-function removeItemsByType(ingredientsList: BurgerIngredient[], type: string) {
-  return ingredientsList.filter(item => !(item.type === type));
-}
-
-function getItemsByType(ingredientsList: BurgerIngredient[], type: string) {
-  return ingredientsList.filter(item => item.type === type);
-}
-
 function BurgerConstructor(props: BurgerConstructorProps) {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
   const dispatch = useAppDispatch();
-  //const bun = getItemsByType(props.ingredients, 'bun')[0];
-  //const filling = removeItemsByType(props.ingredients, 'bun');
+  const [totalPrice, setTotalPrice] = React.useState(0);
+  
+  const getTotalPrice = React.useMemo(() => {
+    let fillingsPrice = 0;
+    
+    if(fillings.length !== 0) {
+      fillings.forEach(function(elem) {
+        fillingsPrice += elem.price;
+      })
+    }
+    
+    if (bun) {
+      return fillingsPrice + bun.price * 2;
+    }
+    return fillingsPrice;
+  }, [bun, fillings]);
+
+  
+
+  React.useEffect(() => {
+    setTotalPrice(getTotalPrice);
+  }, [bun, fillings]);
 
   function handleClick() {
     props.onMakeOrderClick();
@@ -86,7 +98,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
       </>
 
       <div className={`${ constructorStyles.order } mt-10 pr-8`}>
-        <PriceBlock size="medium" price={610}/>
+        <PriceBlock size="medium" price={totalPrice}/>
         <Button 
           htmlType="button" type="primary" size="large"
           onClick={ handleClick }

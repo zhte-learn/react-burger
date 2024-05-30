@@ -55,7 +55,7 @@ function IngredientItem(props: IngredientItemProps) {
         onClick={ handleClick }
       >
         <img src={ props.ingredient.image } alt={ props.ingredient.name } />
-        <PriceBlock size="small" price={20} />
+        <PriceBlock size="small" price={props.ingredient.price} />
         <p className={`${ itemStyles.name } pt-1 text text_type_main-small`}>
           {props.ingredient.name}
         </p>
