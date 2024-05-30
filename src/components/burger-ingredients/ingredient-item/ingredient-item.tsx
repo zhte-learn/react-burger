@@ -15,20 +15,36 @@ interface IngredientItemProps {
 }
 
 function IngredientItem(props: IngredientItemProps) {
-  const { selectedIngredient } = useAppSelector(state => state.selectedIngredient);
+  const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
   const dispatch = useAppDispatch();
+
+  const getCounter = React.useMemo(() => {
+    if(props.ingredient.type === 'bun' && bun && bun._id === props.ingredient._id) {
+      return 2;
+    } else if(props.ingredient.type !== 'bun') {
+      return fillings.filter((item) => item._id === props.ingredient._id).length;
+    } else {
+      return 0;
+    }
+  }, [bun, fillings, props.ingredient]);
+
+  
+  const [counter, setCounter] = React.useState(0);
+
+  React.useEffect(() => {
+    setCounter(getCounter);
+  }, [bun, fillings]);
   
   function handleClick() {
     dispatch(selectIngredient(props.ingredient));
-
+    //
+    //temporary before DND
     if(props.ingredient.type === 'bun') {
       dispatch(addBun(props.ingredient));
     } else {
       dispatch(addIngredient(props.ingredient));
     }
-
-
-
+    //
     props.onIngredientClick();
   };
 
@@ -43,7 +59,7 @@ function IngredientItem(props: IngredientItemProps) {
         <p className={`${ itemStyles.name } pt-1 text text_type_main-small`}>
           {props.ingredient.name}
         </p>
-        <Counter count={1} size="default" extraClass="m-1" />
+        <Counter count={counter} size="default" extraClass="m-1" />
       </li>    
     </>
   )

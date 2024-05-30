@@ -33,7 +33,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
   return(
     <section className={`${constructorStyles.container} pt-25 pl-4 pr-4 mb-15`}>
       <>
-        <div className={`${constructorStyles.itemContainer} ${constructorStyles.bunTop} pr-5 pl-6 mr-4`}>
+        <div className={`${constructorStyles.itemContainer} ${constructorStyles.bunTop} pr-8 pl-6 mr-4`}>
           { bun 
             ? (
               <ConstructorItem 
@@ -49,31 +49,28 @@ function BurgerConstructor(props: BurgerConstructorProps) {
 
         { fillings.length == 0
           ? (
-            <div className={`${constructorStyles.itemContainer} ${constructorStyles.filling} pr-5 pl-6 mr-4`}>
+            <div className={`${constructorStyles.itemContainer} ${constructorStyles.filling} pr-8 pl-6 mr-4`}>
               <p className={`${constructorStyles.text} text text_type_main-small pt-6 pb-6`}>Выберите начинку</p>
             </div>
           )
           : (
             <ul className={constructorStyles.list}>
               {fillings.map((elem) => (
-                <>
-                  <li key={uuidv4()} className={constructorStyles.listItem}>
-                    <DragIcon type="primary" />
-                    <div className={`${constructorStyles.itemContainer} ${constructorStyles.filling} pr-5 pl-6 ml-1`}>
-                      <ConstructorItem  
-                        item = {elem} 
-                        name={elem.name}
-                      />
-                    </div>
-                  </li>
-                </>
-                
+                <li key={uuidv4()} className={constructorStyles.listItem}>
+                  <DragIcon type="primary" />
+                  <div className={`${constructorStyles.itemContainer} ${constructorStyles.filling} pr-8 pl-6 ml-1`}>
+                    <ConstructorItem 
+                      item = {elem} 
+                      name={elem.name}
+                    />
+                  </div>
+                </li>  
               ))}
             </ul>
           )
         }
 
-        <div className={`${constructorStyles.itemContainer} ${constructorStyles.bunBottom} pr-5 pl-6 mr-4`}>
+        <div className={`${constructorStyles.itemContainer} ${constructorStyles.bunBottom} pr-8 pl-6 mr-4`}>
           { bun 
             ? (
               <ConstructorItem 
@@ -103,11 +100,3 @@ function BurgerConstructor(props: BurgerConstructorProps) {
 }
 
 export default BurgerConstructor;
-
-/*
-const dotsState = (props.ingredient.type !== 'bun')
-    ? item.dotsActive
-    : item.dotsHidden;
-<div className={ `${ dotsState }` }>
-            <DragIcon type="primary" />
-          </div>*/
