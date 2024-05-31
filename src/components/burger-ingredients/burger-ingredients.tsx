@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 import ingredientsStyles from './burger-ingredients.module.css';
 import IngredientsGroup from "./ingredients-group/ingredients-group";
 import BurgerIngredient from "../../utils/ingredient-interface";
@@ -10,11 +10,11 @@ interface BurgerIngredientsProps {
 }
 
 function BurgerIngredients( props: BurgerIngredientsProps ) {
-  const [activeTab, setActiveTab] = useState('bun');
-  const containerScrollRef = useRef<HTMLDivElement>(null);
-  const bunRef = useRef<HTMLDivElement>(null);
-  const sauceRef = useRef<HTMLDivElement>(null);
-  const mainRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = React.useState('bun');
+  const containerScrollRef = React.useRef<HTMLDivElement>(null);
+  const bunRef = React.useRef<HTMLDivElement>(null);
+  const sauceRef = React.useRef<HTMLDivElement>(null);
+  const mainRef = React.useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
 
@@ -32,57 +32,27 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
 
   const handleScroll = () => {
     if (bunRef.current && sauceRef.current && mainRef.current && containerScrollRef.current) {
-      //console.log("container top" + containerScrollRef.current.getBoundingClientRect().top);
-      //console.log("bun top" + bunRef.current.getBoundingClientRect().top);
-      //console.log("bun height" + bunRef.current.getBoundingClientRect().height);
-      //console.log("sauce top" + sauceRef.current.getBoundingClientRect().top);
-      //console.log("main height" + mainRef.current.getBoundingClientRect().height);
-
-  
-      
       const containerTop = containerScrollRef.current.getBoundingClientRect().top;
       const bunTop = bunRef.current.getBoundingClientRect().top;
       const sauceTop = sauceRef.current.getBoundingClientRect().top;
       const mainTop = mainRef.current.getBoundingClientRect().top;
-
       const bunHeigth = bunRef.current.getBoundingClientRect().height;
       const sauceHeight = sauceRef.current.getBoundingClientRect().height;
-
       const scrollTop = containerScrollRef.current.scrollTop;
+      const sauceOffset = bunHeigth - scrollTop;
+      const mainOffset = (sauceHeight + bunHeigth) - scrollTop;
 
       if(containerTop === bunTop) {
         setActiveTab('bun');
-      } else if((sauceTop - containerTop) && (bunHeigth - scrollTop < 0) && Math.abs(sauceTop - containerTop) < containerTop) {
-        console.log("container " + containerTop);
-        console.log("sauce " + sauceTop);
-        console.log("diff " + (sauceTop - containerTop));
-        console.log("bun height " + bunRef.current.getBoundingClientRect().height);
-        console.log("container scroll top 2: " + containerScrollRef.current.scrollTop);
+      } else if((sauceOffset < 0) && Math.abs(sauceTop - containerTop) < containerTop) {
         setActiveTab('sauce');
-      } else if ((mainTop - containerTop) && ((sauceHeight + bunHeigth) - scrollTop < 0) && Math.abs(mainTop - containerTop) < containerTop){
-        console.log("sauce + bun height " + (sauceRef.current.getBoundingClientRect().height + bunRef.current.getBoundingClientRect().height));
-        console.log("container scroll top 3: " + containerScrollRef.current.scrollTop);
+      } else if ((mainOffset < 0) && Math.abs(mainTop - containerTop) < containerTop){
         setActiveTab('main');
       }
-
-      /*
-      const scrollPosition = containerScrollRef.current.scrollTop;
-
-      const bunOffset = Math.abs(containerTop - bunTop);
-      const sauceOffset = Math.abs(containerTop - sauceTop);
-      const mainOffset = Math.abs(containerTop - mainTop);
-
-      if (bunOffset < sauceOffset && bunOffset < mainOffset) {
-        setActiveTab('bun');
-      } else if (sauceOffset < mainOffset) {
-        setActiveTab('sauce');
-      } else {
-        setActiveTab('main');
-      }*/
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const content = containerScrollRef.current;
     if (content) {
       content.addEventListener('scroll', handleScroll);
