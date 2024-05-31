@@ -2,7 +2,6 @@ import React from "react";
 import ingredientsStyles from './burger-ingredients.module.css';
 import IngredientsGroup from "./ingredients-group/ingredients-group";
 import BurgerIngredient from "../../utils/ingredient-interface";
-import { useAppSelector, useAppDispatch } from '../../services/hooks';
 
 interface BurgerIngredientsProps {
   ingredients: BurgerIngredient[],
@@ -16,8 +15,6 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
   const sauceRef = React.useRef<HTMLDivElement>(null);
   const mainRef = React.useRef<HTMLDivElement>(null);
 
-  const dispatch = useAppDispatch();
-
   const ingredientsByType = React.useMemo(() => {
     return { 
       bun: getItemsByType(props.ingredients, "bun"),
@@ -28,6 +25,12 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
 
   function getItemsByType(data: BurgerIngredient[], type: string) {
     return data.filter(item => item.type === type);
+  }
+
+  function getStyles(type: string) {
+    return `${ingredientsStyles.navItem} 
+            ${activeTab === type ? ingredientsStyles.navItem_active : 'text_color_inactive'} 
+            text text_type_main-small`;
   }
 
   const handleScroll = () => {
@@ -68,43 +71,37 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
     <section className={`${ingredientsStyles.container} pl-5 pr-5 mt-10 mb-15`}>
       <h2 className={`${ingredientsStyles.title} text text_type_main-large mb-5`}>Соберите бургер</h2>
       <ul className={`${ingredientsStyles.nav} mb-10`}>
-        <li className={`${ingredientsStyles.navItem} ${activeTab === 'bun' ? ingredientsStyles.navItem_active : ''} text text_type_main-small`}>
+        <li className={getStyles('bun')}>
           Булки
         </li>
-        <li className={`${ingredientsStyles.navItem} ${activeTab === 'sauce' ? ingredientsStyles.navItem_active : ''} text text_type_main-small text_color_inactive`}>
+        <li className={getStyles('sauce')}>
           Соусы
         </li>
-        <li className={`${ingredientsStyles.navItem} ${activeTab === 'main' ? ingredientsStyles.navItem_active : ''} text text_type_main-small text_color_inactive`}>
+        <li className={getStyles('main')}>
           Начинки
         </li>
       </ul>
 
-      
-      <div ref={containerScrollRef} className={ ingredientsStyles.content }>
-      <div ref={bunRef}>
-          <IngredientsGroup 
-            groupTitle={'Булки'}
-            ingredients={ingredientsByType.bun}
-            onIngredientClick={props.onIngredientClick}
-          /> 
-      </div>
-      <div ref={sauceRef}>
+      <div ref={containerScrollRef} className={ingredientsStyles.content}>
         <IngredientsGroup 
+          ref={bunRef}
+          groupTitle={'Булки'}
+          ingredients={ingredientsByType.bun}
+          onIngredientClick={props.onIngredientClick}
+        />
+        <IngredientsGroup
+          ref={sauceRef}
           groupTitle={'Соусы'} 
           ingredients={ingredientsByType.sauce}
           onIngredientClick={props.onIngredientClick}
         />
-      </div>
-      <div ref={mainRef}>
         <IngredientsGroup 
+          ref={mainRef}
           groupTitle={'Начинки'} 
           ingredients={ingredientsByType.main}
           onIngredientClick={props.onIngredientClick}
-        />
+        /> 
       </div>
-      </div>
-      
-      
     </section>
   )
 }
