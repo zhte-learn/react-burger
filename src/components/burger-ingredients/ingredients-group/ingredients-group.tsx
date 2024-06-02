@@ -3,7 +3,6 @@ import groupStyle from './ingredients-group.module.css';
 import BurgerIngredient from "../../../utils/ingredient-interface";
 import IngredientItem from "../ingredient-item/ingredient-item";
 
-
 interface IngredientsGroupProps {
   groupTitle: string,
   ingredients: BurgerIngredient[],

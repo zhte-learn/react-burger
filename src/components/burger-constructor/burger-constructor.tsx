@@ -1,6 +1,7 @@
 import React from 'react';
+import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
-import constructorStyles from './burger-constructor.module.css';
+import styles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
 import PriceBlock from '../price-block/price-block';
 import { Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -16,6 +17,10 @@ function BurgerConstructor(props: BurgerConstructorProps) {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
   const dispatch = useAppDispatch();
   const [totalPrice, setTotalPrice] = React.useState(0);
+
+  const [{ isHoverBunTop }, dropTargetBunTop] = useDrop(useDropHandler(['bun'], 'isHoverBunTop'));
+  const [{ isHoverBunBottom }, dropTargetBunBottom] = useDrop(useDropHandler(['bun'], 'isHoverBunBottom'));
+  const [{ isHoverFilling }, dropTargetFilling] = useDrop(useDropHandler(['sauce', 'main'], 'isHoverFilling'));
   
   const getTotalPrice = React.useMemo(() => {
     let fillingsPrice = 0;
@@ -32,8 +37,6 @@ function BurgerConstructor(props: BurgerConstructorProps) {
     return fillingsPrice;
   }, [bun, fillings]);
 
-  
-
   React.useEffect(() => {
     setTotalPrice(getTotalPrice);
   }, [bun, fillings]);
@@ -42,10 +45,35 @@ function BurgerConstructor(props: BurgerConstructorProps) {
     props.onMakeOrderClick();
   };
 
+  function onDropHandler() {
+    console.log("drop");
+  }
+
+  function useDropHandler(ingredientTypes: string[], collectProperty: string) {
+    return () => ({
+      accept: ingredientTypes,
+      drop: () => {
+        onDropHandler();
+      },
+      collect: (monitor: DropTargetMonitor) => ({
+        [collectProperty]: monitor.isOver(),
+      })
+    })
+  };
+
+  const bunHoverClass = (isHoverBunTop || isHoverBunBottom) ? styles.onHover : '';
+  const fillingHoverClass = (isHoverFilling ? styles.onHover : '');
+  console.log(fillingHoverClass)
+  
+
   return(
-    <section className={`${constructorStyles.container} pt-25 pl-4 pr-4 mb-15`}>
+    <section className={`${styles.container} pt-25 pl-4 pr-4 mb-15`}>
       <>
-        <div className={`${constructorStyles.itemContainer} ${constructorStyles.bunTop} pr-8 pl-6 mr-4`}>
+        <div 
+          ref={dropTargetBunTop} 
+          className={`${styles.itemContainer} 
+                      ${styles.bunTop} pr-8 pl-6 mr-4
+                      ${bunHoverClass}`}>
           { bun 
             ? (
               <ConstructorItem 
@@ -54,23 +82,27 @@ function BurgerConstructor(props: BurgerConstructorProps) {
               />
               )
             : (
-                <p className={`${constructorStyles.text} text text_type_main-small pt-6 pb-6`}>Выберите булку</p>
+                <p className={`${styles.text} text text_type_main-small pt-6 pb-6`}>Выберите булку</p>
               )
           }
         </div>
 
         { fillings.length == 0
           ? (
-            <div className={`${constructorStyles.itemContainer} ${constructorStyles.filling} pr-8 pl-6 mr-4`}>
-              <p className={`${constructorStyles.text} text text_type_main-small pt-6 pb-6`}>Выберите начинку</p>
+            <div 
+              ref={dropTargetFilling} 
+              className={`${styles.itemContainer} 
+                          ${styles.filling} pr-8 pl-6 mr-4
+                          ${fillingHoverClass}`}>
+              <p className={`${styles.text} text text_type_main-small pt-6 pb-6`}>Выберите начинку</p>
             </div>
           )
           : (
-            <ul className={constructorStyles.list}>
+            <ul ref={dropTargetFilling} className={styles.list}>
               {fillings.map((elem) => (
-                <li key={uuidv4()} className={constructorStyles.listItem}>
+                <li key={uuidv4()} className={styles.listItem}>
                   <DragIcon type="primary" />
-                  <div className={`${constructorStyles.itemContainer} ${constructorStyles.filling} pr-8 pl-6 ml-1`}>
+                  <div className={`${styles.itemContainer} ${styles.filling} pr-8 pl-6 ml-1`}>
                     <ConstructorItem 
                       item = {elem} 
                       name={elem.name}
@@ -82,7 +114,11 @@ function BurgerConstructor(props: BurgerConstructorProps) {
           )
         }
 
-        <div className={`${constructorStyles.itemContainer} ${constructorStyles.bunBottom} pr-8 pl-6 mr-4`}>
+        <div 
+          ref={dropTargetBunBottom} 
+          className={`${styles.itemContainer} 
+                      ${styles.bunBottom} pr-8 pl-6 mr-4
+                      ${bunHoverClass}`}>
           { bun 
             ? (
               <ConstructorItem 
@@ -91,13 +127,13 @@ function BurgerConstructor(props: BurgerConstructorProps) {
               />
               )
             : (
-                <p className={`${constructorStyles.text} text text_type_main-small pt-6 pb-6`}>Выберите булку</p>
+                <p className={`${styles.text} text text_type_main-small pt-6 pb-6`}>Выберите булку</p>
               )
           }
         </div>
       </>
 
-      <div className={`${ constructorStyles.order } mt-10 pr-8`}>
+      <div className={`${ styles.order } mt-10 pr-8`}>
         <PriceBlock size="medium" price={totalPrice}/>
         <Button 
           htmlType="button" type="primary" size="large"
@@ -106,9 +142,41 @@ function BurgerConstructor(props: BurgerConstructorProps) {
           Оформить заказ
         </Button>
       </div>
-
     </section>
   )
 }
 
 export default BurgerConstructor;
+
+
+/*
+  const [{ isHoverTop }, dropTargetBunTop] = useDrop(() => ({
+    accept: 'bun',
+    drop: (item: { id: string }) => {
+      onDropHandler(item.id);
+    },
+    collect: monitor => ({
+      isHoverTop: monitor.isOver(),
+    }),
+  }));
+
+  const [{ isHoverFilling }, dropTargetFilling] = useDrop(() => ({
+    accept: ['sauce', 'main'],
+    drop: (item: { id: string }) => {
+      onDropHandler(item.id);
+    },
+    collect: monitor => ({
+      isHoverFilling: monitor.isOver(),
+    }),
+  }));
+
+  const [{ isHoverBottom }, dropTargetBunBottom] = useDrop(() => ({
+    accept: 'bun',
+    drop: (item: { id: string }) => {
+      onDropHandler(item.id);
+    },
+    collect: monitor => ({
+      isHoverBottom: monitor.isOver(),
+    }),
+  }));
+*/

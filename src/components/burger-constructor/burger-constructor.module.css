@@ -43,6 +43,7 @@
   align-items: center;
   justify-content: space-between;
   background-color: #2F2F37;
+  border: 3px solid transparent;
 }
 
 .bunTop {
@@ -59,5 +60,9 @@
 
 .text {
   margin: 0 auto;
+}
+
+.onHover {
+  border: 3px #4C4CFF dashed;
 }
 
