@@ -39,11 +39,11 @@ function IngredientItem(props: IngredientItemProps) {
     dispatch(selectIngredient(props.ingredient));
     //
     //temporary before DND
-    if(props.ingredient.type === 'bun') {
-      dispatch(addBun(props.ingredient));
-    } else {
-      dispatch(addIngredient(props.ingredient));
-    }
+    // if(props.ingredient.type === 'bun') {
+    //   dispatch(addBun(props.ingredient));
+    // } else {
+    //   dispatch(addIngredient(props.ingredient));
+    // }
     //
     props.onIngredientClick();
   };
@@ -57,7 +57,7 @@ function IngredientItem(props: IngredientItemProps) {
   });
 
   const opacity = isDragging ? 0.4 : 1;
-
+  
   return (
     <>
       <li 

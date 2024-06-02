@@ -18,6 +18,8 @@ function ConstructorItem(props: IngredientItemProps) {
     dispatch(removeIngredient(props.item._id));
   }
 
+  console.log("constructor item" + props.item.price)
+
   return(
     <>
       <div className={`${itemStyles.details} pt-4 pb-4 pr-8`}>

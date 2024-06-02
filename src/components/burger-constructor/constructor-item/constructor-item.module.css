@@ -1,24 +1,3 @@
-.item {
-  width: 536px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #2F2F37;
-}
-
-.shapeMid {
-  border-radius: 40px;
-}
-
-.shapeTop {
-  border-radius: 70px 70px 40px 40px;
-}
-
-.shapeBottom {
-  border-radius: 40px 40px 70px 70px;
-}
-
 .details {
   display: flex;
   align-items: center;
@@ -41,17 +20,4 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-}
-
-.container {
-  width: 536px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #2F2F37;
-}
-
-.bunTop {
-  border-radius: 70px 70px 40px 40px;
 }

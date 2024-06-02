@@ -5,9 +5,10 @@ import styles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
 import PriceBlock from '../price-block/price-block';
 import { Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import BurgerIngredient from "../../utils/ingredient-interface";
 
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
+import { addBun, addIngredient } from '../../services/constructor/actions';
+import BurgerIngredient from '../../utils/ingredient-interface';
 
 interface BurgerConstructorProps {
   onMakeOrderClick: () => void
@@ -16,6 +17,7 @@ interface BurgerConstructorProps {
 function BurgerConstructor(props: BurgerConstructorProps) {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
   const dispatch = useAppDispatch();
+
   const [totalPrice, setTotalPrice] = React.useState(0);
 
   const [{ isHoverBunTop }, dropTargetBunTop] = useDrop(useDropHandler(['bun'], 'isHoverBunTop'));
@@ -45,15 +47,19 @@ function BurgerConstructor(props: BurgerConstructorProps) {
     props.onMakeOrderClick();
   };
 
-  function onDropHandler() {
-    console.log("drop");
+  function onDropHandler(item: BurgerIngredient) {
+    if(item.type === 'bun') {
+      dispatch(addBun(item));
+    } else {
+      dispatch(addIngredient(item));
+    }
   }
 
   function useDropHandler(ingredientTypes: string[], collectProperty: string) {
     return () => ({
       accept: ingredientTypes,
-      drop: () => {
-        onDropHandler();
+      drop: (item: {ingredient: BurgerIngredient}) => {
+        onDropHandler(item.ingredient);
       },
       collect: (monitor: DropTargetMonitor) => ({
         [collectProperty]: monitor.isOver(),
@@ -63,8 +69,6 @@ function BurgerConstructor(props: BurgerConstructorProps) {
 
   const bunHoverClass = (isHoverBunTop || isHoverBunBottom) ? styles.onHover : '';
   const fillingHoverClass = (isHoverFilling ? styles.onHover : '');
-  console.log(fillingHoverClass)
-  
 
   return(
     <section className={`${styles.container} pt-25 pl-4 pr-4 mb-15`}>
@@ -74,7 +78,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
           className={`${styles.itemContainer} 
                       ${styles.bunTop} pr-8 pl-6 mr-4
                       ${bunHoverClass}`}>
-          { bun 
+          {bun 
             ? (
               <ConstructorItem 
                 item={bun} 
@@ -87,7 +91,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
           }
         </div>
 
-        { fillings.length == 0
+        {fillings.length == 0
           ? (
             <div 
               ref={dropTargetFilling} 
@@ -102,7 +106,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
               {fillings.map((elem) => (
                 <li key={uuidv4()} className={styles.listItem}>
                   <DragIcon type="primary" />
-                  <div className={`${styles.itemContainer} ${styles.filling} pr-8 pl-6 ml-1`}>
+                  <div className={`${styles.itemContainer} ${fillingHoverClass} ${styles.filling} pr-8 pl-6 ml-1`}>
                     <ConstructorItem 
                       item = {elem} 
                       name={elem.name}
@@ -119,7 +123,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
           className={`${styles.itemContainer} 
                       ${styles.bunBottom} pr-8 pl-6 mr-4
                       ${bunHoverClass}`}>
-          { bun 
+          {bun 
             ? (
               <ConstructorItem 
                 item={bun} 
@@ -133,11 +137,11 @@ function BurgerConstructor(props: BurgerConstructorProps) {
         </div>
       </>
 
-      <div className={`${ styles.order } mt-10 pr-8`}>
+      <div className={`${styles.order} mt-10 pr-8`}>
         <PriceBlock size="medium" price={totalPrice}/>
         <Button 
           htmlType="button" type="primary" size="large"
-          onClick={ handleClick }
+          onClick={handleClick}
         >
           Оформить заказ
         </Button>

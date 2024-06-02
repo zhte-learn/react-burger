@@ -26,14 +26,6 @@
 .listItem {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-.order {
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  gap: 40px;
 }
 
 .itemContainer {
@@ -58,6 +50,13 @@
   border-radius: 40px;
 }
 
+.order {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 40px;
+}
+
 .text {
   margin: 0 auto;
 }
@@ -65,4 +64,3 @@
 .onHover {
   border: 3px #4C4CFF dashed;
 }
-
