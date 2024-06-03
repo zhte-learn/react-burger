@@ -3,6 +3,7 @@ import {
   ADD_BUN,
   ADD_INGREDIENT,
   REMOVE_INGREDIENT,
+  MOVE_INGREDIENT,
 } from './actions';
 
 const initialState = {
@@ -24,18 +25,28 @@ export const constructorReducer= (state = initialState, action: any) => {
       return {
         ...state,
         bun: action.payload,
-      };
+      }
     }
     case ADD_INGREDIENT: {
       return {
         ...state,
         fillings: [...state.fillings, action.payload]
-    }
+      }
     }
     case REMOVE_INGREDIENT: {
       return {
         ...state,
         fillings: removeElementById(state.fillings, action.payload)
+      }
+    }
+    case MOVE_INGREDIENT: {
+      const {dragIndex, hoverIndex} = action.payload;
+      const updatedIngredients = [...state.fillings];
+      const [movedItem] = updatedIngredients.splice(dragIndex, 1);
+      updatedIngredients.splice(hoverIndex, 0, movedItem);
+      return {
+        ...state,
+        fillings: updatedIngredients,
       }
     }
     default: {

@@ -1,13 +1,15 @@
 import React from 'react';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
+
 import { v4 as uuidv4 } from 'uuid';
 import styles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
+import ConstructorItemInit from './constructor-item-init/constructor-item-init';
 import PriceBlock from '../price-block/price-block';
 import { Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
-import { addBun, addIngredient } from '../../services/constructor/actions';
+import { addBun, addIngredient, moveIngredient } from '../../services/constructor/actions';
 import BurgerIngredient from '../../utils/ingredient-interface';
 
 interface BurgerConstructorProps {
@@ -20,10 +22,6 @@ function BurgerConstructor(props: BurgerConstructorProps) {
 
   const [totalPrice, setTotalPrice] = React.useState(0);
 
-  const [{ isHoverBunTop }, dropTargetBunTop] = useDrop(useDropHandler(['bun'], 'isHoverBunTop'));
-  const [{ isHoverBunBottom }, dropTargetBunBottom] = useDrop(useDropHandler(['bun'], 'isHoverBunBottom'));
-  const [{ isHoverFilling }, dropTargetFilling] = useDrop(useDropHandler(['sauce', 'main'], 'isHoverFilling'));
-  
   const getTotalPrice = React.useMemo(() => {
     let fillingsPrice = 0;
     
@@ -55,17 +53,33 @@ function BurgerConstructor(props: BurgerConstructorProps) {
     }
   }
 
-  function useDropHandler(ingredientTypes: string[], collectProperty: string) {
-    return () => ({
-      accept: ingredientTypes,
-      drop: (item: {ingredient: BurgerIngredient}) => {
-        onDropHandler(item.ingredient);
-      },
-      collect: (monitor: DropTargetMonitor) => ({
-        [collectProperty]: monitor.isOver(),
-      })
-    })
-  };
+  const [{ isHoverBunTop }, dropTargetBunTop] = useDrop({
+    accept: 'bun',
+    drop: (item: { ingredient: BurgerIngredient }) => onDropHandler(item.ingredient),
+    collect: (monitor: DropTargetMonitor) => ({
+      isHoverBunTop: monitor.isOver(),
+    }),
+  });
+
+  const [{ isHoverBunBottom }, dropTargetBunBottom] = useDrop({
+    accept: 'bun',
+    drop: (item: { ingredient: BurgerIngredient }) => onDropHandler(item.ingredient),
+    collect: (monitor: DropTargetMonitor) => ({
+      isHoverBunBottom: monitor.isOver(),
+    }),
+  });
+
+  const [{ isHoverFilling }, dropTargetFilling] = useDrop({
+    accept: ['sauce', 'main'],
+    drop: (item: { ingredient: BurgerIngredient }) => onDropHandler(item.ingredient),
+    collect: (monitor: DropTargetMonitor) => ({
+      isHoverFilling: monitor.isOver(),
+    }),
+  });
+
+  const moveItem = React.useCallback((dragIndex: number, hoverIndex: number) => {
+    dispatch(moveIngredient(dragIndex, hoverIndex));
+  }, []);
 
   const bunHoverClass = (isHoverBunTop || isHoverBunBottom) ? styles.onHover : '';
   const fillingHoverClass = (isHoverFilling ? styles.onHover : '');
@@ -73,69 +87,61 @@ function BurgerConstructor(props: BurgerConstructorProps) {
   return(
     <section className={`${styles.container} pt-25 pl-4 pr-4 mb-15`}>
       <>
-          {bun 
-            ? (
-              <ConstructorItem 
-                item={bun} 
-                name={`${bun.name} (верх)`}
-                index={0}
-              />
-              )
-            : (
-              <div 
-                ref={dropTargetBunTop} 
-                className={`${styles.itemContainer} 
-                      ${styles.bunTop} pr-8 pl-6 mr-4
-                      ${bunHoverClass}`}>
-                <p className={`${styles.text} text text_type_main-small pt-6 pb-6`}>Выберите булку</p>
-              </div>
-              )
-          }
+        {bun ? (
+          <ConstructorItem 
+            ref={dropTargetBunTop}
+            item={bun} 
+            position={'top'}
+            index={0}
+            isHover={isHoverBunTop}
+          />
+        ) : (
+          <ConstructorItemInit 
+            ref={dropTargetBunTop} 
+            position={'top'}
+            isHover={isHoverBunTop}
+            text={'Выберите булку'}
+          />
+        )}
 
-        {fillings.length == 0
-          ? (
-            <div 
-              ref={dropTargetFilling} 
-              className={`${styles.itemContainer} 
-                          ${styles.filling} pr-8 pl-6 mr-4
-                          ${fillingHoverClass}`}>
-              <p className={`${styles.text} text text_type_main-small pt-6 pb-6`}>Выберите начинку</p>
-            </div>
-          )
-          : (
-            <ul ref={dropTargetFilling} className= {`${styles.list} ${fillingHoverClass}`}>
-              {fillings.map((elem, index) => (
-                <li key={uuidv4()} className={styles.listItem}>
-                  <DragIcon type="primary" />
-                  <ConstructorItem 
-                    item = {elem} 
-                    name={elem.name}
-                    index={index}
-                  />
-                </li>  
-              ))}
-            </ul>
-          )
-        }
-
-          {bun 
-            ? (
+        {fillings.length == 0 ? (
+          <ConstructorItemInit 
+            ref={dropTargetFilling} 
+            position={'middle'}
+            isHover={isHoverFilling}
+            text={'Выберите начинку'}
+          />
+        ) : (
+          <ul ref={dropTargetFilling} className={styles.list}>
+            {fillings.map((elem, index) => (
               <ConstructorItem 
-                item={bun} 
-                name={`${bun.name} (верх)`}
-                index={0}
-              />
-              )
-            : (
-              <div 
-                ref={dropTargetBunBottom} 
-                className={`${styles.itemContainer} 
-                      ${styles.bunBottom} pr-8 pl-6 mr-4
-                      ${bunHoverClass}`}>
-                <p className={`${styles.text} text text_type_main-small pt-6 pb-6`}>Выберите булку</p>
-                </div>
-              )
-          }
+                key={uuidv4()}
+                item = {elem} 
+                position={'middle'}
+                index={index}
+                isHover={isHoverFilling}
+                moveItem={moveItem}
+              /> 
+            ))}
+          </ul>
+        )}
+
+        {bun ? (
+          <ConstructorItem 
+            ref={dropTargetBunBottom} 
+            item={bun} 
+            position={'bottom'}
+            index={0}
+            isHover={isHoverBunBottom}
+          />
+          ) : (
+          <ConstructorItemInit 
+            ref={dropTargetBunBottom} 
+            position={'bottom'}
+            isHover={isHoverBunBottom}
+            text={'Выберите булку'}
+          />
+        )}
       </>
 
       <div className={`${styles.order} mt-10 pr-8`}>

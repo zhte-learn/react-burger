@@ -5,125 +5,124 @@ import type { Identifier, XYCoord } from 'dnd-core'
 import itemStyles from './constructor-item.module.css';
 import PriceBlock from '../../price-block/price-block';
 import BurgerIngredient from "../../../utils/ingredient-interface";
-import { LockIcon, DeleteIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { LockIcon, DeleteIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppSelector, useAppDispatch } from '../../../services/hooks';
 import { removeIngredient } from '../../../services/constructor/actions';
 
-interface IngredientItemProps {
+interface ConstructorItemProps {
   item: BurgerIngredient,
-  name: string,
+  position: string,
   index: number,
+  isHover: boolean,
+  mRef?: React.Ref<HTMLDivElement>,
+  moveItem?: (dragIndex: number, hoverIndex: number) => void,
 }
 
 interface DragItem {
-  index: number,
-  id: string,
-  type: string,
+  index: number
+  id: string
+  type: string
 }
 
-function ConstructorItem(props: IngredientItemProps) {
+const ConstructorItem = React.forwardRef<HTMLDivElement, ConstructorItemProps>((props, ref) => {
   const dispatch = useAppDispatch();
+
+  const name = (props.position === 'top') ? `${props.item.name} (верх)`
+                : (props.position === 'bottom') ? `${props.item.name} (низ)`
+                : props.item.name;
+  
+  const shapeStyle = (props.position === 'top') ? itemStyles.top
+                      : (props.position === 'bottom') ? itemStyles.bottom
+                      : itemStyles.middle;
+  
+  const onHoverStyle = (props.isHover) ? itemStyles.onHover : '';
+  const extraClass = (props.position === 'top' || props.position === 'bottom') ? 'mr-4' : '';
 
   function handleDelete() {
     dispatch(removeIngredient(props.item._id));
   }
 
-  const ref = React.useRef<HTMLDivElement>(null);
+  const sortRef = React.useRef<HTMLLIElement>(null);
 
-  const [{ handlerId }, drop] = useDrop<
-    DragItem,
-    void,
-    { handlerId: Identifier | null }
-  >({
-    accept: ['sauce', 'main'],
+  const [{ isHoverItem, handlerId }, drop] = useDrop<DragItem, void, {isHoverItem: boolean, handlerId: Identifier|null}>({
+    accept: "draggable",
     collect(monitor) {
-      return {
+      return{
         handlerId: monitor.getHandlerId(),
+        isHoverItem: monitor.isOver(),
       }
     },
     hover(item: DragItem, monitor) {
-      if (!ref.current) {
+      if (!sortRef.current) {
         return;
       }
-      const dragIndex = item.index;
-      const hoverIndex = props.index;
+    const dragIndex = item.index;
+    const hoverIndex = props.index;
 
-      // Don't replace items with themselves
-      if (dragIndex === hoverIndex) {
-        return;
-      }
+    if (dragIndex === hoverIndex) {
+      return;
+    }
 
-      // Determine rectangle on screen
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+    const hoverBoundingRect = sortRef.current?.getBoundingClientRect();
+    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    const clientOffset = monitor.getClientOffset();
+    const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
-      // Get vertical middle
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      return;
+    }
 
-      // Determine mouse position
-      const clientOffset = monitor.getClientOffset();
+    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      return;
+    }
 
-      // Get pixels to the top
-      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+    props.moveItem?.(dragIndex, hoverIndex);
 
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
-
-      // Dragging downwards
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
-      }
-
-      // Dragging upwards
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
-      }
-
-      // Time to actually perform the action
-      //moveCard(dragIndex, hoverIndex);
-
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
-      item.index = hoverIndex;
-    },
+    item.index = hoverIndex;
+    }
   })
 
-  /*const [{ isDragging }, drag] = useDrag({
-    type: props.item.type,
+  const [{ isDragging }, drag] = useDrag({
+    type: "draggable",
     item: () => {
-      return { props.item._id, props.item.index };
+      return { id: props.item._id, index: props.index }
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),
     }),
-  })
+  });
 
   const opacity = isDragging ? 0 : 1;
-  drag(drop(ref));*/
+  const itemHoverClass = (isHoverItem ? itemStyles.onHover : '');
+  drag(drop(sortRef));
 
   return(
-    <div className={`${itemStyles.container} pr-8 pl-6 ml-1`}>
-      <div className={`${itemStyles.details} pt-4 pb-4 pr-8`}>
-        <img 
-          className={`${itemStyles.image}`} 
-          src={props.item.image_mobile} 
-          alt={props.item.name} 
-        />
-        <p className={`${itemStyles.name} text text_type_main-small ml-5`}>{props.name}</p>
-      </div>
+    <li ref={sortRef} style={{opacity}} data-handler-id={handlerId} className={`${itemStyles.item} ${extraClass} ${itemHoverClass}`}>
+      {
+        props.position === 'middle' && <DragIcon type="primary" />
+      }
+      
+      <div ref={ref} className={`${itemStyles.container} ${shapeStyle} ${onHoverStyle} pr-8 pl-6 ml-1`}>
+        <div className={`${itemStyles.details} pt-4 pb-4 pr-8`}>
+          <img 
+            className={`${itemStyles.image}`} 
+            src={props.item.image_mobile} 
+            alt={props.item.name} 
+          />
+          <p className={`${itemStyles.name} text text_type_main-small ml-5`}>{name}</p>
+        </div>
 
-      <div className={itemStyles.controls}>
-        <PriceBlock size={'small'} price={props.item.price}/>
-        { 
-          props.item.type !== 'bun'
-          ? <DeleteIcon type="primary" onClick={handleDelete}/>
-          : <LockIcon type="secondary" />
-        }
+        <div className={itemStyles.controls}>
+          <PriceBlock size={'small'} price={props.item.price}/>
+          { 
+            props.position === 'middle'
+            ? <DeleteIcon type="primary" onClick={handleDelete}/>
+            : <LockIcon type="secondary" />
+          }
+        </div>
       </div>
-    </div>
+    </li>
   )
-}
+});
 
 export default ConstructorItem;
