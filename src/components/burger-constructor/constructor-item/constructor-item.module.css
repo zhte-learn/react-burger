@@ -1,3 +1,13 @@
+.container {
+  width: 536px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #2F2F37;
+  border: 3px solid transparent;
+}
+
 .details {
   display: flex;
   align-items: center;

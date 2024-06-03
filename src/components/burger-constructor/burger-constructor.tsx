@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDrop, DropTargetMonitor } from 'react-dnd';
+import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
@@ -73,23 +73,24 @@ function BurgerConstructor(props: BurgerConstructorProps) {
   return(
     <section className={`${styles.container} pt-25 pl-4 pr-4 mb-15`}>
       <>
-        <div 
-          ref={dropTargetBunTop} 
-          className={`${styles.itemContainer} 
-                      ${styles.bunTop} pr-8 pl-6 mr-4
-                      ${bunHoverClass}`}>
           {bun 
             ? (
               <ConstructorItem 
                 item={bun} 
                 name={`${bun.name} (верх)`}
+                index={0}
               />
               )
             : (
+              <div 
+                ref={dropTargetBunTop} 
+                className={`${styles.itemContainer} 
+                      ${styles.bunTop} pr-8 pl-6 mr-4
+                      ${bunHoverClass}`}>
                 <p className={`${styles.text} text text_type_main-small pt-6 pb-6`}>Выберите булку</p>
+              </div>
               )
           }
-        </div>
 
         {fillings.length == 0
           ? (
@@ -102,39 +103,39 @@ function BurgerConstructor(props: BurgerConstructorProps) {
             </div>
           )
           : (
-            <ul ref={dropTargetFilling} className={styles.list}>
-              {fillings.map((elem) => (
+            <ul ref={dropTargetFilling} className= {`${styles.list} ${fillingHoverClass}`}>
+              {fillings.map((elem, index) => (
                 <li key={uuidv4()} className={styles.listItem}>
                   <DragIcon type="primary" />
-                  <div className={`${styles.itemContainer} ${fillingHoverClass} ${styles.filling} pr-8 pl-6 ml-1`}>
-                    <ConstructorItem 
-                      item = {elem} 
-                      name={elem.name}
-                    />
-                  </div>
+                  <ConstructorItem 
+                    item = {elem} 
+                    name={elem.name}
+                    index={index}
+                  />
                 </li>  
               ))}
             </ul>
           )
         }
 
-        <div 
-          ref={dropTargetBunBottom} 
-          className={`${styles.itemContainer} 
-                      ${styles.bunBottom} pr-8 pl-6 mr-4
-                      ${bunHoverClass}`}>
           {bun 
             ? (
               <ConstructorItem 
                 item={bun} 
                 name={`${bun.name} (верх)`}
+                index={0}
               />
               )
             : (
+              <div 
+                ref={dropTargetBunBottom} 
+                className={`${styles.itemContainer} 
+                      ${styles.bunBottom} pr-8 pl-6 mr-4
+                      ${bunHoverClass}`}>
                 <p className={`${styles.text} text text_type_main-small pt-6 pb-6`}>Выберите булку</p>
+                </div>
               )
           }
-        </div>
       </>
 
       <div className={`${styles.order} mt-10 pr-8`}>

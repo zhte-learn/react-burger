@@ -37,38 +37,30 @@ function IngredientItem(props: IngredientItemProps) {
   
   function handleClick() {
     dispatch(selectIngredient(props.ingredient));
-    //
-    //temporary before DND
-    // if(props.ingredient.type === 'bun') {
-    //   dispatch(addBun(props.ingredient));
-    // } else {
-    //   dispatch(addIngredient(props.ingredient));
-    // }
-    //
     props.onIngredientClick();
   };
 
   const [{ isDragging }, dragRef] = useDrag({
     type: props.ingredient.type,
-    item: { ingredient: props.ingredient },
+    item: {ingredient: props.ingredient},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     })
   });
 
   const opacity = isDragging ? 0.4 : 1;
-  
+
   return (
     <>
       <li 
         ref={dragRef}
-        className={`${ itemStyles.item } mb-8`}
-        onClick={ handleClick }
-        style={{ opacity }}
+        className={`${itemStyles.item} mb-8`}
+        onClick={handleClick}
+        style={{opacity}}
       >
-        <img src={ props.ingredient.image } alt={ props.ingredient.name } />
+        <img src={props.ingredient.image} alt={props.ingredient.name} />
         <PriceBlock size="small" price={props.ingredient.price} />
-        <p className={`${ itemStyles.name } pt-1 text text_type_main-small`}>
+        <p className={`${itemStyles.name} pt-1 text text_type_main-small`}>
           {props.ingredient.name}
         </p>
         {
