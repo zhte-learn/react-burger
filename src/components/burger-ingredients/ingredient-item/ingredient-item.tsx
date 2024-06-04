@@ -8,7 +8,6 @@ import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useAppSelector, useAppDispatch } from '../../../services/hooks';
 import { selectIngredient } from "../../../services/selected-ingredient/actions";
-import { addBun, addIngredient } from '../../../services/constructor/actions';
 
 interface IngredientItemProps {
   ingredient: BurgerIngredient,

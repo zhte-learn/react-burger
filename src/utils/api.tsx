@@ -15,3 +15,12 @@ export const getIngredientsRequest = () => {
   })
   .then(getResponse);
 }
+
+export const getOrder = (data: string[]) => {
+  return fetch(`${apiConfig.baseUrl}/orders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ingredients: data}),
+  })
+  .then(getResponse);
+}

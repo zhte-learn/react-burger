@@ -1,19 +1,20 @@
 import React from 'react';
-import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
+import { useDrop, DropTargetMonitor } from 'react-dnd';
 
 import { v4 as uuidv4 } from 'uuid';
 import styles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
 import ConstructorItemInit from './constructor-item-init/constructor-item-init';
 import PriceBlock from '../price-block/price-block';
-import { Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { addBun, addIngredient, moveIngredient } from '../../services/constructor/actions';
+import { getOrderDetails } from '../../services/order/actions';
 import BurgerIngredient from '../../utils/ingredient-interface';
 
 interface BurgerConstructorProps {
-  onMakeOrderClick: () => void
+  onOrderClick: () => void,
 }
 
 function BurgerConstructor(props: BurgerConstructorProps) {
@@ -21,6 +22,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
   const dispatch = useAppDispatch();
 
   const [totalPrice, setTotalPrice] = React.useState(0);
+  const [isDisabled, setIsDisabled] = React.useState(true);
 
   const getTotalPrice = React.useMemo(() => {
     let fillingsPrice = 0;
@@ -41,9 +43,28 @@ function BurgerConstructor(props: BurgerConstructorProps) {
     setTotalPrice(getTotalPrice);
   }, [bun, fillings]);
 
+  function getIngredientsIds(ingredientsList: BurgerIngredient[]) {
+    return ingredientsList.map(item => item._id);
+  }
+
+  const makeOrder = React.useCallback(() => {
+    const ingredientsList = [bun].concat(fillings);
+    const ingredientsIds = (getIngredientsIds(ingredientsList));
+    dispatch(getOrderDetails(ingredientsIds.concat(bun._id)));
+  }, [bun, fillings]);
+
   function handleClick() {
-    props.onMakeOrderClick();
+    makeOrder();
+    props.onOrderClick();
   };
+
+  React.useEffect(() => {
+    if(fillings.length > 0 && bun) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [bun, fillings]);
 
   function onDropHandler(item: BurgerIngredient) {
     if(item.type === 'bun') {
@@ -80,9 +101,6 @@ function BurgerConstructor(props: BurgerConstructorProps) {
   const moveItem = React.useCallback((dragIndex: number, hoverIndex: number) => {
     dispatch(moveIngredient(dragIndex, hoverIndex));
   }, []);
-
-  const bunHoverClass = (isHoverBunTop || isHoverBunBottom) ? styles.onHover : '';
-  const fillingHoverClass = (isHoverFilling ? styles.onHover : '');
 
   return(
     <section className={`${styles.container} pt-25 pl-4 pr-4 mb-15`}>
@@ -148,6 +166,7 @@ function BurgerConstructor(props: BurgerConstructorProps) {
         <PriceBlock size="medium" price={totalPrice}/>
         <Button 
           htmlType="button" type="primary" size="large"
+          disabled={isDisabled}
           onClick={handleClick}
         >
           Оформить заказ
@@ -158,36 +177,3 @@ function BurgerConstructor(props: BurgerConstructorProps) {
 }
 
 export default BurgerConstructor;
-
-
-/*
-  const [{ isHoverTop }, dropTargetBunTop] = useDrop(() => ({
-    accept: 'bun',
-    drop: (item: { id: string }) => {
-      onDropHandler(item.id);
-    },
-    collect: monitor => ({
-      isHoverTop: monitor.isOver(),
-    }),
-  }));
-
-  const [{ isHoverFilling }, dropTargetFilling] = useDrop(() => ({
-    accept: ['sauce', 'main'],
-    drop: (item: { id: string }) => {
-      onDropHandler(item.id);
-    },
-    collect: monitor => ({
-      isHoverFilling: monitor.isOver(),
-    }),
-  }));
-
-  const [{ isHoverBottom }, dropTargetBunBottom] = useDrop(() => ({
-    accept: 'bun',
-    drop: (item: { id: string }) => {
-      onDropHandler(item.id);
-    },
-    collect: monitor => ({
-      isHoverBottom: monitor.isOver(),
-    }),
-  }));
-*/

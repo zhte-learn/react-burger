@@ -12,7 +12,6 @@ const KEY_NAME_ESC = 'Escape';
 interface ModalProps {
   onClose: () => void;
   ingredient: BurgerIngredient | null,
-  orderNumber: string,
   title: string,
   children: React.ReactNode
 }

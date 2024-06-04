@@ -4,6 +4,7 @@ import {
   ADD_INGREDIENT,
   REMOVE_INGREDIENT,
   MOVE_INGREDIENT,
+  RESET_CONSTRUCTOR,
 } from './actions';
 
 const initialState = {
@@ -19,7 +20,7 @@ const removeElementById = (array: BurgerIngredient[], id: string) => {
   return array;
 }
 
-export const constructorReducer= (state = initialState, action: any) => {
+export const constructorReducer = (state = initialState, action: any) => {
   switch(action.type) {
     case ADD_BUN: {
       return {
@@ -42,11 +43,18 @@ export const constructorReducer= (state = initialState, action: any) => {
     case MOVE_INGREDIENT: {
       const {dragIndex, hoverIndex} = action.payload;
       const updatedIngredients = [...state.fillings];
-      const [movedItem] = updatedIngredients.splice(dragIndex, 1);
+      const movedItem = updatedIngredients.splice(dragIndex, 1)[0];
       updatedIngredients.splice(hoverIndex, 0, movedItem);
       return {
         ...state,
         fillings: updatedIngredients,
+      }
+    }
+    case RESET_CONSTRUCTOR: {
+      return{
+        ...state,
+        bun: null,
+        fillings: [],
       }
     }
     default: {

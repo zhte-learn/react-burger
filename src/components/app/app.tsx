@@ -11,17 +11,19 @@ import OrderDetails from '../order-details/order-details';
 
 import { selectIngredient } from '../../services/selected-ingredient/actions';
 import { getIngredients } from '../../services/ingredients/actions';
+import { resetOrder } from '../../services/order/actions';
+import { resetConstructor } from '../../services/constructor/actions';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const orderNumber = "034536";
 
   const dispatch = useAppDispatch();
   const { ingredients, ingredientsLoading, ingredientsRequestFailed, errorMessage } = useAppSelector(state => state.ingredients);
   const { selectedIngredient } = useAppSelector(state => state.selectedIngredient);
-
+  const { orderNumber, orderRequestFailed, orderLoading, orderErrorMessage } = useAppSelector(state => state.order);
+  
   function openModal() {
     setIsModalOpen(true);
   }
@@ -29,6 +31,8 @@ function App() {
   function closeModal() {
     setIsModalOpen(false);
     dispatch(selectIngredient(null));
+    dispatch(resetOrder());
+    dispatch(resetConstructor());
   }
   
   React.useEffect(() => {
@@ -38,7 +42,6 @@ function App() {
   return (  
     <>
       <AppHeader />
-
       { ingredientsRequestFailed 
         ? (
             <>
@@ -56,7 +59,7 @@ function App() {
                         onIngredientClick={ openModal }
                       />
                       <BurgerConstructor 
-                        onMakeOrderClick={ openModal }
+                        onOrderClick={ openModal }
                       />                                        
                     </div>
                   </DndProvider>
@@ -65,16 +68,13 @@ function App() {
         : (<p>No ingredients...</p>)
       }
       
-      
       {isModalOpen && (
         selectedIngredient 
         ? (
           <Modal 
-            ingredient={ selectedIngredient } 
-            onClose={ closeModal }
-            orderNumber={ "" }
-            title={"Детали ингредиента"}>
-              
+            ingredient={selectedIngredient} 
+            onClose={closeModal}
+            title={"Детали ингредиента"}>  
               <IngredientDetails 
                 image={selectedIngredient.image_large}
                 name={selectedIngredient.name}
@@ -83,15 +83,24 @@ function App() {
                 calories={selectedIngredient.calories}
                 proteins={selectedIngredient.proteins}
               />
-
           </Modal>) 
         : (
           <Modal 
-            ingredient={ null } 
-            onClose={ closeModal }
-            orderNumber={ orderNumber }
+            ingredient={null} 
+            onClose={closeModal}
             title={""}>
-              <OrderDetails orderNumber={orderNumber}/>
+              {orderRequestFailed ?
+              (
+                <>
+                  <div>Что-то пошло не так</div>
+                  <div>{ orderErrorMessage }</div>
+                </>
+              ) : orderLoading ? (
+                <Loader />
+              ) : (
+                <OrderDetails orderNumber={orderNumber}/>
+              )
+            }
           </Modal>)
       )}
     </>
@@ -99,23 +108,3 @@ function App() {
 }
 
 export default App;
-
-
-/*function getIngredients(link: string) {
-    fetch(link)
-      .then(res => {
-        if(!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
-      .then(data => {
-        setIngredients(data.data);
-      })
-      .catch(err => {
-        setError(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };*/

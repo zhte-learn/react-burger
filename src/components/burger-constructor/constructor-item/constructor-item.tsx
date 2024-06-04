@@ -6,7 +6,7 @@ import itemStyles from './constructor-item.module.css';
 import PriceBlock from '../../price-block/price-block';
 import BurgerIngredient from "../../../utils/ingredient-interface";
 import { LockIcon, DeleteIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useAppSelector, useAppDispatch } from '../../../services/hooks';
+import { useAppDispatch } from '../../../services/hooks';
 import { removeIngredient } from '../../../services/constructor/actions';
 
 interface ConstructorItemProps {
