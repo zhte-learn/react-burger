@@ -120,7 +120,7 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
         /> 
       </div>
     </section>
-    {isModalOpen &&
+    {(isModalOpen && selectedIngredient) &&
       <Modal 
         ingredient={selectedIngredient} 
         onClose={closeModal}

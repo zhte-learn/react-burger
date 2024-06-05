@@ -20,7 +20,7 @@ import BurgerIngredient from '../../utils/ingredient-interface';
 
 function BurgerConstructor() {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
-  const { orderNumber, orderRequestFailed, orderLoading, orderErrorMessage } = useAppSelector(state => state.order);
+  const { orderNumber, orderRequestFailed, orderLoading, orderError } = useAppSelector(state => state.order);
   
   const dispatch = useAppDispatch();
 
@@ -52,9 +52,13 @@ function BurgerConstructor() {
   }
 
   const makeOrder = React.useCallback(() => {
-    const ingredientsList = [bun].concat(fillings);
-    const ingredientsIds = (getIngredientsIds(ingredientsList));
-    dispatch(getOrderDetails(ingredientsIds.concat(bun._id)));
+    const ingredientsList = []; // = [bun].concat(fillings);
+    if(bun && fillings.length > 0) {
+      ingredientsList.push(bun);
+      ingredientsList.concat(fillings);
+      const ingredientsIds = (getIngredientsIds(ingredientsList));
+      dispatch(getOrderDetails(ingredientsIds.concat(bun._id)));
+    }
   }, [bun, fillings]);
 
   function handleClick() {
@@ -104,7 +108,7 @@ function BurgerConstructor() {
   });
 
   const moveItem = React.useCallback((dragIndex: number, hoverIndex: number) => {
-    dispatch(moveIngredient(dragIndex, hoverIndex));
+    dispatch(moveIngredient({dragIndex, hoverIndex}));
   }, []);
 
   function closeModal() {
@@ -191,7 +195,7 @@ function BurgerConstructor() {
           {orderRequestFailed ? (
             <>
               <div>Что-то пошло не так</div>
-              <div>{ orderErrorMessage }</div>
+              <div>{ orderError }</div>
             </>
             ) : orderLoading ? (
             <Loader />

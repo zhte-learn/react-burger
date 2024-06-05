@@ -4,7 +4,8 @@ const apiConfig = {
 
 const getResponse = (res: Response) => {
   if(!res.ok) {
-    throw new Error(`${res.status}`);
+    //throw new Error(`${res.status}`);
+    Promise.reject(`Ошибка ${res.status}`);
   }
   return res.json();
 }

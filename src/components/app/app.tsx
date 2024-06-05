@@ -17,7 +17,7 @@ function App() {
   const { ingredients, 
           ingredientsLoading, 
           ingredientsRequestFailed, 
-          errorMessage } 
+          ingredientsError } 
           = useAppSelector(state => state.ingredients);
   
   React.useEffect(() => {
@@ -31,7 +31,7 @@ function App() {
         ? (
           <>
             <div>Что-то пошло не так</div>
-            <div>{errorMessage}</div>
+            <div>{ingredientsError}</div>
           </>
           ) 
         : ingredientsLoading 

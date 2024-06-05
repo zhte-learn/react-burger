@@ -1,11 +1,31 @@
-import { Dispatch } from 'redux';
+//import { Dispatch } from 'redux';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getOrder } from '../../utils/api';
 
-export const GET_ORDER_DETAILS = 'GET_ORDER_DETAILS';
-export const GET_ORDER_DETAILS_SUCCESS = 'GET_ORDER_DETAILS_SUCCESS';
-export const GET_ORDER_DETAILS_FAILED = 'GET_ORDER_DETAILS_FAILED';
-export const RESET_ORDER = 'RESET_ORDER' 
+// export const GET_ORDER_DETAILS = 'GET_ORDER_DETAILS';
+// export const GET_ORDER_DETAILS_SUCCESS = 'GET_ORDER_DETAILS_SUCCESS';
+// export const GET_ORDER_DETAILS_FAILED = 'GET_ORDER_DETAILS_FAILED';
+// export const RESET_ORDER = 'RESET_ORDER';
 
+export const getOrderDetails = createAsyncThunk(
+  "order/getOrderDetails",
+  async (ingredientsIds: string[], thunkAPI) => {
+    try {
+        return await getOrder(ingredientsIds);
+    } catch (error: any) {
+        thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const resetOrder = createAsyncThunk(
+  "order/resetOrder",
+  async() => {
+    return;
+  }
+)
+
+/*
 export function getOrderDetails(ingredientsIds: string[]) {
   return function(dispatch: Dispatch) {
     dispatch({
@@ -40,4 +60,4 @@ export function resetOrder() {
       type: RESET_ORDER,
     })
   }
-}
+}*/
