@@ -5,24 +5,28 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
 import ConstructorItemInit from './constructor-item-init/constructor-item-init';
+import Modal from '../modal/modal';
+import OrderDetails from '../order-details/order-details';
+import Loader from '../loader/loader';
 import PriceBlock from '../price-block/price-block';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { addBun, addIngredient, moveIngredient } from '../../services/constructor/actions';
 import { getOrderDetails } from '../../services/order/actions';
+import { resetOrder } from '../../services/order/actions';
+import { resetConstructor } from '../../services/constructor/actions';
 import BurgerIngredient from '../../utils/ingredient-interface';
 
-interface BurgerConstructorProps {
-  onOrderClick: () => void,
-}
-
-function BurgerConstructor(props: BurgerConstructorProps) {
+function BurgerConstructor() {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
+  const { orderNumber, orderRequestFailed, orderLoading, orderErrorMessage } = useAppSelector(state => state.order);
+  
   const dispatch = useAppDispatch();
 
   const [totalPrice, setTotalPrice] = React.useState(0);
   const [isDisabled, setIsDisabled] = React.useState(true);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const getTotalPrice = React.useMemo(() => {
     let fillingsPrice = 0;
@@ -55,7 +59,8 @@ function BurgerConstructor(props: BurgerConstructorProps) {
 
   function handleClick() {
     makeOrder();
-    props.onOrderClick();
+    setIsModalOpen(true);
+    //props.onOrderClick();
   };
 
   React.useEffect(() => {
@@ -102,7 +107,14 @@ function BurgerConstructor(props: BurgerConstructorProps) {
     dispatch(moveIngredient(dragIndex, hoverIndex));
   }, []);
 
+  function closeModal() {
+    setIsModalOpen(false);
+    dispatch(resetOrder());
+    dispatch(resetConstructor());
+  }
+
   return(
+    <>
     <section className={`${styles.container} pt-25 pl-4 pr-4 mb-15`}>
       <>
         {bun ? (
@@ -173,6 +185,23 @@ function BurgerConstructor(props: BurgerConstructorProps) {
         </Button>
       </div>
     </section>
+
+    {isModalOpen && (
+      <Modal onClose={closeModal}>
+          {orderRequestFailed ? (
+            <>
+              <div>Что-то пошло не так</div>
+              <div>{ orderErrorMessage }</div>
+            </>
+            ) : orderLoading ? (
+            <Loader />
+          ) : (
+            <OrderDetails orderNumber={orderNumber}/>
+          )
+        }
+      </Modal>
+      )}
+    </>
   )
 }
 

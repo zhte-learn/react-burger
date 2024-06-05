@@ -3,15 +3,15 @@ import { useDrag } from "react-dnd";
 
 import itemStyles from './ingredient-item.module.css';
 import PriceBlock from "../../price-block/price-block";
-import BurgerIngredient from "../../../utils/ingredient-interface";
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import BurgerIngredient from "../../../utils/ingredient-interface";
 
 import { useAppSelector, useAppDispatch } from '../../../services/hooks';
 import { selectIngredient } from "../../../services/selected-ingredient/actions";
 
 interface IngredientItemProps {
   ingredient: BurgerIngredient,
-  onIngredientClick: () => void
+  onClick: () => void
 }
 
 function IngredientItem(props: IngredientItemProps) {
@@ -36,7 +36,7 @@ function IngredientItem(props: IngredientItemProps) {
   
   function handleClick() {
     dispatch(selectIngredient(props.ingredient));
-    props.onIngredientClick();
+    props.onClick();
   };
 
   const [{ isDragging }, dragRef] = useDrag({

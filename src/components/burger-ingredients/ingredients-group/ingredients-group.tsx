@@ -6,7 +6,7 @@ import IngredientItem from "../ingredient-item/ingredient-item";
 interface IngredientsGroupProps {
   groupTitle: string,
   ingredients: BurgerIngredient[],
-  onIngredientClick: () => void,
+  onClick: () => void,
   mRef?: React.Ref<HTMLDivElement>;
 }
 
@@ -19,7 +19,7 @@ const IngredientsGroup = React.forwardRef<HTMLDivElement, IngredientsGroupProps>
           <IngredientItem 
             key={ ingredient._id } 
             ingredient={ ingredient }
-            onIngredientClick = { props.onIngredientClick }
+            onClick = { props.onClick }
           />
         ))}
       </ul>

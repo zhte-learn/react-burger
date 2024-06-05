@@ -11,8 +11,8 @@ const KEY_NAME_ESC = 'Escape';
 
 interface ModalProps {
   onClose: () => void;
-  ingredient: BurgerIngredient | null,
-  title: string,
+  ingredient?: BurgerIngredient,
+  title?: string,
   children: React.ReactNode
 }
 
@@ -25,8 +25,8 @@ function Modal(props: ModalProps) {
     }
   
     document.addEventListener('keydown', handleEscapeKey);
-    return () => document.removeEventListener('keydown', handleEscapeKey);
-  }, [props.onClose]);
+      return () => document.removeEventListener('keydown', handleEscapeKey);
+    }, [props.onClose]);
 
   return ReactDOM.createPortal((
     <ModalOverlay onClose={props.onClose}>

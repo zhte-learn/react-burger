@@ -1,15 +1,22 @@
 import React from "react";
 import ingredientsStyles from './burger-ingredients.module.css';
 import IngredientsGroup from "./ingredients-group/ingredients-group";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import Modal from '../modal/modal';
 import BurgerIngredient from "../../utils/ingredient-interface";
+import { useAppSelector, useAppDispatch } from '../../services/hooks';
+
+import { selectIngredient } from '../../services/selected-ingredient/actions';
 
 interface BurgerIngredientsProps {
   ingredients: BurgerIngredient[],
-  onIngredientClick: () => void
 }
 
 function BurgerIngredients( props: BurgerIngredientsProps ) {
   const [activeTab, setActiveTab] = React.useState('bun');
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const { selectedIngredient } = useAppSelector(state => state.selectedIngredient);
+  const dispatch = useAppDispatch();
   const containerScrollRef = React.useRef<HTMLDivElement>(null);
   const bunRef = React.useRef<HTMLDivElement>(null);
   const sauceRef = React.useRef<HTMLDivElement>(null);
@@ -67,7 +74,17 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
     };
   }, []);
 
+  function handleClick() {
+    setIsModalOpen(true);
+  };
+
+  function closeModal() {
+    setIsModalOpen(false);
+    dispatch(selectIngredient(null));
+  }
+
   return(
+    <>
     <section className={`${ingredientsStyles.container} pl-5 pr-5 mt-10 mb-15`}>
       <h2 className={`${ingredientsStyles.title} text text_type_main-large mb-5`}>Соберите бургер</h2>
       <ul className={`${ingredientsStyles.nav} mb-10`}>
@@ -87,22 +104,38 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
           ref={bunRef}
           groupTitle={'Булки'}
           ingredients={ingredientsByType.bun}
-          onIngredientClick={props.onIngredientClick}
+          onClick={handleClick}
         />
         <IngredientsGroup
           ref={sauceRef}
           groupTitle={'Соусы'} 
           ingredients={ingredientsByType.sauce}
-          onIngredientClick={props.onIngredientClick}
+          onClick={handleClick}
         />
         <IngredientsGroup 
           ref={mainRef}
           groupTitle={'Начинки'} 
           ingredients={ingredientsByType.main}
-          onIngredientClick={props.onIngredientClick}
+          onClick={handleClick}
         /> 
       </div>
     </section>
+    {isModalOpen &&
+      <Modal 
+        ingredient={selectedIngredient} 
+        onClose={closeModal}
+        title={"Детали ингредиента"}>  
+          <IngredientDetails 
+            image={selectedIngredient.image_large}
+            name={selectedIngredient.name}
+            fat={selectedIngredient.fat}
+            carbohydrates={selectedIngredient.carbohydrates}
+            calories={selectedIngredient.calories}
+            proteins={selectedIngredient.proteins}
+          />
+      </Modal>
+    }
+    </>
   )
 }
 
