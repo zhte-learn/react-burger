@@ -1,9 +1,3 @@
-// import {
-//   GET_INGREDIENTS_REQUEST,
-//   GET_INGREDIENTS_REQUEST_SUCCESS,
-//   GET_INGREDIENTS_REQUEST_FAILED,
-// } from './actions'
-
 import { createSlice } from "@reduxjs/toolkit";
 import { getIngredients } from "./actions";
 import BurgerIngredient from "../../utils/ingredient-interface";
@@ -44,36 +38,3 @@ export const ingredientsSlice = createSlice({
       })
   }
 })
-
-// export const ingredientsReducer = (state = initialState, action: any) => {
-//   switch(action.type) {
-//     case GET_INGREDIENTS_REQUEST: {
-//       return {
-//         ...state,
-//         ingredientsLoading: true,
-//         ingredientsRequestFailed: false,
-//         errorMessage: "",
-//       };
-//     }
-//     case GET_INGREDIENTS_REQUEST_SUCCESS: {
-//       return {
-//         ...state,
-//         ingredients: action.payload,
-//         ingredientsLoading: false,
-//         ingredientsRequestFailed: false,
-//         errorMessage: "",
-//       }
-//     }
-//     case GET_INGREDIENTS_REQUEST_FAILED: {
-//       return {
-//         ...state,
-//         ingredientsRequestFailed: true,
-//         ingredientsLoading: false,
-//         errorMessage: action.payload,
-//       }
-//     }
-//     default: {
-//       return state;
-//     }
-//   }
-// }

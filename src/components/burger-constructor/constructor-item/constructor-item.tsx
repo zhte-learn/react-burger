@@ -7,7 +7,7 @@ import PriceBlock from '../../price-block/price-block';
 import BurgerIngredient from "../../../utils/ingredient-interface";
 import { LockIcon, DeleteIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppDispatch } from '../../../services/hooks';
-import { removeIngredient } from '../../../services/constructor/actions';
+import { removeIngredient } from '../../../services/burger-constructor/actions';
 
 interface ConstructorItemProps {
   item: BurgerIngredient,

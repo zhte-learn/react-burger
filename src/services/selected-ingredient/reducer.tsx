@@ -1,4 +1,3 @@
-//import { SELECT_INGREDIENT } from "./actions";
 import { createSlice } from "@reduxjs/toolkit";
 import { selectIngredient } from "./actions";
 import BurgerIngredient from "../../utils/ingredient-interface";
@@ -22,18 +21,3 @@ export const selectedIngredientSlice = createSlice({
       })
   }
 })
-
-
-// export const selectedIngredientReducer= (state = initialState, action: any) => {
-//   switch(action.type) {
-//     case SELECT_INGREDIENT: {
-//       return {
-//         ...state,
-//         selectedIngredient: action.payload,
-//       };
-//     }
-//     default: {
-//       return state;
-//     }
-//   }
-// }
