@@ -39,7 +39,8 @@ const ConstructorItem = React.forwardRef<HTMLDivElement, ConstructorItemProps>((
   const extraClass = (props.position === 'top' || props.position === 'bottom') ? 'mr-4' : '';
 
   function handleDelete() {
-    dispatch(removeIngredient(props.item._id));
+    const uniqueId = props.item.uniqueId || "";
+    dispatch(removeIngredient(uniqueId));
   }
 
   const sortRef = React.useRef<HTMLLIElement>(null);

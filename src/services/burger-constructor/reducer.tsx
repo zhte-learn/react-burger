@@ -1,3 +1,4 @@
+import { stat } from 'fs';
 import BurgerIngredient from '../../utils/ingredient-interface';
 import { createSlice, PayloadAction, nanoid  } from "@reduxjs/toolkit";
 
@@ -11,13 +12,13 @@ const initialState: BurgerConstructorState = {
   fillings: []
 }
 
-const removeElementById = (array: BurgerIngredient[], id: string) => {
-  const idx = array.findIndex((element: BurgerIngredient) => element._id === id);
-  if (idx !== -1) {
-    return [...array.slice(0, idx), ...array.slice(idx + 1)];
-  }
-  return array;
-}
+// const removeElementById = (array: BurgerIngredient[], id: string) => {
+//   const idx = array.findIndex((element: BurgerIngredient) => element._id === id);
+//   if (idx !== -1) {
+//     return [...array.slice(0, idx), ...array.slice(idx + 1)];
+//   }
+//   return array;
+// }
 
 export const burgerConstructorSlice = createSlice({
   name: "burgerConstructor",
@@ -36,7 +37,8 @@ export const burgerConstructorSlice = createSlice({
       }
     },
     removeIngredient: (state, action: PayloadAction<string>) => {
-      state.fillings = removeElementById(state.fillings, action.payload);
+      //state.fillings = removeElementById(state.fillings, action.payload);
+      state.fillings = state.fillings.filter(item => item.uniqueId !== action.payload);
     },
     moveIngredient: (state, action: PayloadAction<{dragIndex: number, hoverIndex: number}>) => {
       const {dragIndex, hoverIndex} = action.payload;
