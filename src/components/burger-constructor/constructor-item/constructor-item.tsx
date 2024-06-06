@@ -39,7 +39,6 @@ const ConstructorItem = React.forwardRef<HTMLDivElement, ConstructorItemProps>((
   const extraClass = (props.position === 'top' || props.position === 'bottom') ? 'mr-4' : '';
 
   function handleDelete() {
-    console.log(props.item);
     dispatch(removeIngredient(props.item._id));
   }
 
