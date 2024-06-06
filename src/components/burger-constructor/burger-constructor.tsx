@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDrop, DropTargetMonitor } from 'react-dnd';
 
-import { v4 as uuidv4 } from 'uuid';
 import styles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
 import ConstructorItemInit from './constructor-item-init/constructor-item-init';
@@ -12,7 +11,7 @@ import PriceBlock from '../price-block/price-block';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
-import { addBun, addIngredient, moveIngredient, resetConstructor } from '../../services/burger-constructor/actions';
+import { addBun, addIngredient, moveIngredient, resetConstructor } from '../../services/burger-constructor/reducer';
 import { getOrderDetails, resetOrder } from '../../services/order/actions';
 import BurgerIngredient from '../../utils/ingredient-interface';
 
@@ -62,7 +61,6 @@ function BurgerConstructor() {
   function handleClick() {
     makeOrder();
     setIsModalOpen(true);
-    //props.onOrderClick();
   };
 
   React.useEffect(() => {
@@ -147,7 +145,7 @@ function BurgerConstructor() {
           <ul ref={dropTargetFilling} className={styles.list}>
             {fillings.map((elem, index) => (
               <ConstructorItem 
-                key={uuidv4()}
+                key={elem.uniqueId}
                 item = {elem} 
                 position={'middle'}
                 index={index}

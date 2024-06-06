@@ -1,4 +1,5 @@
 interface BurgerIngredient {
+  uniqueId?: string,
   _id: string;
   name: string;
   type: string;

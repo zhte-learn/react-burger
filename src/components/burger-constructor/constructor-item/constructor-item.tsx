@@ -7,7 +7,7 @@ import PriceBlock from '../../price-block/price-block';
 import BurgerIngredient from "../../../utils/ingredient-interface";
 import { LockIcon, DeleteIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppDispatch } from '../../../services/hooks';
-import { removeIngredient } from '../../../services/burger-constructor/actions';
+import { removeIngredient } from '../../../services/burger-constructor/reducer';
 
 interface ConstructorItemProps {
   item: BurgerIngredient,
@@ -39,6 +39,7 @@ const ConstructorItem = React.forwardRef<HTMLDivElement, ConstructorItemProps>((
   const extraClass = (props.position === 'top' || props.position === 'bottom') ? 'mr-4' : '';
 
   function handleDelete() {
+    console.log(props.item);
     dispatch(removeIngredient(props.item._id));
   }
 
