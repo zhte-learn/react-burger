@@ -11,6 +11,9 @@ import { useAppSelector, useAppDispatch } from '../../services/hooks';
 
 import { LoginPage } from '../../pages/login-page';
 import { MainPage } from '../../pages/main-page';
+import { RegisterPage } from '../../pages/register-page';
+import { ForgotPassword } from '../../pages/forgot-password';
+import { ResetPassword } from '../../pages/reset-password';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -43,7 +46,10 @@ function App() {
                   <Routes>
                     <Route path='/' element={<MainPage />} />
                     <Route path='/login' element={<LoginPage />} />
-                </Routes>
+                    <Route path='/register' element={<RegisterPage />} />
+                    <Route path='/forgot-password' element={<ForgotPassword />} />
+                    <Route path='/reset-password' element={<ResetPassword />} />
+                  </Routes>
                 </main>
                 ) 
               : <p>No ingredients...</p>
