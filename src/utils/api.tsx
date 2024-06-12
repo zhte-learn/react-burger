@@ -27,3 +27,27 @@ export const getOrder = (data: string[]) => {
     body: JSON.stringify({ingredients: data}),
   })
 }
+
+export const forgetPassword = () => {
+  return request(`${apiConfig.baseUrl}/password-reset`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({email: ""}),
+  })
+}
+
+export const resetPassword = (newPassword: string, token: string) => {
+  return request(`${apiConfig.baseUrl}/password-reset/reset`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({password: newPassword, token: token}),
+  })
+}
+
+export const registerUser = (name: string, password: string, email: string) => {
+  return request(`${apiConfig.baseUrl}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({email: email, password: password, name: name}),
+  })
+}

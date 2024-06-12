@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { EmailInput, Button, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Input, EmailInput, Button, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './styles.module.css';
 
 export const ResetPassword = () => {
@@ -20,14 +20,21 @@ export const ResetPassword = () => {
           extraClass="mt-6"
         />
 
-        <EmailInput
-          onChange={onChange}
-          value={''}
-          name={''}
+        <Input 
+          type={'text'}
           placeholder={'Введите код из письма'}
-          isIcon={false}
+          onChange={onChange}
+          icon={undefined}
+          value={''}
+          name={'token'}
+          error={false}
+          //ref={inputRef}
+          //onIconClick={onIconClick}
+          errorText={'Ошибка'}
+          size={'default'}
           extraClass="mt-6"
-          disabled={false}
+          onPointerEnterCapture={()=>{}}
+          onPointerLeaveCapture={()=>{}}
         />
 
         <Button 

@@ -27,4 +27,23 @@
   gap: 14px;
 }
 
+.profileContainer {
+  display: flex;
+  gap: 60px;
+}
 
+.profileNav {
+  width: 320px;
+}
+
+.profileLink {
+  display: block;
+  cursor: pointer;
+  list-style-type: none;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.profileLink:hover {
+  color: #fff;
+}

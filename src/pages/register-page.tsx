@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { EmailInput, Button, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Input, EmailInput, Button, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './styles.module.css';
 
 export const RegisterPage = () => {
@@ -12,30 +12,21 @@ export const RegisterPage = () => {
       <h2 className="text text_type_main-medium">Регистрация</h2>
 
       <form className={styles.form} action="submit">
-      
-        {/* <Input 
+        <Input 
           type={'text'}
-        placeholder={'placeholder'}
-        onChange={e => setValue(e.target.value)}
-        icon={'CurrencyIcon'}
-        value={value}
-        name={'name'}
-        error={false}
-        ref={inputRef}
-        onIconClick={onIconClick}
-        errorText={'Ошибка'}
-        size={'default'}
-        extraClass="ml-1"
-        /> */}
-        
-        <EmailInput
-          onChange={onChange}
-          value={''}
           placeholder={'Имя'}
-          name={''}
-          isIcon={false}
+          onChange={onChange}
+          icon={undefined}
+          value={''}
+          name={'name'}
+          error={false}
+          //ref={inputRef}
+          //onIconClick={onIconClick}
+          errorText={'Ошибка'}
+          size={'default'}
           extraClass="mt-6"
-          disabled={false}
+          onPointerEnterCapture={()=>{}}
+          onPointerLeaveCapture={()=>{}}
         />
 
         <EmailInput

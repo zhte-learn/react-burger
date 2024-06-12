@@ -38,6 +38,19 @@
   color: #fff;
   text-decoration: none;
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.navItem:hover {
+  color: #8585AD;
+}
+
+.navItem svg {
+  transition: fill 0.3s ease;
+}
+
+.navItem:hover svg {
+  fill: #8585AD;
 }
 
 @media (max-width: 1000px) {

@@ -15,22 +15,6 @@ export const LoginPage = () => {
       <h2 className="text text_type_main-medium">Вход</h2>
 
       <form className={styles.form} action="submit">
-      
-        {/* <Input 
-          type={'text'}
-        placeholder={'placeholder'}
-        onChange={e => setValue(e.target.value)}
-        icon={'CurrencyIcon'}
-        value={value}
-        name={'name'}
-        error={false}
-        ref={inputRef}
-        onIconClick={onIconClick}
-        errorText={'Ошибка'}
-        size={'default'}
-        extraClass="ml-1"
-        /> */}
-
         <EmailInput
           onChange={onChange}
           value={''}
