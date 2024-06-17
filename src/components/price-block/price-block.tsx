@@ -12,7 +12,6 @@ function PriceBlock(props: PriceBlockProps) {
     ? 'text text_type_digits-default'
     : 'text text_type_digits-medium';
 
-
   return(
     <div className={`${ price.container } mr-5`}>
       <p className={`${ textStyle } mr-2`}>{ props.price }</p>
