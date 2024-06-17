@@ -1,13 +1,20 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { register, login, logout, updateUserDetails } from './actions';
 import { TUser } from "../../utils/auth-types";
+import { register, 
+        login, 
+        logout, 
+        updateUserDetails, 
+        resetPassword} from './actions';
 
 type TUserState = {
   user: TUser | null;
   isAuthChecked: boolean;
   isUpdateFailed: boolean;
   isUpdateLoading: boolean;
-  updateError: any; 
+  updateError: any;
+  isResetFailed: boolean;
+  isResetLoading: boolean;
+  resetError: any;
 }
 
 const initialState: TUserState = {
@@ -16,6 +23,9 @@ const initialState: TUserState = {
   isUpdateFailed: false,
   isUpdateLoading: false,
   updateError: null,
+  isResetFailed: false,
+  isResetLoading: false,
+  resetError: null,
 }
 
 export const userSlice = createSlice({
@@ -50,6 +60,21 @@ export const userSlice = createSlice({
         state.isUpdateFailed = true;
         state.isUpdateLoading = false;
         state.updateError = action.payload;
+      })
+      .addCase(resetPassword.fulfilled, (state) => {
+        state.isResetFailed = false;
+        state.resetError = null;
+        state.isResetLoading = false;
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.isResetLoading = true;
+        state.isResetFailed = false;
+        state.resetError = null;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.isResetLoading = false;
+        state.isResetFailed = true;
+        state.resetError = action.payload;
       })
   }
 })

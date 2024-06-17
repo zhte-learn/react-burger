@@ -8,12 +8,7 @@ import { logout } from '../services/user/actions';
 export const ProfilePage = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
-
-  // const {logoutFailed,
-  //   logoutLoading,
-  //   logoutError } 
-  //   = useAppSelector(state => state.logout);
-
+  
   function handleLogout() {
     dispatch(logout());
   }

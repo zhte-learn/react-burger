@@ -52,7 +52,7 @@
 .navItem:hover svg {
   fill: #8585AD;
 }
-
+/* 
 @media (max-width: 1000px) {
   .container {
     padding-top: 40px;
@@ -64,4 +64,4 @@
     flex-direction: column;
     gap: 30px;
   }
-}
+} */

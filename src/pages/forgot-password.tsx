@@ -1,22 +1,35 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { EmailInput, Button, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
+import { EmailInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './styles.module.css';
 
+import { forgotPassword } from '../services/user/actions';
+import { useAppSelector, useAppDispatch } from '../services/hooks';
+
 export const ForgotPassword = () => {
-  function onChange() {
-    console.log("click");
+  const [ email, setEmail ] = React.useState('');
+  const dispatch = useAppDispatch();
+
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setEmail(e.target.value);
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    dispatch(forgotPassword(email));
+    setEmail('');
   }
 
   return(
     <section className={styles.authContainer}>
       <h2 className="text text_type_main-medium">Восстановление пароля</h2>
 
-      <form className={styles.form} action="submit">
+      <form className={styles.form} action="submit" onSubmit={handleSubmit}>
         <EmailInput
-          onChange={onChange}
-          value={''}
+          onChange={handleInputChange}
+          value={email}
           placeholder={'Укажите e-mail'}
-          name={''}
+          name={'email'}
           isIcon={false}
           extraClass="mt-6"
           disabled={false}
@@ -26,7 +39,9 @@ export const ForgotPassword = () => {
           htmlType="submit" 
           type="primary" 
           size="large" 
-          extraClass="mt-6">
+          extraClass="mt-6"
+          disabled={!email}
+        >
             Восстановить
         </Button>
       </form>

@@ -18,6 +18,7 @@ import { ResetPassword } from '../../pages/reset-password';
 import { ProfilePage } from '../../pages/profile-page';
 import { OrderPage } from '../../pages/orders-page';
 import ProfileDetails from '../profile-details/profile-details';
+import { OnlyAuth, OnlyUnAuth } from '../protected-route';
 
 const MINUTE_MS = 1200000
 
@@ -59,13 +60,13 @@ function App() {
                 <main className={styles.mainContainer}>
                   <Routes>
                     <Route path='/' element={<MainPage />} />
-                    <Route path='/login' element={<LoginPage />} />
-                    <Route path='/register' element={<RegisterPage />} />
-                    <Route path='/forgot-password' element={<ForgotPassword />} />
-                    <Route path='/reset-password' element={<ResetPassword />} />
-                    <Route path='/profile' element={<ProfilePage />}>
-                      <Route index element={<ProfileDetails />}/>
-                      <Route path='orders' element={<OrderPage />} />
+                    <Route path='/login' element={<OnlyUnAuth component={<LoginPage/>}/>} />
+                    <Route path='/register' element={<OnlyUnAuth component={<RegisterPage/>}/>} />
+                    <Route path='/forgot-password' element={<OnlyUnAuth component={<ForgotPassword/>}/>} />
+                    <Route path='/reset-password' element={<OnlyUnAuth component={<ResetPassword/>}/>} />
+                    <Route path='/profile' element={<OnlyAuth component={<ProfilePage/>}/>}>
+                      <Route index element={<OnlyAuth component={<ProfileDetails/>}/>}/>
+                      <Route path='orders' element={<OnlyAuth component={<OrderPage/>}/>} />
                     </Route>
                   </Routes>
                 </main>

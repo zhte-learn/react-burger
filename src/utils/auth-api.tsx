@@ -1,8 +1,5 @@
 import { TUser } from "./auth-types";
-
-const apiConfig = {
-  baseUrl: "https://norma.nomoreparties.space/api/auth",
-}
+import { BURGER_API_URL, BURGER_API_AUTH_URL } from "./api-settings";
 
 function request(url: string, options: RequestInit) {
   return fetch(url, options).then(getResponse);
@@ -19,8 +16,8 @@ const getResponse = (res: Response) => {
   })
 }
 
-export const register = (email: string, password: string, name: string) => {
-  return request(`${apiConfig.baseUrl}/register`, {
+const register = (email: string, password: string, name: string) => {
+  return request(`${BURGER_API_AUTH_URL}/register`, {
     credentials: 'omit',
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -28,32 +25,32 @@ export const register = (email: string, password: string, name: string) => {
   });
 }
 
-export const login = (email: string, password: string) => {
-  return request(`${apiConfig.baseUrl}/login`, {
+const login = (email: string, password: string) => {
+  return request(`${BURGER_API_AUTH_URL}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({email: email, password: password}),
   })
 }
 
-export const logout = (token: string) => {
-  return request(`${apiConfig.baseUrl}/logout`, {
+const logout = (token: string) => {
+  return request(`${BURGER_API_AUTH_URL}/logout`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({token: token}),
   })
 }
 
-export const refreshToken = (token: string) => {
-  return request(`${apiConfig.baseUrl}/token`, {
+const refreshToken = (token: string) => {
+  return request(`${BURGER_API_AUTH_URL}/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({token: token}),
   })
 }
 
-export const getUserDetails = (token: string) => {
-  return request(`${apiConfig.baseUrl}/user`, {
+const getUserDetails = (token: string) => {
+  return request(`${BURGER_API_AUTH_URL}/user`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -62,8 +59,8 @@ export const getUserDetails = (token: string) => {
   })
 }
 
-export const updateUserDetails = (token: string, userData: TUser) => {
-  return request(`${apiConfig.baseUrl}/user`, {
+const updateUserDetails = (token: string, userData: TUser) => {
+  return request(`${BURGER_API_AUTH_URL}/user`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -73,6 +70,21 @@ export const updateUserDetails = (token: string, userData: TUser) => {
   })
 }
 
+export const forgotPassword = (email: string) => {
+  return request(`${BURGER_API_URL}/password-reset`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({email: email}),
+  })
+}
+
+export const resetPassword = (password: string, token: string) => {
+  return request(`${BURGER_API_URL}/password-reset/reset`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({password: password, token: token}),
+  })
+}
 
 export const authApi = {
   register,
@@ -80,17 +92,13 @@ export const authApi = {
   logout,
   refreshToken,
   getUserDetails,
-  updateUserDetails
+  updateUserDetails,
+  forgotPassword,
+  resetPassword,
 };
 
 
-// export const forgetPassword = () => {
-//   return request(`${apiConfig.baseUrl}/password-reset`, {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({email: ""}),
-//   })
-// }
+
 
 
 // export const getUserDetails = (token: string) => {

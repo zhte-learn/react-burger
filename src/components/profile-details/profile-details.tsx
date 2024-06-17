@@ -44,6 +44,7 @@ function ProfileDetails() {
   }
 
   return(
+    
     <>
       {isUpdateFailed ? (
         <>

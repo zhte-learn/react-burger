@@ -14,15 +14,13 @@ export const RegisterPage = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const dispatch = useAppDispatch();
-  // const { token,
-  //   registerFailed,
-  //   registerLoading,
-  //   registerError } 
-  //   = useAppSelector(state => state.register);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(register({email: email, password: password, name: name}));
+    setName('');
+    setEmail('');
+    setPassword('');
   }
 
   function onNameChange(e: React.ChangeEvent<HTMLInputElement>) {
