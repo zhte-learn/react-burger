@@ -7,6 +7,7 @@ import AppHeader from '../header/header';
 import Loader from '../loader/loader';
 
 import { getIngredients } from '../../services/ingredients/actions';
+import { checkUserAuth, refreshToken } from '../../services/user/actions';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 
 import { LoginPage } from '../../pages/login-page';
@@ -16,6 +17,9 @@ import { ForgotPassword } from '../../pages/forgot-password';
 import { ResetPassword } from '../../pages/reset-password';
 import { ProfilePage } from '../../pages/profile-page';
 import { OrderPage } from '../../pages/orders-page';
+import ProfileDetails from '../profile-details/profile-details';
+
+const MINUTE_MS = 1200000
 
 function App() {
   const dispatch = useAppDispatch();
@@ -27,6 +31,14 @@ function App() {
   
   React.useEffect(() => {
     dispatch(getIngredients());
+    dispatch(checkUserAuth());
+  }, []);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      refreshToken()
+    }, MINUTE_MS);
+    return () => clearInterval(interval); 
   }, []);
 
   return (  
@@ -51,8 +63,10 @@ function App() {
                     <Route path='/register' element={<RegisterPage />} />
                     <Route path='/forgot-password' element={<ForgotPassword />} />
                     <Route path='/reset-password' element={<ResetPassword />} />
-                    <Route path='/profile' element={<ProfilePage />} />
-                    <Route path='/profile/orders' element={<OrderPage />} />
+                    <Route path='/profile' element={<ProfilePage />}>
+                      <Route index element={<ProfileDetails />}/>
+                      <Route path='orders' element={<OrderPage />} />
+                    </Route>
                   </Routes>
                 </main>
                 ) 
