@@ -1,5 +1,6 @@
 import React from "react";
 import { useDrag } from "react-dnd";
+import { Link, useLocation } from 'react-router-dom';
 
 import itemStyles from './ingredient-item.module.css';
 import PriceBlock from "../../price-block/price-block";
@@ -15,8 +16,10 @@ interface IngredientItemProps {
 }
 
 function IngredientItem(props: IngredientItemProps) {
+  const ingredientId = props.ingredient._id;
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
   const getCounter = React.useMemo(() => {
     if(props.ingredient.type === 'bun' && bun && bun._id === props.ingredient._id) {
@@ -51,10 +54,16 @@ function IngredientItem(props: IngredientItemProps) {
 
   return (
     <>
-      <li 
+      <Link 
+        key={ingredientId}
+        // Тут мы формируем динамический путь для нашего ингредиента
+        to={`/ingredients/${ingredientId}`}
+        // а также сохраняем в свойство background роут,
+        // на котором была открыта наша модалка
+        state={{ background: location }}
         ref={dragRef}
         className={`${itemStyles.item} mb-8`}
-        onClick={handleClick}
+        //onClick={handleClick}
         style={{opacity}}
       >
         <img src={props.ingredient.image} alt={props.ingredient.name} />
@@ -67,7 +76,7 @@ function IngredientItem(props: IngredientItemProps) {
           &&
           <Counter count={counter} size="default" extraClass="m-1" />
         }
-      </li>    
+      </Link>    
     </>
   )
 }

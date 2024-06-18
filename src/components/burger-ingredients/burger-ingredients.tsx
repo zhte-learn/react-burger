@@ -120,6 +120,7 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
         /> 
       </div>
     </section>
+{/* 
     {(isModalOpen && selectedIngredient) &&
       <Modal 
         ingredient={selectedIngredient} 
@@ -135,6 +136,7 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
           />
       </Modal>
     }
+     */}
     </>
   )
 }

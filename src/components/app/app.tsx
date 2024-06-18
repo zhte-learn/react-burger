@@ -1,10 +1,11 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import styles from './app.module.css';
 
 import AppHeader from '../header/header';
 import Loader from '../loader/loader';
+import Modal from '../modal/modal';
 
 import { getIngredients } from '../../services/ingredients/actions';
 import { checkUserAuth, refreshToken } from '../../services/user/actions';
@@ -18,32 +19,66 @@ import { ResetPassword } from '../../pages/reset-password';
 import { ProfilePage } from '../../pages/profile-page';
 import { OrderPage } from '../../pages/orders-page';
 import ProfileDetails from '../profile-details/profile-details';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
+import BurgerIngredient from '../../utils/ingredient-interface';
 
-const MINUTE_MS = 1200000
+//const MINUTE_MS = 1200000;
+
+function Test() {
+  let { ingredientId } = useParams<"ingredientId">();
+  const { ingredients, 
+    ingredientsLoading, 
+    ingredientsRequestFailed, 
+    ingredientsError } 
+    = useAppSelector(state => state.ingredients);
+  
+  console.log(ingredients.filter(item => item._id === ingredientId));
+
+  return(
+    <>
+    <div>{ingredientId}</div>
+    </>
+    
+  )
+}
 
 function App() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const background = location.state && location.state.background;
+
   const dispatch = useAppDispatch();
   const { ingredients, 
           ingredientsLoading, 
           ingredientsRequestFailed, 
           ingredientsError } 
           = useAppSelector(state => state.ingredients);
+
+// let { ingredientId } = useParams<"ingredientId">();
+// console.log(ingredientId)
+// const ingredientData = ingredients.filter(item => item._id === ingredientId)[0];
+// console.log(ingredients.filter(item => item._id === ingredientId)[0]);
   
   React.useEffect(() => {
     dispatch(getIngredients());
     dispatch(checkUserAuth());
   }, []);
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      refreshToken()
-    }, MINUTE_MS);
-    return () => clearInterval(interval); 
-  }, []);
+  // React.useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     refreshToken()
+  //   }, MINUTE_MS);
+  //   return () => clearInterval(interval); 
+  // }, []);
 
-  return (  
-    <BrowserRouter>
+  const handleModalClose = () => {
+    // Возвращаемся к предыдущему пути при закрытии модалки
+    //navigate(-1, { replace: true });
+    navigate('/', { replace: true });
+  };
+
+  return ( 
       <div className={styles.page}>
         <AppHeader />
         {ingredientsRequestFailed 
@@ -58,8 +93,10 @@ function App() {
             : ingredients && ingredients.length 
               ? (
                 <main className={styles.mainContainer}>
-                  <Routes>
+                  <Routes location={background || location}>
                     <Route path='/' element={<MainPage />} />
+                    <Route path='/ingredients/:ingredientId'
+                      element={<IngredientDetails />} />
                     <Route path='/login' element={<OnlyUnAuth component={<LoginPage/>}/>} />
                     <Route path='/register' element={<OnlyUnAuth component={<RegisterPage/>}/>} />
                     <Route path='/forgot-password' element={<OnlyUnAuth component={<ForgotPassword/>}/>} />
@@ -69,12 +106,24 @@ function App() {
                       <Route path='orders' element={<OnlyAuth component={<OrderPage/>}/>} />
                     </Route>
                   </Routes>
+
+                  {background && (
+                    <Routes>
+                      <Route
+                        path='/ingredients/:ingredientId'
+                        element={
+                          <Modal onClose={handleModalClose}>
+                            <IngredientDetails />
+                          </Modal>
+                        }
+                      />
+                    </Routes>
+                  )}
                 </main>
                 ) 
               : <p>No ingredients...</p>
         }
       </div>
-    </BrowserRouter>
   );
 }
 

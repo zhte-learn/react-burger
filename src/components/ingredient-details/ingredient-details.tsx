@@ -1,27 +1,25 @@
-import React from "react";
+import { useParams } from 'react-router-dom';
+
 import ingredientDetailsStyles from './ingredient-details.module.css';
+import { useAppSelector } from '../../services/hooks';
 
-interface IngredientDetailsProps {
-  image: string | undefined,
-  name: string | undefined,
-  fat: number | undefined,
-  carbohydrates: number | undefined,
-  calories: number | undefined,
-  proteins: number | undefined,
-}
+function IngredientDetails() {
+  const { ingredients} = useAppSelector(state => state.ingredients);
 
-function IngredientDetails(props: IngredientDetailsProps) {
+  let { ingredientId } = useParams<"ingredientId">();
+  let ingredient = ingredients.filter(item => item._id === ingredientId)[0];
+
   return(
     <>
       <img 
         className={ ingredientDetailsStyles.image }
-        src={ props.image } 
-        alt={ props.name } 
+        src={ ingredient.image } 
+        alt={ ingredient.name } 
       />
 
       <div className={ingredientDetailsStyles.content}>
         <h3 className={`${ingredientDetailsStyles.title} text text_type_main-medium`}>
-          {props.name}
+          {ingredient.name}
         </h3>
         <ul className={`${ingredientDetailsStyles.details} mt-8`}>
           <li className={ingredientDetailsStyles.detailsItem}>
@@ -29,7 +27,7 @@ function IngredientDetails(props: IngredientDetailsProps) {
               Калории,ккал
             </p>
             <span className={`text text_type_digits-default text_color_inactive`}>
-              {props.calories}
+              {ingredient.calories}
             </span>
           </li>
           <li className={ingredientDetailsStyles.detailsItem}>
@@ -37,7 +35,7 @@ function IngredientDetails(props: IngredientDetailsProps) {
               Белки, г
             </p>
             <span className={`text text_type_digits-default text_color_inactive`}>
-              {props.proteins}
+              {ingredient.proteins}
             </span>
           </li>
           <li className={ingredientDetailsStyles.detailsItem}>
@@ -45,7 +43,7 @@ function IngredientDetails(props: IngredientDetailsProps) {
               Жиры, г
             </p>
             <span className={`text text_type_digits-default text_color_inactive`}>
-              {props.fat}
+              {ingredient.fat}
             </span>
           </li>
           <li className={ingredientDetailsStyles.detailsItem}>
@@ -53,7 +51,7 @@ function IngredientDetails(props: IngredientDetailsProps) {
               Углеводы, г
             </p>
             <span className={`text text_type_digits-default text_color_inactive`}>
-              {props.carbohydrates}
+              {ingredient.carbohydrates}
             </span>
           </li>
         </ul>
