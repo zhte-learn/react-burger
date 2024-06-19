@@ -5,15 +5,14 @@ import styles from './styles.module.css';
 
 import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { register } from '../services/user/actions';
-// import { register }  from '../services/register/actions';
-// import { clearState } from '../services/register/reducer';
-import Loader from '../components/loader/loader';
+import ErrorDetails from '../components/error-details';
 
 export const RegisterPage = () => {
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const dispatch = useAppDispatch();
+  const { isFailed, isLoading, errorMessage } = useAppSelector(state => state.user);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -41,6 +40,8 @@ export const RegisterPage = () => {
   return(
     <section className={styles.authContainer}>
       <h2 className="text text_type_main-medium">Регистрация</h2>
+
+      <ErrorDetails />
 
       <form className={styles.form} action="submit" onSubmit={handleSubmit}>
         <Input 

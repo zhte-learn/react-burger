@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import ingredientDetailsStyles from './ingredient-details.module.css';
+import styles from './ingredient-details.module.css';
 import { useAppSelector } from '../../services/hooks';
 
 function IngredientDetails() {
@@ -10,53 +10,54 @@ function IngredientDetails() {
   let ingredient = ingredients.filter(item => item._id === ingredientId)[0];
 
   return(
-    <>
+    <section className={styles.container}>
+      <h2 className='text text_type_main-large'>Детали ингредиента</h2>
+
       <img 
-        className={ ingredientDetailsStyles.image }
-        src={ ingredient.image } 
-        alt={ ingredient.name } 
+        className={styles.image}
+        src={ingredient.image} 
+        alt={ingredient.name} 
       />
 
-      <div className={ingredientDetailsStyles.content}>
-        <h3 className={`${ingredientDetailsStyles.title} text text_type_main-medium`}>
-          {ingredient.name}
-        </h3>
-        <ul className={`${ingredientDetailsStyles.details} mt-8`}>
-          <li className={ingredientDetailsStyles.detailsItem}>
-            <p className={`text text_type_main-small text_color_inactive`}>
-              Калории,ккал
-            </p>
-            <span className={`text text_type_digits-default text_color_inactive`}>
-              {ingredient.calories}
-            </span>
-          </li>
-          <li className={ingredientDetailsStyles.detailsItem}>
-            <p className={`text text_type_main-small text_color_inactive`}>
-              Белки, г
-            </p>
-            <span className={`text text_type_digits-default text_color_inactive`}>
-              {ingredient.proteins}
-            </span>
-          </li>
-          <li className={ingredientDetailsStyles.detailsItem}>
-            <p className={`text text_type_main-small text_color_inactive`}>
-              Жиры, г
-            </p>
-            <span className={`text text_type_digits-default text_color_inactive`}>
-              {ingredient.fat}
-            </span>
-          </li>
-          <li className={ingredientDetailsStyles.detailsItem}>
-            <p className={`text text_type_main-small text_color_inactive`}>
-              Углеводы, г
-            </p>
-            <span className={`text text_type_digits-default text_color_inactive`}>
-              {ingredient.carbohydrates}
-            </span>
-          </li>
-        </ul>
-      </div>
-    </>
+      <h3 className={`${styles.title} text text_type_main-medium`}>
+        {ingredient.name}
+      </h3>
+
+      <ul className={`${styles.details} mt-8`}>
+        <li className={styles.detailsItem}>
+          <p className={`text text_type_main-small text_color_inactive`}>
+            Калории,ккал
+          </p>
+          <span className={`text text_type_digits-default text_color_inactive`}>
+            {ingredient.calories}
+          </span>
+        </li>
+        <li className={styles.detailsItem}>
+          <p className={`text text_type_main-small text_color_inactive`}>
+            Белки, г
+          </p>
+          <span className={`text text_type_digits-default text_color_inactive`}>
+            {ingredient.proteins}
+          </span>
+        </li>
+        <li className={styles.detailsItem}>
+          <p className={`text text_type_main-small text_color_inactive`}>
+            Жиры, г
+          </p>
+          <span className={`text text_type_digits-default text_color_inactive`}>
+            {ingredient.fat}
+          </span>
+        </li>
+        <li className={styles.detailsItem}>
+          <p className={`text text_type_main-small text_color_inactive`}>
+            Углеводы, г
+          </p>
+          <span className={`text text_type_digits-default text_color_inactive`}>
+            {ingredient.carbohydrates}
+          </span>
+        </li>
+      </ul>
+    </section>
   )
 }
 

@@ -4,7 +4,8 @@ import { EmailInput, Button } from "@ya.praktikum/react-developer-burger-ui-comp
 import styles from './styles.module.css';
 
 import { forgotPassword } from '../services/user/actions';
-import { useAppSelector, useAppDispatch } from '../services/hooks';
+import { useAppDispatch } from '../services/hooks';
+import ErrorDetails from '../components/error-details';
 
 export const ForgotPassword = () => {
   const [ email, setEmail ] = React.useState('');
@@ -23,6 +24,8 @@ export const ForgotPassword = () => {
   return(
     <section className={styles.authContainer}>
       <h2 className="text text_type_main-medium">Восстановление пароля</h2>
+
+      <ErrorDetails />
 
       <form className={styles.form} action="submit" onSubmit={handleSubmit}>
         <EmailInput

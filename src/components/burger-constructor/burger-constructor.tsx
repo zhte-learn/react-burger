@@ -1,5 +1,7 @@
 import React from 'react';
 import { useDrop, DropTargetMonitor } from 'react-dnd';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 
 import styles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
@@ -20,6 +22,8 @@ function BurgerConstructor() {
   const { orderNumber, orderRequestFailed, orderLoading, orderError } = useAppSelector(state => state.order);
   
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [totalPrice, setTotalPrice] = React.useState(0);
   const [isDisabled, setIsDisabled] = React.useState(true);
@@ -58,9 +62,13 @@ function BurgerConstructor() {
     }
   }, [bun, fillings]);
 
-  function handleClick() {
-    makeOrder();
-    setIsModalOpen(true);
+  function handleMakeOrder() {
+    if(!localStorage.getItem("accessToken")) {
+      navigate('/login', { replace: true, state: { from: location } });
+    } else {
+      makeOrder();
+      setIsModalOpen(true);
+    }
   };
 
   React.useEffect(() => {
@@ -179,7 +187,7 @@ function BurgerConstructor() {
         <Button 
           htmlType="button" type="primary" size="large"
           disabled={isDisabled}
-          onClick={handleClick}
+          onClick={handleMakeOrder}
         >
           Оформить заказ
         </Button>

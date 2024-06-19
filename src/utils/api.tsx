@@ -1,7 +1,6 @@
 import { BURGER_API_URL, BURGER_API_AUTH_URL } from "./api-settings";
 import { TUser } from "./auth-types";
 
-
 // const getResponse = (res: Response) => {
 //   if(!res.ok) {
 //     Promise.reject(res.status);
@@ -17,7 +16,7 @@ const checkResponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 }
 
-function request(url: string, options: RequestInit) {
+function fetchWithCheck(url: string, options: RequestInit) {
   return fetch(url, options).then(checkResponse);
 }
 
@@ -64,13 +63,13 @@ const refreshToken = () => {
 };
 
 const getIngredientsRequest = () => {
-  return request(`${BURGER_API_URL}/ingredients`, {
+  return fetchWithCheck(`${BURGER_API_URL}/ingredients`, {
     method: 'GET',
   })
 }
 
 const getOrder = (data: string[]) => {
-  return request(`${BURGER_API_URL}/orders`, {
+  return fetchWithCheck(`${BURGER_API_URL}/orders`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ingredients: data}),
@@ -78,7 +77,7 @@ const getOrder = (data: string[]) => {
 }
 
 const register = (email: string, password: string, name: string) => {
-  return request(`${BURGER_API_AUTH_URL}/register`, {
+  return fetchWithCheck(`${BURGER_API_AUTH_URL}/register`, {
     credentials: 'omit',
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -87,7 +86,7 @@ const register = (email: string, password: string, name: string) => {
 }
 
 const login = (email: string, password: string) => {
-  return request(`${BURGER_API_AUTH_URL}/login`, {
+  return fetchWithCheck(`${BURGER_API_AUTH_URL}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({email: email, password: password}),
@@ -95,7 +94,7 @@ const login = (email: string, password: string) => {
 }
 
 const logout = (token: string) => {
-  return request(`${BURGER_API_AUTH_URL}/logout`, {
+  return fetchWithCheck(`${BURGER_API_AUTH_URL}/logout`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({token: token}),
@@ -132,7 +131,7 @@ const updateUserDetails = (token: string, userData: TUser) => {
 }
 
 const forgotPassword = (email: string) => {
-  return request(`${BURGER_API_URL}/password-reset`, {
+  return fetchWithCheck(`${BURGER_API_URL}/password-reset`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({email: email}),
@@ -140,7 +139,7 @@ const forgotPassword = (email: string) => {
 }
 
 const resetPassword = (password: string, token: string) => {
-  return request(`${BURGER_API_URL}/password-reset/reset`, {
+  return fetchWithCheck(`${BURGER_API_URL}/password-reset/reset`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({password: password, token: token}),

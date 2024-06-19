@@ -1,23 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Loader from '../components/loader/loader';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { EmailInput, Button, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './styles.module.css';
 import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { login } from '../services/user/actions';
-//import { clearState } from '../services/login/reducer';
+import ErrorDetails from '../components/error-details';
 
 export const LoginPage = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const dispatch = useAppDispatch();
-  // const { accessToken,
-  //   refreshToken,
-  //   loginFailed,
-  //   loginLoading,
-  //   loginError } 
-  //   = useAppSelector(state => state.login);
-
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   function onEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     //dispatch(clearState());
     setEmail(e.target.value);
@@ -31,11 +26,18 @@ export const LoginPage = () => {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(login({email: email, password: password}));
+    
+    if(localStorage.getItem("accessToken")) {
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+    }
   }
 
   return(
     <section className={styles.authContainer}>
       <h2 className="text text_type_main-medium">Вход</h2>
+
+      <ErrorDetails />
 
       <form className={styles.form} action="submit" onSubmit={handleSubmit}>
         <EmailInput
@@ -62,16 +64,6 @@ export const LoginPage = () => {
             Войти
         </Button>
       </form>
-
-      <div className={`${styles.extraInfo} mt-6`}>
-        {/* {loginFailed && 
-          <p className="text text_type_main-medium">{loginError}</p>
-        }
-
-        {loginLoading && 
-          <Loader />     
-        }   */}
-      </div>
 
       <div className={`${styles.actions} mt-20`}>
         <p className="text text_type_main-default text_color_inactive">Вы — новый пользователь?</p>

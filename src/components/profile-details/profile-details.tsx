@@ -4,9 +4,10 @@ import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-de
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { updateUserDetails } from '../../services/user/actions';
 import Loader from '../loader/loader';
+import ErrorDetails from '../error-details';
 
 function ProfileDetails() {
-  const { user, isUpdateLoading, isUpdateFailed, updateError } = useAppSelector(state => state.user);
+  const { user, isLoading, isFailed, errorMessage } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
   const [ name, setName ] = React.useState(() => user?.name || '');
   const [ email, setEmail ] = React.useState(() => user?.email || '');
@@ -44,58 +45,49 @@ function ProfileDetails() {
   }
 
   return(
-    
     <>
-      {isUpdateFailed ? (
-        <>
-          <div>Что-то пошло не так</div>
-          <div>{updateError}</div>
-        </>
-      ) : isUpdateLoading 
-          ? <Loader />
-          : (
-            <form className={styles.form} action="submit" onSubmit={handleSubmit}>
-              <Input 
-                type={'text'}
-                placeholder={'Имя'}
-                onChange={handleChangeName}
-                icon={'EditIcon'}
-                value={name ?? ""}
-                name={'name'}
-                error={false}
-                ref={inputRef}
-                onIconClick={onIconClick}
-                errorText={'Ошибка'}
-                size={'default'}
-                onPointerEnterCapture={()=>{}}
-                onPointerLeaveCapture={()=>{}}
-              />
-              <EmailInput
-                onChange={handleChangeEmail}
-                value={email ?? ""}
-                name={'email'}
-                placeholder='Логин'
-                isIcon={true}
-                extraClass='mt-6'
-              />
-              <PasswordInput
-                onChange={handleChangePassword}
-                value={password ?? "*****"}
-                name={'password'}
-                icon="EditIcon"
-                extraClass='mt-6'
-              />
-              <div className={`${styles.actions} mt-6`}>
-                <Button htmlType="button" type="secondary" size="medium" onClick={handleReset}>
-                  Отмена
-                </Button>
-                <Button htmlType="button" type="primary" size="medium" onClick={handleConfirm}>
-                  Сохранить
-                </Button>
-              </div>
-            </form>
-          )
-      }
+      <ErrorDetails />
+
+      <form className={styles.form} action="submit" onSubmit={handleSubmit}>
+        <Input 
+          type={'text'}
+          placeholder={'Имя'}
+          onChange={handleChangeName}
+          icon={'EditIcon'}
+          value={name ?? ""}
+          name={'name'}
+          error={false}
+          ref={inputRef}
+          onIconClick={onIconClick}
+          errorText={'Ошибка'}
+          size={'default'}
+          onPointerEnterCapture={()=>{}}
+          onPointerLeaveCapture={()=>{}}
+        />
+        <EmailInput
+          onChange={handleChangeEmail}
+          value={email ?? ""}
+          name={'email'}
+          placeholder='Логин'
+          isIcon={true}
+          extraClass='mt-6'
+        />
+        <PasswordInput
+          onChange={handleChangePassword}
+          value={password ?? "*****"}
+          name={'password'}
+          icon="EditIcon"
+          extraClass='mt-6'
+        />
+        <div className={`${styles.actions} mt-6`}>
+          <Button htmlType="button" type="secondary" size="medium" onClick={handleReset}>
+            Отмена
+          </Button>
+          <Button htmlType="button" type="primary" size="medium" onClick={handleConfirm}>
+            Сохранить
+          </Button>
+        </div>
+      </form>
     </>
   )
 }

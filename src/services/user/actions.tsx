@@ -22,28 +22,28 @@ interface ResetPayload {
 
 export const register = createAsyncThunk<TRegisterResponse, RegisterPayload>(
   "auth/register",
-  async ({email, password, name}) => {
-    const res = await api.register(email, password, name);
-    if(res.success) {
+  async ({ email, password, name }, { rejectWithValue }) => {
+    try {
+      const res = await api.register(email, password, name);
       localStorage.setItem("accessToken", res.accessToken.split('Bearer ')[1]);
       localStorage.setItem("refreshToken", res.refreshToken);
       return res;
-    } else {
-      console.log('An error occurred while registration');
+    } catch(err: any) {
+      return rejectWithValue(err.message);
     }
   }
 );
 
 export const login = createAsyncThunk<TLoginResponse, LoginPayload>(
   "auth/login",
-  async ({email, password}) => {
-    const res = await api.login(email, password);
-    if(res.success) {
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const res = await api.login(email, password);
       localStorage.setItem("accessToken", res.accessToken.split('Bearer ')[1]);
       localStorage.setItem("refreshToken", res.refreshToken);
       return res;
-    } else {
-      console.log('An error occurred while logging in');
+    } catch(err: any) {
+      return rejectWithValue(err.message);
     }
   }
 );
