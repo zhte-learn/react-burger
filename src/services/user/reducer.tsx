@@ -13,6 +13,7 @@ type TUserState = {
   isFailed: boolean;
   isLoading: boolean;
   errorMessage: any;
+  error: any;
 }
 
 const initialState: TUserState = {
@@ -21,6 +22,7 @@ const initialState: TUserState = {
   isFailed: false,
   isLoading: false,
   errorMessage: null,
+  error: null,
 }
 
 export const userSlice = createSlice({
@@ -72,45 +74,46 @@ export const userSlice = createSlice({
       .addCase(updateUserDetails.fulfilled, (state) => {
         state.isFailed = false;
         state.isLoading = false;
-        state.errorMessage = null;
+        state.error = null;
       })
       .addCase(updateUserDetails.pending, (state) => {
         state.isLoading = true;
-        state.errorMessage = null;
+        state.error = null;
       })
       .addCase(updateUserDetails.rejected, (state, action) => {
         state.isFailed = true;
         state.isLoading = false;
-        state.errorMessage = action.payload;
+        state.error = action.payload;
       })
       .addCase(forgotPassword.fulfilled, (state) => {
-        //state.isFailed = false;
+        state.isFailed = false;
         state.isLoading = false;
-        //state.errorMessage = null;
+        state.error = null;
       })
       .addCase(forgotPassword.pending, (state) => {
         state.isLoading = true;
-        //state.isFailed = false;
-        //state.errorMessage = null;
+        state.isFailed = false;
+        state.error = null;
       })
-      .addCase(forgotPassword.rejected, (state) => {
+      .addCase(forgotPassword.rejected, (state, action) => {
         state.isLoading = false;
-        //state.isFailed = true;
-        //state.errorMessage = action.payload;
+        state.isFailed = true;
+        state.error = action.payload;
       })
       .addCase(resetPassword.fulfilled, (state) => {
-        //state.isFailed = false;
+        state.isFailed = false;
         state.isLoading = false;
-        //state.errorMessage = null;
+        state.error = null;
       })
       .addCase(resetPassword.pending, (state) => {
         state.isLoading = true;
-        //state.isFailed = false;
-        //state.errorMessage = null;
+        state.isFailed = false;
+        state.error = null;
       })
-      .addCase(resetPassword.rejected, (state) => {
+      .addCase(resetPassword.rejected, (state, action) => {
         state.isLoading = false;
-        //state.isFailed = true;
+        state.error = action.payload;
+        state.isFailed = true;
         //state.errorMessage = action.payload;
       })
   }

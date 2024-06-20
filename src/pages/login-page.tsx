@@ -4,11 +4,12 @@ import { EmailInput, Button, PasswordInput } from "@ya.praktikum/react-developer
 import styles from './styles.module.css';
 import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { login } from '../services/user/actions';
-import ErrorDetails from '../components/error-details';
+import Loader from '../components/loader/loader';
 
 export const LoginPage = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const { isLoading, isFailed, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,34 +37,37 @@ export const LoginPage = () => {
   return(
     <section className={styles.authContainer}>
       <h2 className="text text_type_main-medium">Вход</h2>
+      {isFailed && <p className="text text_type_main-medium">{error.message}</p>}
+      
+      {isLoading ? <Loader/> 
+      : (
+        <form className={styles.form} action="submit" onSubmit={handleSubmit}>
+          <EmailInput
+            onChange={onEmailChange}
+            value={email}
+            name={'email'}
+            isIcon={false}
+            extraClass="mt-6"
+            disabled={false}
+          />
 
-      <ErrorDetails />
+          <PasswordInput
+            onChange={onPasswordChange}
+            value={password}
+            name={'password'}
+            extraClass="mt-6"
+          />
 
-      <form className={styles.form} action="submit" onSubmit={handleSubmit}>
-        <EmailInput
-          onChange={onEmailChange}
-          value={email}
-          name={'email'}
-          isIcon={false}
-          extraClass="mt-6"
-          disabled={false}
-        />
-
-        <PasswordInput
-          onChange={onPasswordChange}
-          value={password}
-          name={'password'}
-          extraClass="mt-6"
-        />
-
-        <Button 
-          htmlType="submit" 
-          type="primary" 
-          size="large" 
-          extraClass="mt-6">
-            Войти
-        </Button>
-      </form>
+          <Button 
+            htmlType="submit" 
+            type="primary" 
+            size="large" 
+            extraClass="mt-6">
+              Войти
+          </Button>
+        </form>
+      )}
+      
 
       <div className={`${styles.actions} mt-20`}>
         <p className="text text_type_main-default text_color_inactive">Вы — новый пользователь?</p>

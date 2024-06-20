@@ -7,11 +7,11 @@ import Loader from '../loader/loader';
 import ErrorDetails from '../error-details';
 
 function ProfileDetails() {
-  const { user, isLoading, isFailed, errorMessage } = useAppSelector(state => state.user);
+  const { user, isLoading, isFailed, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
-  const [ name, setName ] = React.useState(() => user?.name || '');
-  const [ email, setEmail ] = React.useState(() => user?.email || '');
-  const [ password, setPassword ] = React.useState(() => user?.password || '');
+  const [ name, setName ] = React.useState(() => user!.name);
+  const [ email, setEmail ] = React.useState(() => user!.email);
+  const [ password, setPassword ] = React.useState(() => user!.password);
 
   function handleChangeName(e: React.ChangeEvent<HTMLInputElement>) {
     setName(e.target.value);
@@ -34,9 +34,9 @@ function ProfileDetails() {
   }
 
   function handleReset() {
-    setName(user?.name || '');
-    setEmail(user?.email || '');
-    setPassword(user?.password || '');
+    setName(user!.name);
+    setEmail(user!.email);
+    setPassword(user!.password);
   }
 
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -46,48 +46,63 @@ function ProfileDetails() {
 
   return(
     <>
-      <ErrorDetails />
+      {isFailed && <p className="text text_type_main-medium">{error.message}</p>}
 
-      <form className={styles.form} action="submit" onSubmit={handleSubmit}>
-        <Input 
-          type={'text'}
-          placeholder={'Имя'}
-          onChange={handleChangeName}
-          icon={'EditIcon'}
-          value={name ?? ""}
-          name={'name'}
-          error={false}
-          ref={inputRef}
-          onIconClick={onIconClick}
-          errorText={'Ошибка'}
-          size={'default'}
-          onPointerEnterCapture={()=>{}}
-          onPointerLeaveCapture={()=>{}}
-        />
-        <EmailInput
-          onChange={handleChangeEmail}
-          value={email ?? ""}
-          name={'email'}
-          placeholder='Логин'
-          isIcon={true}
-          extraClass='mt-6'
-        />
-        <PasswordInput
-          onChange={handleChangePassword}
-          value={password ?? "*****"}
-          name={'password'}
-          icon="EditIcon"
-          extraClass='mt-6'
-        />
-        <div className={`${styles.actions} mt-6`}>
-          <Button htmlType="button" type="secondary" size="medium" onClick={handleReset}>
-            Отмена
-          </Button>
-          <Button htmlType="button" type="primary" size="medium" onClick={handleConfirm}>
-            Сохранить
-          </Button>
-        </div>
-      </form>
+      {isLoading ? <Loader /> 
+      : (
+        <form className={styles.form} action="submit" onSubmit={handleSubmit}>
+          <Input 
+            type={'text'}
+            placeholder={'Имя'}
+            onChange={handleChangeName}
+            icon={'EditIcon'}
+            value={name ?? ""}
+            name={'name'}
+            error={false}
+            ref={inputRef}
+            onIconClick={onIconClick}
+            errorText={'Ошибка'}
+            size={'default'}
+            onPointerEnterCapture={()=>{}}
+            onPointerLeaveCapture={()=>{}}
+          />
+          <EmailInput
+            onChange={handleChangeEmail}
+            value={email ?? ""}
+            name={'email'}
+            placeholder='Логин'
+            isIcon={true}
+            extraClass='mt-6'
+          />
+          <PasswordInput
+            onChange={handleChangePassword}
+            value={password ?? "*****"}
+            name={'password'}
+            icon="EditIcon"
+            extraClass='mt-6'
+          />
+          <div className={`${styles.actions} mt-6`}>
+            <Button 
+              htmlType="button" 
+              type="secondary" 
+              size="medium" 
+              onClick={handleReset}
+            >
+              Отмена
+            </Button>
+
+            <Button 
+              htmlType="button" 
+              type="primary" 
+              size="medium" 
+              onClick={handleConfirm}
+              disabled={!(user?.email !== email || user?.name !== name || user?.password !== '*****')}
+            >
+              Сохранить
+            </Button>
+          </div>
+        </form>
+      )}
     </>
   )
 }

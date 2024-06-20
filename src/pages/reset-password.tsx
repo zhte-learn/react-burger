@@ -18,7 +18,7 @@ export const ResetPassword = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isLoading } = useAppSelector(state => state.user);
+  const { isLoading, error } = useAppSelector(state => state.user);
 
   function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPassword(e.target.value);
@@ -33,14 +33,17 @@ export const ResetPassword = () => {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault();
-    const res = await dispatch(resetPassword({ password: password, token: token })) as { payload: ResetPasswordResponse };
+    //const res = await dispatch(resetPassword({ password: password, token: token })) as { payload: ResetPasswordResponse };
+    const res = await dispatch(resetPassword({ password: password, token: token }));
+    const payload = res.payload as ResetPasswordResponse;
+
     setPassword('');
     setToken('');
 
-    if (res.payload.success) {
+    if (payload.success) {
       navigate('/login', { replace: true });
     } else {
-      setErrorMessage(res.payload.message);
+      setErrorMessage(payload.message);
     }
   }
 

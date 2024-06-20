@@ -1,8 +1,7 @@
-import React from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 
 import styles from './styles.module.css';
-import { useAppSelector, useAppDispatch } from '../services/hooks';
+import { useAppDispatch } from '../services/hooks';
 import { logout } from '../services/user/actions';
 
 export const ProfilePage = () => {

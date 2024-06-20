@@ -4,7 +4,7 @@ import { TUser, TRegisterResponse, TLoginResponse, TUpdateResponse } from '../..
 import { setAuthChecked, setUser } from './reducer';
 import { AppDispatch } from '../store';
 
-interface RegisterPayload {
+interface RegisterArgs {
   email: string;
   password: string;
   name: string;
@@ -15,12 +15,12 @@ interface LoginPayload {
   password: string;
 }
 
-interface ResetPayload {
+interface ResetPasswordArgs {
   password: string;
   token: string;
 }
 
-export const register = createAsyncThunk<TRegisterResponse, RegisterPayload>(
+export const register = createAsyncThunk<TRegisterResponse, RegisterArgs>(
   "auth/register",
   async ({ email, password, name }, { rejectWithValue }) => {
     try {
@@ -81,17 +81,24 @@ export const refreshToken = createAsyncThunk<void, void> (
   }
 );
 
-export const updateUserDetails = createAsyncThunk<TUpdateResponse, TUser, {dispatch: AppDispatch}>(
+export const updateUserDetails = createAsyncThunk<void, TUser, {dispatch: AppDispatch}>(
   "auth/updateUserDetails",
-  async(userData, { dispatch }) => {
+  async(userData, { dispatch, rejectWithValue}) => {
     const token = localStorage.getItem("accessToken");
     if(token) {
-      const res = await api.updateUserDetails(token, userData);
-      dispatch(setUser({ ...res.user, password: '*****' }));
-      return res;
+      api.updateUserDetails(token, userData)
+        .then(res => dispatch(setUser({ ...res.user, password: '*****' })))
+        .catch(error => rejectWithValue(error))
     } else {
       console.log('Token not found');
     }
+    // if(token) {
+    //   const res = await api.updateUserDetails(token, userData);
+    //   dispatch(setUser({ ...res.user, password: '*****' }));
+    //   return res;
+    // } else {
+    //   console.log('Token not found');
+    // }
   }
 )
 
@@ -119,13 +126,12 @@ export const forgotPassword = createAsyncThunk<void, string>(
     try {
       return await api.forgotPassword(email);
     } catch(error: any) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error);
     }
   }
 );
 
-
-export const resetPassword = createAsyncThunk<void, ResetPayload>(
+export const resetPassword = createAsyncThunk<void, ResetPasswordArgs>(
   "auth/resetPassword",
   async ({ password, token }, { rejectWithValue }) => {
     try {
