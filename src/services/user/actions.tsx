@@ -124,6 +124,7 @@ export const forgotPassword = createAsyncThunk<void, string>(
   }
 );
 
+
 export const resetPassword = createAsyncThunk<void, ResetPayload>(
   "auth/resetPassword",
   async ({ password, token }, { rejectWithValue }) => {
@@ -131,7 +132,7 @@ export const resetPassword = createAsyncThunk<void, ResetPayload>(
       const res = await api.resetPassword(password, token);
       return res;
     } catch(error: any) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error);
     }
   }
 );
@@ -139,7 +140,7 @@ export const resetPassword = createAsyncThunk<void, ResetPayload>(
 // export const resetPassword = createAsyncThunk<void, ResetPayload>(
 //   "auth/resetPassword",
 //   async ({password, token}, { rejectWithValue }) => {
-//     const res = await authApi.resetPassword(password, token);
+//     const res = await api.resetPassword(password, token);
 //     if(res.success) {
 //       return res;
 //     } else {

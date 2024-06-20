@@ -4,6 +4,7 @@ import { register,
         login, 
         logout, 
         updateUserDetails, 
+        forgotPassword,
         resetPassword} from './actions';
 
 type TUserState = {
@@ -82,20 +83,35 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.errorMessage = action.payload;
       })
-      .addCase(resetPassword.fulfilled, (state) => {
-        state.isFailed = false;
-        state.errorMessage = null;
+      .addCase(forgotPassword.fulfilled, (state) => {
+        //state.isFailed = false;
         state.isLoading = false;
+        //state.errorMessage = null;
+      })
+      .addCase(forgotPassword.pending, (state) => {
+        state.isLoading = true;
+        //state.isFailed = false;
+        //state.errorMessage = null;
+      })
+      .addCase(forgotPassword.rejected, (state) => {
+        state.isLoading = false;
+        //state.isFailed = true;
+        //state.errorMessage = action.payload;
+      })
+      .addCase(resetPassword.fulfilled, (state) => {
+        //state.isFailed = false;
+        state.isLoading = false;
+        //state.errorMessage = null;
       })
       .addCase(resetPassword.pending, (state) => {
         state.isLoading = true;
-        state.isFailed = false;
-        state.errorMessage = null;
+        //state.isFailed = false;
+        //state.errorMessage = null;
       })
-      .addCase(resetPassword.rejected, (state, action) => {
+      .addCase(resetPassword.rejected, (state) => {
         state.isLoading = false;
-        state.isFailed = true;
-        state.errorMessage = action.payload;
+        //state.isFailed = true;
+        //state.errorMessage = action.payload;
       })
   }
 })
