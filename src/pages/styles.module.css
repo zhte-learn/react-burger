@@ -52,3 +52,15 @@
 .profileLink:hover {
   color: #d3d3df;
 }
+
+.buttonExit{
+  background-color: transparent;
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
+  cursor: pointer;
+}
+
+.buttonExit:hover {
+  color: #d3d3df;
+}

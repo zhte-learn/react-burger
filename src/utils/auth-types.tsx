@@ -20,6 +20,7 @@ export type TLoginResponse = {
     accessToken: string;
     refreshToken: string;
     user: TUser;
+    message: string;
 }
 
 export type TLogoutResponse = {
@@ -30,4 +31,9 @@ export type TLogoutResponse = {
 export type TUpdateResponse = {
     success: boolean;
     user: TUser;
+}
+
+export type TResetPasswordResponse = {
+    success: boolean;
+    message: string;
 }

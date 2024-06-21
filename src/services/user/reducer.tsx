@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { TUser } from "../../utils/auth-types";
+import { TUser } from "../../utils/custom-types";
 import { register, 
         login, 
         logout, 
@@ -10,18 +10,14 @@ import { register,
 type TUserState = {
   user: TUser | null;
   isAuthChecked: boolean;
-  isFailed: boolean;
-  isLoading: boolean;
-  errorMessage: any;
+  status: string;
   error: any;
 }
 
 const initialState: TUserState = {
   user: null,
   isAuthChecked: false,
-  isFailed: false,
-  isLoading: false,
-  errorMessage: null,
+  status: 'idle',
   error: null,
 }
 
@@ -35,90 +31,80 @@ export const userSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
+    clearStatus: (state) => {
+      state.status = 'idle';
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(register.fulfilled, (state, action) => {
         state.user = {...action.payload.user, password: "*****"};
-        state.isFailed = false;
-        state.isLoading = false;
-        state.errorMessage = null;
+        state.status = "success";
+        state.error = null;
       })
       .addCase(register.pending, (state) => {
-        state.isLoading = true;
-        state.errorMessage = null;
+        state.status = "loading";
+        state.error = null;
       })
       .addCase(register.rejected, (state, action) => {
-        state.isFailed = true;
-        state.isLoading = false;
-        state.errorMessage = action.payload;
+        state.status = "failed";
+        state.error = action.payload;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.user = {...action.payload.user, password: "*****"};
-        state.isFailed = false;
-        state.isLoading = false;
-        state.errorMessage = null;
+        state.status = "success";
+        state.error = null;
       })
       .addCase(login.pending, (state) => {
-        state.isLoading = true;
-        state.errorMessage = null;
+        state.status = "loading";
+        state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
-        state.isFailed = true;
-        state.isLoading = false;
-        state.errorMessage = action.payload;
+        state.status = "failed";
+        state.error = action.payload;
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
       })
       .addCase(updateUserDetails.fulfilled, (state) => {
-        state.isFailed = false;
-        state.isLoading = false;
+        state.status = "success";
         state.error = null;
       })
       .addCase(updateUserDetails.pending, (state) => {
-        state.isLoading = true;
+        state.status = "loading";
         state.error = null;
       })
       .addCase(updateUserDetails.rejected, (state, action) => {
-        state.isFailed = true;
-        state.isLoading = false;
+        state.status = "failed";
         state.error = action.payload;
       })
       .addCase(forgotPassword.fulfilled, (state) => {
-        state.isFailed = false;
-        state.isLoading = false;
+        state.status = 'success';
         state.error = null;
       })
       .addCase(forgotPassword.pending, (state) => {
-        state.isLoading = true;
-        state.isFailed = false;
+        state.status = 'loading';
         state.error = null;
       })
       .addCase(forgotPassword.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isFailed = true;
+        state.status = 'failed';
         state.error = action.payload;
       })
       .addCase(resetPassword.fulfilled, (state) => {
-        state.isFailed = false;
-        state.isLoading = false;
+        state.status = 'success';
         state.error = null;
       })
       .addCase(resetPassword.pending, (state) => {
-        state.isLoading = true;
-        state.isFailed = false;
+        state.status = 'loading';
         state.error = null;
       })
       .addCase(resetPassword.rejected, (state, action) => {
-        state.isLoading = false;
+        state.status = 'failed';
         state.error = action.payload;
-        state.isFailed = true;
-        //state.errorMessage = action.payload;
       })
   }
 })
 
-export const { setAuthChecked, setUser } = userSlice.actions;
-
+export const { setAuthChecked, setUser, clearStatus } = userSlice.actions;
 export default userSlice.reducer;

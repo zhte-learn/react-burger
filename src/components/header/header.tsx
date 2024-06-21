@@ -44,7 +44,6 @@ function AppHeader() {
         </ul>  
       </div>
     </header>
-    
   )
 }
 

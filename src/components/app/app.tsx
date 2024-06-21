@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
-
 import styles from './app.module.css';
 
 import AppHeader from '../header/header';
@@ -8,7 +7,7 @@ import Loader from '../loader/loader';
 import Modal from '../modal/modal';
 
 import { getIngredients } from '../../services/ingredients/actions';
-import { checkUserAuth, refreshToken } from '../../services/user/actions';
+import { checkUserAuth } from '../../services/user/actions';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 
 import { LoginPage } from '../../pages/login-page';
@@ -21,27 +20,6 @@ import { OrderPage } from '../../pages/orders-page';
 import ProfileDetails from '../profile-details/profile-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
-import BurgerIngredient from '../../utils/ingredient-interface';
-
-//const MINUTE_MS = 1200000;
-
-function Test() {
-  let { ingredientId } = useParams<"ingredientId">();
-  const { ingredients, 
-    ingredientsLoading, 
-    ingredientsRequestFailed, 
-    ingredientsError } 
-    = useAppSelector(state => state.ingredients);
-  
-  console.log(ingredients.filter(item => item._id === ingredientId));
-
-  return(
-    <>
-    <div>{ingredientId}</div>
-    </>
-    
-  )
-}
 
 function App() {
   const location = useLocation();
@@ -55,22 +33,10 @@ function App() {
           ingredientsError } 
           = useAppSelector(state => state.ingredients);
 
-// let { ingredientId } = useParams<"ingredientId">();
-// console.log(ingredientId)
-// const ingredientData = ingredients.filter(item => item._id === ingredientId)[0];
-// console.log(ingredients.filter(item => item._id === ingredientId)[0]);
-  
   React.useEffect(() => {
     dispatch(getIngredients());
     dispatch(checkUserAuth());
   }, []);
-
-  // React.useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     refreshToken()
-  //   }, MINUTE_MS);
-  //   return () => clearInterval(interval); 
-  // }, []);
 
   const handleModalClose = () => {
     // Возвращаемся к предыдущему пути при закрытии модалки

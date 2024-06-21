@@ -1,98 +1,120 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
+
+import Loader from '../components/loader/loader';
 import { Input, EmailInput, Button, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './styles.module.css';
 
 import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { register } from '../services/user/actions';
-import ErrorDetails from '../components/error-details';
+import { clearStatus } from '../services/user/reducer';
 
 export const RegisterPage = () => {
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const dispatch = useAppDispatch();
-  const { isFailed, isLoading, errorMessage } = useAppSelector(state => state.user);
+  const [errorMessage, setErrorMessage] = React.useState('');
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const { status, error } = useAppSelector(state => state.user);
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  //remove errors and status state from the previous page
+  React.useEffect(() => {
+    dispatch(clearStatus());
+  }, []);
+  
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(register({email: email, password: password, name: name}));
+    
     setName('');
     setEmail('');
     setPassword('');
+    // const res = await dispatch(register({name: name, email: email, password: password}));
+    // const payload = res.payload as TRegisterResponse;
+    // if(payload.success) {
+    //   const from = location.state?.from?.pathname || "/";
+    //   navigate(from, { replace: true });
+    // } else {
+    //   setErrorMessage(payload.message);
+    // }
   }
 
+  React.useEffect(() => {
+    if(error) {
+      setErrorMessage(error.message);
+    }
+  }, [error]);
+
   function onNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-    //dispatch(clearState());
-    setName(e.target.value)
+    setName(e.target.value);
+    setErrorMessage('');
   }
 
   function onEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
-    //dispatch(clearState());
     setEmail(e.target.value);
+    setErrorMessage('');
   }
 
   function onPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
-    //dispatch(clearState());
     setPassword(e.target.value);
+    setErrorMessage('');
   }
 
   return(
     <section className={styles.authContainer}>
       <h2 className="text text_type_main-medium">Регистрация</h2>
 
-      <ErrorDetails />
+      {status === 'failed' && <p className="text text_type_main-medium">{errorMessage}</p>}
 
-      <form className={styles.form} action="submit" onSubmit={handleSubmit}>
-        <Input 
-          type={'text'}
-          placeholder={'Имя'}
-          onChange={onNameChange}
-          icon={undefined}
-          value={name}
-          name={'name'}
-          error={false}
-          errorText={'Ошибка'}
-          size={'default'}
-          extraClass="mt-6"
-          onPointerEnterCapture={()=>{}}
-          onPointerLeaveCapture={()=>{}}
-        />
+      {status === 'success' && <Navigate to={from ? from : '/'} replace={true} />}
 
-        <EmailInput
-          onChange={onEmailChange}
-          value={email}
-          name={'email'}
-          isIcon={false}
-          extraClass="mt-6"
-          disabled={false}
-        />
+      {status === 'loading' ? <Loader />
+      : (
+        <form className={styles.form} action="submit" onSubmit={handleSubmit}>
+          <Input 
+            type={'text'}
+            placeholder={'Имя'}
+            onChange={onNameChange}
+            icon={undefined}
+            value={name}
+            name={'name'}
+            error={false}
+            errorText={'Ошибка'}
+            size={'default'}
+            extraClass="mt-6"
+            onPointerEnterCapture={()=>{}}
+            onPointerLeaveCapture={()=>{}}
+          />
 
-        <PasswordInput
-          onChange={onPasswordChange}
-          value={password}
-          name={'password'}
-          extraClass="mt-6"
-        />
+          <EmailInput
+            onChange={onEmailChange}
+            value={email}
+            name={'email'}
+            isIcon={false}
+            extraClass="mt-6"
+            disabled={false}
+          />
 
-        <Button 
-          htmlType="submit" 
-          type="primary" 
-          size="large" 
-          extraClass="mt-6">
-            Зарегистрироваться
-        </Button>
-      </form>
+          <PasswordInput
+            onChange={onPasswordChange}
+            value={password}
+            name={'password'}
+            extraClass="mt-6"
+          />
 
-      <div className={`${styles.extraInfo} mt-6`}>
-        {/* {registerFailed && 
-          <p className="text text_type_main-medium">{registerError}</p>
-        }
-
-        {registerLoading && 
-          <Loader />      
-        }   */}
-      </div>
+          <Button 
+            htmlType="submit" 
+            type="primary" 
+            size="large" 
+            extraClass="mt-6"
+            disabled={!email || !name || !password}>
+              Зарегистрироваться
+          </Button>
+        </form>
+      )}
 
       <div className={`${styles.actions} mt-20`}>
         <p className="text text_type_main-default text_color_inactive">Уже зарегистрированы?</p>

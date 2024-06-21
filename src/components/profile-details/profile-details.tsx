@@ -1,28 +1,36 @@
 import React from 'react';
 import styles from './profile-details.module.css';
+import Loader from '../loader/loader';
 import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import { TUser } from '../../utils/custom-types';
+
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { updateUserDetails } from '../../services/user/actions';
-import Loader from '../loader/loader';
-import ErrorDetails from '../error-details';
 
 function ProfileDetails() {
-  const { user, isLoading, isFailed, error } = useAppSelector(state => state.user);
+  const { user, status, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
+
   const [ name, setName ] = React.useState(() => user!.name);
   const [ email, setEmail ] = React.useState(() => user!.email);
   const [ password, setPassword ] = React.useState(() => user!.password);
+  const [ isPasswordChanged, setIsPasswordChanged ] = React.useState(false);
+  const [ errorMessage, setErrorMessage ] = React.useState('');
 
   function handleChangeName(e: React.ChangeEvent<HTMLInputElement>) {
     setName(e.target.value);
+    setErrorMessage('');
   }
 
   function handleChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
+    setErrorMessage('');
   }
 
   function handleChangePassword(e: React.ChangeEvent<HTMLInputElement>) {
     setPassword(e.target.value);
+    setIsPasswordChanged(true);
+    setErrorMessage('');
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -30,7 +38,11 @@ function ProfileDetails() {
   }
 
   function handleConfirm() {
-    dispatch(updateUserDetails({ name, email, password }));
+    if(isPasswordChanged) {
+      dispatch(updateUserDetails({ name, email, password } as TUser));
+    } else {
+      dispatch(updateUserDetails({ name, email } as TUser));
+    }
   }
 
   function handleReset() {
@@ -44,11 +56,17 @@ function ProfileDetails() {
     setTimeout(() => inputRef.current!.focus(), 0);
   }
 
+  React.useEffect(() => {
+    if(error) {
+      setErrorMessage(error.message);
+    }
+  }, [error]);
+
   return(
     <>
-      {isFailed && <p className="text text_type_main-medium">{error.message}</p>}
+      {status === 'failed' && <p className="text text_type_main-medium">{errorMessage}</p>}
 
-      {isLoading ? <Loader /> 
+      {status === 'loading' ? <Loader /> 
       : (
         <form className={styles.form} action="submit" onSubmit={handleSubmit}>
           <Input 
@@ -81,14 +99,14 @@ function ProfileDetails() {
             icon="EditIcon"
             extraClass='mt-6'
           />
+          
           <div className={`${styles.actions} mt-6`}>
             <Button 
               htmlType="button" 
               type="secondary" 
               size="medium" 
-              onClick={handleReset}
-            >
-              Отмена
+              onClick={handleReset}>
+                Отмена
             </Button>
 
             <Button 
@@ -96,9 +114,8 @@ function ProfileDetails() {
               type="primary" 
               size="medium" 
               onClick={handleConfirm}
-              disabled={!(user?.email !== email || user?.name !== name || user?.password !== '*****')}
-            >
-              Сохранить
+              disabled={!(user?.email !== email || user?.name !== name || isPasswordChanged)}>
+                Сохранить
             </Button>
           </div>
         </form>

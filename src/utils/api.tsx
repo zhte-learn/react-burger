@@ -1,16 +1,5 @@
 import { BURGER_API_URL, BURGER_API_AUTH_URL } from "./api-settings";
-import { TUser } from "./auth-types";
-
-// const getResponse = (res: Response) => {
-//   if(!res.ok) {
-//     Promise.reject(res.status);
-//   } 
-//   return res.json();
-// }
-
-// function request2(url: string, options: RequestInit) {
-//   return fetch(url, options).then(getResponse);
-// }
+import { TUser } from "./custom-types";
 
 const checkResponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
@@ -100,14 +89,6 @@ const logout = (token: string) => {
     body: JSON.stringify({token: token}),
   })
 }
-
-// const refreshToken = (token: string) => {
-//   return request(`${BURGER_API_AUTH_URL}/token`, {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({token: token}),
-//   })
-// }
 
 const getUserDetails = (token: string) => {
   return fetchWithRefresh(`${BURGER_API_AUTH_URL}/user`, {

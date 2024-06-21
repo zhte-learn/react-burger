@@ -1,12 +1,20 @@
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-
+import React from 'react';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './styles.module.css';
+
 import { useAppDispatch } from '../services/hooks';
 import { logout } from '../services/user/actions';
+import { clearStatus } from '../services/user/reducer';
 
 export const ProfilePage = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
+
+  //remove errors and status state from the previous page
+  React.useEffect(() => {
+    dispatch(clearStatus());
+  }, []);
   
   function handleLogout() {
     dispatch(logout());
@@ -32,12 +40,14 @@ export const ProfilePage = () => {
         >
           История заказов
         </NavLink>
-        <Link 
-          to='/login' 
+        <Button 
+          htmlType="button" 
+          type="secondary" 
+          size="large"
           onClick={handleLogout}
-          className= {`${styles.profileLink} text_type_main-medium text_color_inactive pt-4 pb-4`}>
+          className= {`${styles.buttonExit} text_type_main-medium text_color_inactive pt-4 pb-4`}>
             Выход
-        </Link>
+        </Button>
 
         {location.pathname === '/profile' && (
           <div className={`${styles.profileInfo} mt-20`}>

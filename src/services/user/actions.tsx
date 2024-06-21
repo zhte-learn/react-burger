@@ -1,8 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../utils/api';
-import { TUser, TRegisterResponse, TLoginResponse, TUpdateResponse } from '../../utils/auth-types';
+import { TUser, TRegisterResponse, TLoginResponse, TUpdateResponse } from '../../utils/custom-types';
 import { setAuthChecked, setUser } from './reducer';
-import { AppDispatch } from '../store';
 
 interface RegisterArgs {
   email: string;
@@ -10,7 +9,7 @@ interface RegisterArgs {
   name: string;
 }
 
-interface LoginPayload {
+interface LoginArgs {
   email: string;
   password: string;
 }
@@ -23,54 +22,38 @@ interface ResetPasswordArgs {
 export const register = createAsyncThunk<TRegisterResponse, RegisterArgs>(
   "auth/register",
   async ({ email, password, name }, { rejectWithValue }) => {
-    try {
-      const res = await api.register(email, password, name);
-      localStorage.setItem("accessToken", res.accessToken.split('Bearer ')[1]);
-      localStorage.setItem("refreshToken", res.refreshToken);
-      return res;
-    } catch(err: any) {
-      return rejectWithValue(err.message);
-    }
+    return await api.register(email, password, name)
+      .then(res => {
+        localStorage.setItem("accessToken", res.accessToken.split('Bearer ')[1]);
+        localStorage.setItem("refreshToken", res.refreshToken);
+        return res;
+      })
+      .catch(error => rejectWithValue(error))
   }
 );
 
-export const login = createAsyncThunk<TLoginResponse, LoginPayload>(
+export const login = createAsyncThunk<TLoginResponse, LoginArgs>(
   "auth/login",
   async ({ email, password }, { rejectWithValue }) => {
-    try {
-      const res = await api.login(email, password);
-      localStorage.setItem("accessToken", res.accessToken.split('Bearer ')[1]);
-      localStorage.setItem("refreshToken", res.refreshToken);
-      return res;
-    } catch(err: any) {
-      return rejectWithValue(err.message);
-    }
+    return await api.login(email, password)
+      .then(res => {
+        localStorage.setItem("accessToken", res.accessToken.split('Bearer ')[1]);
+        localStorage.setItem("refreshToken", res.refreshToken);
+        return res;
+      })
+      .catch(error => rejectWithValue(error))
   }
 );
 
 export const logout = createAsyncThunk<void, void>(
   "user/logout",
-  async () => {
+  async (_, { rejectWithValue }) => {
     const token = localStorage.getItem("refreshToken");
     if(token) {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      const res = await api.logout(token);
-      return res;
-    } else {
-      console.log('An error occurred while logging out');
-    }
-  }
-);
-
-export const refreshToken = createAsyncThunk<void, void> (
-  "user/refreshToken",
-  async () => {
-    const token = localStorage.getItem("refreshToken");
-    if(token) {
-      api.refreshToken()
-        .then(res => localStorage.setItem("accessToken", res.accessToken.split('Bearer ')[1]))
-        .catch(() => {
+      return await api.logout(token)
+        .then(res => res)
+        .catch(error => rejectWithValue(error))
+        .finally(() => {
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
         })
@@ -81,7 +64,19 @@ export const refreshToken = createAsyncThunk<void, void> (
   }
 );
 
-export const updateUserDetails = createAsyncThunk<void, TUser, {dispatch: AppDispatch}>(
+export const refreshToken = createAsyncThunk<void, void> (
+  "user/refreshToken",
+  async (_, { rejectWithValue }) => {
+    const token = localStorage.getItem("refreshToken");
+    if(token) {
+      return await api.refreshToken()
+        .then(res => localStorage.setItem("accessToken", res.accessToken.split('Bearer ')[1]))
+        .catch(error => rejectWithValue(error))
+    }
+  }
+);
+
+export const updateUserDetails = createAsyncThunk<void, TUser>(
   "auth/updateUserDetails",
   async(userData, { dispatch, rejectWithValue}) => {
     const token = localStorage.getItem("accessToken");
@@ -89,20 +84,11 @@ export const updateUserDetails = createAsyncThunk<void, TUser, {dispatch: AppDis
       api.updateUserDetails(token, userData)
         .then(res => dispatch(setUser({ ...res.user, password: '*****' })))
         .catch(error => rejectWithValue(error))
-    } else {
-      console.log('Token not found');
     }
-    // if(token) {
-    //   const res = await api.updateUserDetails(token, userData);
-    //   dispatch(setUser({ ...res.user, password: '*****' }));
-    //   return res;
-    // } else {
-    //   console.log('Token not found');
-    // }
   }
 )
 
-export const checkUserAuth = createAsyncThunk<void, void, {dispatch: AppDispatch}> (
+export const checkUserAuth = createAsyncThunk<void, void> (
   "user/checkAuth",
   async (_, { dispatch }) => {
     const token = localStorage.getItem("accessToken");
@@ -122,68 +108,18 @@ export const checkUserAuth = createAsyncThunk<void, void, {dispatch: AppDispatch
 
 export const forgotPassword = createAsyncThunk<void, string>(
   "auth/forgotPassword",
-  async (email, { rejectWithValue }) => {
-    try {
-      return await api.forgotPassword(email);
-    } catch(error: any) {
-      return rejectWithValue(error);
-    }
+  async (email, { rejectWithValue, dispatch }) => {
+    return await api.forgotPassword(email)
+      .then(res => res)
+      .catch(error => rejectWithValue(error))
   }
 );
 
 export const resetPassword = createAsyncThunk<void, ResetPasswordArgs>(
   "auth/resetPassword",
-  async ({ password, token }, { rejectWithValue }) => {
-    try {
-      const res = await api.resetPassword(password, token);
-      return res;
-    } catch(error: any) {
-      return rejectWithValue(error);
-    }
+  async ({ password, token }, { rejectWithValue, dispatch }) => {
+    return await api.resetPassword(password, token)
+    .then(res => res)
+    .catch(error => rejectWithValue(error))
   }
 );
-
-// export const resetPassword = createAsyncThunk<void, ResetPayload>(
-//   "auth/resetPassword",
-//   async ({password, token}, { rejectWithValue }) => {
-//     const res = await api.resetPassword(password, token);
-//     if(res.success) {
-//       return res;
-//     } else {
-//       console.log(res.message)
-//       return rejectWithValue(res.message);
-//     }
-//   }
-// );
-
-// export const refreshToken = createAsyncThunk<void, string>(
-//   "auth/refreshToken",
-//   async (_, thunkAPI) => {
-//     try {
-//       const token = localStorage.getItem("refreshToken");
-//       if(token) {
-//         const res = await authApi.refreshToken(token);
-//         localStorage.setItem("accessToken", res.accessToken.split('Bearer ')[1]);
-//         return res;
-//       } else {
-//         throw new Error("Token not found");
-//       }
-//     } catch (error: any) {
-//       return thunkAPI.rejectWithValue(error.message || 'Failed to update user details');
-//     }
-//   }
-// );
-
-// export const logout = createAsyncThunk<TLogoutResponse, string>(
-//   "auth/logout",
-//   async (token: string, thunkAPI) => {
-//     try {
-//       const res = await authApi.logout(token);
-//       localStorage.removeItem("accessToken");
-//       localStorage.removeItem("refreshToken");
-//       return res;
-//     } catch (error: any) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );

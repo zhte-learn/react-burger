@@ -57,6 +57,7 @@ function IngredientItem(props: IngredientItemProps) {
         className={`${itemStyles.item} mb-8`}
         style={{opacity}}
       >
+
         <img src={props.ingredient.image} alt={props.ingredient.name} />
         
         <PriceBlock size="small" price={props.ingredient.price} />
@@ -64,11 +65,7 @@ function IngredientItem(props: IngredientItemProps) {
           {props.ingredient.name}
         </p>
 
-        {
-        counter > 0 
-          &&
-          <Counter count={counter} size="default" extraClass="m-1" />
-        }
+        {counter > 0 && <Counter count={counter} size="default" extraClass="m-1" />}
       </Link>    
     </>
   )
