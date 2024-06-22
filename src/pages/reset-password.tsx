@@ -40,10 +40,6 @@ export const ResetPassword = () => {
     dispatch(resetPassword({ password: password, token: token }));
     setHasMount(false);
 
-    if(error) {
-      setErrorMessage(error.message);
-    }
-
     setPassword('');
     setToken('');
 
@@ -56,11 +52,17 @@ export const ResetPassword = () => {
     // }
   }
 
+  React.useEffect(() => {
+    if(error) {
+      setErrorMessage(error.message);
+    }
+  }, [error]);
+
   return(
     <section className={styles.authContainer}>
       <h2 className="text text_type_main-medium">Восстановление пароля</h2>
 
-      {status === 'failed' && <p className="text text_type_main-medium mt-6">{error.message}</p>}
+      {status === 'failed' && <p className="text text_type_main-medium mt-6">{errorMessage}</p>}
 
       {(status === 'success' && !hasMount) && <Navigate to='/login' replace={true} />}
 
@@ -102,8 +104,6 @@ export const ResetPassword = () => {
         </form>
         )}
       
-      {errorMessage && <p className="text text_type_main-medium mt-6">{errorMessage}</p>}
-  
       <div className={`${styles.actions} mt-20`}>
         <p className="text text_type_main-default text_color_inactive">Вспомнили пароль?</p>
         <Link to='/login' className="text text_type_main-default text_color_accent">Войти</Link>

@@ -5,7 +5,8 @@ import { register,
         logout, 
         updateUserDetails, 
         forgotPassword,
-        resetPassword} from './actions';
+        resetPassword,
+        checkUserAuth} from './actions';
 
 type TUserState = {
   user: TUser | null;
@@ -39,6 +40,7 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(register.fulfilled, (state, action) => {
+        console.log(action)
         state.user = {...action.payload.user, password: "*****"};
         state.status = "success";
         state.error = null;
@@ -49,7 +51,7 @@ export const userSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action.error;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.user = {...action.payload.user, password: "*****"};
@@ -62,7 +64,7 @@ export const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action.error;
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
@@ -77,7 +79,13 @@ export const userSlice = createSlice({
       })
       .addCase(updateUserDetails.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action.error;
+      })
+      .addCase(checkUserAuth.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error;
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
       })
       .addCase(forgotPassword.fulfilled, (state) => {
         state.status = 'success';
@@ -89,7 +97,7 @@ export const userSlice = createSlice({
       })
       .addCase(forgotPassword.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.error;
       })
       .addCase(resetPassword.fulfilled, (state) => {
         state.status = 'success';
@@ -101,7 +109,7 @@ export const userSlice = createSlice({
       })
       .addCase(resetPassword.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.error;
       })
   }
 })
