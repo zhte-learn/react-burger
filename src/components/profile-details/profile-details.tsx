@@ -16,6 +16,7 @@ function ProfileDetails() {
   const [ password, setPassword ] = React.useState(() => user!.password);
   const [ isPasswordChanged, setIsPasswordChanged ] = React.useState(false);
   const [ errorMessage, setErrorMessage ] = React.useState('');
+  const isDataChanged = user?.email !== email || user?.name !== name || isPasswordChanged;
 
   function handleChangeName(e: React.ChangeEvent<HTMLInputElement>) {
     setName(e.target.value);
@@ -100,24 +101,25 @@ function ProfileDetails() {
             extraClass='mt-6'
           />
           
-          <div className={`${styles.actions} mt-6`}>
-            <Button 
-              htmlType="button" 
-              type="secondary" 
-              size="medium" 
-              onClick={handleReset}>
-                Отмена
-            </Button>
+          {isDataChanged && (
+            <div className={`${styles.actions} mt-6`}>
+              <Button 
+                htmlType="button" 
+                type="secondary" 
+                size="medium" 
+                onClick={handleReset}>
+                  Отмена
+              </Button>
 
-            <Button 
-              htmlType="button" 
-              type="primary" 
-              size="medium" 
-              onClick={handleConfirm}
-              disabled={!(user?.email !== email || user?.name !== name || isPasswordChanged)}>
-                Сохранить
-            </Button>
-          </div>
+              <Button 
+                htmlType="button" 
+                type="primary" 
+                size="medium" 
+                onClick={handleConfirm}>
+                  Сохранить
+              </Button>
+            </div>
+          )}
         </form>
       )}
     </>
