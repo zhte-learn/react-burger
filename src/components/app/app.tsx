@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import styles from './app.module.css';
 
 import AppHeader from '../header/header';
@@ -22,10 +22,9 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
 
 function App() {
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
   const background = location.state && location.state.background;
-
   const dispatch = useAppDispatch();
   const { ingredients, 
           ingredientsLoading, 
@@ -38,11 +37,9 @@ function App() {
     dispatch(checkUserAuth());
   }, []);
 
-  const handleModalClose = () => {
-    // Возвращаемся к предыдущему пути при закрытии модалки
-    //navigate(-1, { replace: true });
+  function handleCloseModal() {
     navigate('/', { replace: true });
-  };
+  }
 
   return ( 
       <div className={styles.page}>
@@ -78,7 +75,7 @@ function App() {
                       <Route
                         path='/ingredients/:ingredientId'
                         element={
-                          <Modal onClose={handleModalClose}>
+                          <Modal onClose={handleCloseModal}>
                             <IngredientDetails />
                           </Modal>
                         }

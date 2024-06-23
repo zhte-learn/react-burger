@@ -2,7 +2,6 @@ import React from 'react';
 import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-
 import styles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
 import ConstructorItemInit from './constructor-item-init/constructor-item-init';

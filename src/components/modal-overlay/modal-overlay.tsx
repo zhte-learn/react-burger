@@ -7,8 +7,15 @@ interface ModalOverlayProps {
 }
 
 function ModalOverlay(props: ModalOverlayProps) {
+  function handleOverlayClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    const target = e.target as HTMLElement;
+    if(target.dataset.overlay) {
+      props.onClose();
+    }
+  }
+
   return (
-    <div className={ overlayStyles.overlay } onClick={ props.onClose }>
+    <div data-overlay="overlay" className={overlayStyles.overlay} onClick={handleOverlayClick}>
       {props.children}
     </div>    
   )

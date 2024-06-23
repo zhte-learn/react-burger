@@ -23,7 +23,6 @@ function Modal(props: ModalProps) {
         props.onClose();
       }
     }
-  
     document.addEventListener('keydown', handleEscapeKey);
       return () => document.removeEventListener('keydown', handleEscapeKey);
     }, [props.onClose]);
@@ -32,7 +31,7 @@ function Modal(props: ModalProps) {
     <ModalOverlay onClose={props.onClose}>
       <div className={`${modalStyles.modal} pt-10 pb-10 pr-8 pl-8`}>
         <div className={modalStyles.closeIcon}>
-          <CloseIcon type="primary" onClick={ props.onClose }/>
+          <CloseIcon type="primary" onClick={props.onClose}/>
         </div>
         {props.children} 
       </div> 

@@ -6,8 +6,8 @@ import { useAppSelector } from '../../services/hooks';
 function IngredientDetails() {
   const { ingredients} = useAppSelector(state => state.ingredients);
 
-  let { ingredientId } = useParams<"ingredientId">();
-  let ingredient = ingredients.filter(item => item._id === ingredientId)[0];
+  const { ingredientId } = useParams<"ingredientId">();
+  const ingredient = ingredients.filter(item => item._id === ingredientId)[0];
 
   return(
     <section className={styles.container}>
