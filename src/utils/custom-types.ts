@@ -59,3 +59,29 @@ export type TResetPasswordResponse = {
   success: boolean;
   message: string;
 }
+
+export type TRegisterFormValues = {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export type TForgotFormValues = {
+  email: string;
+}
+
+export type TResetFormValues = {
+  password: string;
+  token: string;
+}
+
+export type TProfileFormValues = {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export type TLoginFormValues = {
+  email: string;
+  password: string;
+}

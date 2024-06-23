@@ -40,7 +40,6 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(register.fulfilled, (state, action) => {
-        console.log(action)
         state.user = {...action.payload.user, password: "*****"};
         state.status = "success";
         state.error = null;

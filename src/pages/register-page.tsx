@@ -8,11 +8,10 @@ import styles from './styles.module.css';
 import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { register } from '../services/user/actions';
 import { clearStatus } from '../services/user/reducer';
+import { useForm } from '../hooks/use-form';
+import { TRegisterFormValues } from '../utils/custom-types';
 
 export const RegisterPage = () => {
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const { status, error } = useAppSelector(state => state.user);
@@ -20,26 +19,26 @@ export const RegisterPage = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
+  const {values, handleChange, clearForm} = useForm<TRegisterFormValues>({ 
+    name: '', 
+    email: '', 
+    password: ''
+  });
+
   //remove errors and status state from the previous page
   React.useEffect(() => {
     dispatch(clearStatus());
   }, []);
+
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    handleChange(e);
+    setErrorMessage(''); //remove error message if user starts typing
+  }
   
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    dispatch(register({email: email, password: password, name: name}));
-    
-    setName('');
-    setEmail('');
-    setPassword('');
-    // const res = await dispatch(register({name: name, email: email, password: password}));
-    // const payload = res.payload as TRegisterResponse;
-    // if(payload.success) {
-    //   const from = location.state?.from?.pathname || "/";
-    //   navigate(from, { replace: true });
-    // } else {
-    //   setErrorMessage(payload.message);
-    // }
+    dispatch(register(values));
+    clearForm();
   }
 
   React.useEffect(() => {
@@ -47,21 +46,6 @@ export const RegisterPage = () => {
       setErrorMessage(error.message);
     }
   }, [error]);
-
-  function onNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setName(e.target.value);
-    setErrorMessage('');
-  }
-
-  function onEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setEmail(e.target.value);
-    setErrorMessage('');
-  }
-
-  function onPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setPassword(e.target.value);
-    setErrorMessage('');
-  }
 
   return(
     <section className={styles.authContainer}>
@@ -77,9 +61,9 @@ export const RegisterPage = () => {
           <Input 
             type={'text'}
             placeholder={'Имя'}
-            onChange={onNameChange}
+            onChange={handleInputChange}
             icon={undefined}
-            value={name}
+            value={values.name}
             name={'name'}
             error={false}
             errorText={'Ошибка'}
@@ -90,8 +74,8 @@ export const RegisterPage = () => {
           />
 
           <EmailInput
-            onChange={onEmailChange}
-            value={email}
+            onChange={handleInputChange}
+            value={values.email}
             name={'email'}
             isIcon={false}
             extraClass="mt-6"
@@ -99,8 +83,8 @@ export const RegisterPage = () => {
           />
 
           <PasswordInput
-            onChange={onPasswordChange}
-            value={password}
+            onChange={handleInputChange}
+            value={values.password}
             name={'password'}
             extraClass="mt-6"
           />
@@ -110,7 +94,7 @@ export const RegisterPage = () => {
             type="primary" 
             size="large" 
             extraClass="mt-6"
-            disabled={!email || !name || !password}>
+            disabled={!values.email || !values.name || !values.password}>
               Зарегистрироваться
           </Button>
         </form>

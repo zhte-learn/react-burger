@@ -6,32 +6,31 @@ import { TUser } from '../../utils/custom-types';
 
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { updateUserDetails } from '../../services/user/actions';
+import { useForm } from '../../hooks/use-form';
+import { TProfileFormValues } from '../../utils/custom-types';
 
 function ProfileDetails() {
   const { user, status, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
-
-  const [ name, setName ] = React.useState(() => user!.name);
-  const [ email, setEmail ] = React.useState(() => user!.email);
-  const [ password, setPassword ] = React.useState(() => user!.password);
+  const {values, setValues, handleChange} = useForm<TProfileFormValues>({ 
+    name: user!.name, 
+    email: user!.email, 
+    password: user!.password ?? '*****',
+  });
   const [ isPasswordChanged, setIsPasswordChanged ] = React.useState(false);
   const [ errorMessage, setErrorMessage ] = React.useState('');
-  const isDataChanged = user?.email !== email || user?.name !== name || isPasswordChanged;
+  
+  const isDataChanged = user?.email !== values.email || user?.name !== values.name || isPasswordChanged;
 
-  function handleChangeName(e: React.ChangeEvent<HTMLInputElement>) {
-    setName(e.target.value);
-    setErrorMessage('');
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    handleChange(e);
+    setErrorMessage(''); //remove error message if user starts typing
   }
 
-  function handleChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {
-    setEmail(e.target.value);
-    setErrorMessage('');
-  }
-
-  function handleChangePassword(e: React.ChangeEvent<HTMLInputElement>) {
-    setPassword(e.target.value);
+  function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
+    handleChange(e);
     setIsPasswordChanged(true);
-    setErrorMessage('');
+    setErrorMessage(''); //remove error message if user starts typing
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -40,16 +39,14 @@ function ProfileDetails() {
 
   function handleConfirm() {
     if(isPasswordChanged) {
-      dispatch(updateUserDetails({ name, email, password } as TUser));
+      dispatch(updateUserDetails(values as TUser));
     } else {
-      dispatch(updateUserDetails({ name, email } as TUser));
+      dispatch(updateUserDetails({ name: values.name, email: values.email } as TUser));
     }
   }
 
   function handleReset() {
-    setName(user!.name);
-    setEmail(user!.email);
-    setPassword(user!.password);
+    setValues({name: user!.name, email: user!.email, password: '*****'})
   }
 
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -73,9 +70,9 @@ function ProfileDetails() {
           <Input 
             type={'text'}
             placeholder={'Имя'}
-            onChange={handleChangeName}
+            onChange={handleInputChange}
             icon={'EditIcon'}
-            value={name ?? ""}
+            value={values.name ?? ""}
             name={'name'}
             error={false}
             ref={inputRef}
@@ -86,16 +83,16 @@ function ProfileDetails() {
             onPointerLeaveCapture={()=>{}}
           />
           <EmailInput
-            onChange={handleChangeEmail}
-            value={email ?? ""}
+            onChange={handleInputChange}
+            value={values.email ?? ""}
             name={'email'}
             placeholder='Логин'
             isIcon={true}
             extraClass='mt-6'
           />
           <PasswordInput
-            onChange={handleChangePassword}
-            value={password ?? "*****"}
+            onChange={handlePasswordChange}
+            value={values.password ?? "*****"}
             name={'password'}
             icon="EditIcon"
             extraClass='mt-6'

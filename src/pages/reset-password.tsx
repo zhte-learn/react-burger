@@ -8,48 +8,36 @@ import { Input, Button, PasswordInput } from "@ya.praktikum/react-developer-burg
 import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { resetPassword } from '../services/user/actions';
 import { clearStatus } from '../services/user/reducer';
+import { useForm } from '../hooks/use-form';
+import { TResetFormValues } from '../utils/custom-types';
 
 export const ResetPassword = () => {
-  const [ password, setPassword ] = React.useState('');
-  const [ token, setToken ] = React.useState('');
   const [ errorMessage, setErrorMessage ] = React.useState('');
   //to prevent redirection to the next page if state.status is success from previous page
   const [ hasMount, setHasMount ] = React.useState(true);
 
   const dispatch = useAppDispatch();
   const { error, status } = useAppSelector(state => state.user);
+  const {values, handleChange, clearForm} = useForm<TResetFormValues>({ 
+    password: '',
+    token: '',
+  });
 
   //remove errors and status state from the previous page
   React.useEffect(() => {
     dispatch(clearStatus());
   }, []);
 
-  function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setPassword(e.target.value);
-    setErrorMessage(''); //remove error message if user starts typing
-  }
-
-  function handleTokenChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setToken(e.target.value);
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    handleChange(e);
     setErrorMessage(''); //remove error message if user starts typing
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault();
-    
-    dispatch(resetPassword({ password: password, token: token }));
+    dispatch(resetPassword(values));
     setHasMount(false);
-
-    setPassword('');
-    setToken('');
-
-    // const res = await dispatch(resetPassword({ password: password, token: token }));
-    // const payload = res.payload as TResetPasswordResponse;
-    // if (payload.success) {
-    //   navigate('/login', { replace: true });
-    // } else {
-    //   setErrorMessage(payload.message);
-    // }
+    clearForm();
   }
 
   React.useEffect(() => {
@@ -71,9 +59,9 @@ export const ResetPassword = () => {
         : (
         <form className={styles.form} action="submit" onSubmit={handleSubmit}>
           <PasswordInput
-            onChange={handlePasswordChange}
+            onChange={handleInputChange}
             placeholder={'Введите новый пароль'}
-            value={password}
+            value={values.password}
             name={'password'}
             extraClass="mt-6"
           />
@@ -81,9 +69,9 @@ export const ResetPassword = () => {
           <Input 
             type={'text'}
             placeholder={'Введите код из письма'}
-            onChange={handleTokenChange}
+            onChange={handleInputChange}
             icon={undefined}
-            value={token}
+            value={values.token}
             name={'token'}
             error={false}
             errorText={'Ошибка'}
@@ -98,7 +86,7 @@ export const ResetPassword = () => {
             type="primary" 
             size="large" 
             extraClass="mt-6"
-            disabled={!password && !token}>
+            disabled={!values.password && !values.token}>
               Сохранить
           </Button>
         </form>

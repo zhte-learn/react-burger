@@ -8,15 +8,20 @@ import styles from './styles.module.css';
 import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { forgotPassword } from '../services/user/actions';
 import { clearStatus } from '../services/user/reducer';
+import { useForm } from '../hooks/use-form';
+import { TForgotFormValues } from '../utils/custom-types';
 
 export const ForgotPassword = () => {
-  const [ email, setEmail ] = React.useState('');
   const [ errorMessage, setErrorMessage ] = React.useState('');
   //to prevent redirection to the next page if state.status is success from previous page
   const [ hasMount, setHasMount ] = React.useState(true);
 
   const { status, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
+
+  const {values, handleChange, clearForm} = useForm<TForgotFormValues>({ 
+    email: '', 
+  });
   
   //remove errors and status state from the previous page
   React.useEffect(() => {
@@ -24,21 +29,22 @@ export const ForgotPassword = () => {
   }, []);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setEmail(e.target.value);
+    handleChange(e);
     setErrorMessage(''); //remove error message if user starts typing
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault();
-
-    dispatch(forgotPassword(email));
+    dispatch(forgotPassword(values.email));
     setHasMount(false);
+    clearForm();
+  }
 
+  React.useEffect(() => {
     if(error) {
       setErrorMessage(error.message);
     }
-    setEmail('');
-  }
+  }, [error]);
 
   return(
     <section className={styles.authContainer}>
@@ -54,7 +60,7 @@ export const ForgotPassword = () => {
           <form className={styles.form} action="submit" onSubmit={handleSubmit}>
             <EmailInput
               onChange={handleInputChange}
-              value={email}
+              value={values.email}
               placeholder={'Укажите e-mail'}
               name={'email'}
               isIcon={false}
@@ -67,7 +73,7 @@ export const ForgotPassword = () => {
               type="primary" 
               size="large" 
               extraClass="mt-6"
-              disabled={!email}>
+              disabled={!values.email}>
                 Восстановить
             </Button>
           </form>
