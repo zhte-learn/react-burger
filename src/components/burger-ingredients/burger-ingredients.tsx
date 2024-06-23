@@ -4,11 +4,7 @@ import IngredientsGroup from "./ingredients-group/ingredients-group";
 import BurgerIngredient from "../../utils/ingredient-interface";
 import { useAppSelector } from '../../services/hooks';
 
-interface BurgerIngredientsProps {
-  ingredients: BurgerIngredient[],
-}
-
-function BurgerIngredients( props: BurgerIngredientsProps ) {
+function BurgerIngredients() {
   const [activeTab, setActiveTab] = React.useState('bun');
   const { ingredients } = useAppSelector(state => state.ingredients);
   const containerScrollRef = React.useRef<HTMLDivElement>(null);
