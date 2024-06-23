@@ -4,7 +4,7 @@ import type { Identifier, XYCoord } from 'dnd-core'
 
 import itemStyles from './constructor-item.module.css';
 import PriceBlock from '../../price-block/price-block';
-import BurgerIngredient from "../../../utils/ingredient-interface";
+import { BurgerIngredient } from '../../../utils/custom-types';
 import { LockIcon, DeleteIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppDispatch } from '../../../services/hooks';
 import { removeIngredient } from '../../../services/burger-constructor/reducer';

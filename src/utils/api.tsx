@@ -1,35 +1,29 @@
-import { BURGER_API_URL, BURGER_API_AUTH_URL } from "./api-settings";
+const BURGER_API_URL = 'https://norma.nomoreparties.space/api/';
 import { TUser } from "./custom-types";
 
 const checkResponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 }
 
-function fetchWithCheck(url: string, options: RequestInit) {
-  return fetch(url, options).then(checkResponse);
-}
-
-const fetchWithRefresh = async (url: string, options: RequestInit) => {
-  try {
-    const res = await fetch(url, options);
-    return await checkResponse(res);
-  } catch (err: any) {
-    if (err.message === "jwt expired") {
-      const refreshData = await refreshToken(); //обновляем токен
-      const headers = new Headers(options.headers as HeadersInit);
-      headers.set('authorization', refreshData.accessToken);
-      //options.headers.authorization = refreshData.accessToken;
-      //const res = await fetch(url, options); //повторяем запрос
-      const res = await fetch(url, { ...options, headers });
-      return await checkResponse(res);
-    } else {
-      return Promise.reject(err);
-    }
+const checkSuccess = async (res: any) => {
+  if (res && res.success) {
+    return res;
   }
+  return Promise.reject(res);
 };
 
+const request = (endpoint: string, options?: RequestInit) => {
+  return fetch(`${BURGER_API_URL}${endpoint}`, options)
+    .then(checkResponse)
+    .then(checkSuccess);
+};
+
+const getIngredients = () => {
+  return request('ingredients');
+}
+
 const refreshToken = () => {
-  return fetch(`${BURGER_API_URL}/auth/token`, {
+  return request('auth/token', {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -38,27 +32,31 @@ const refreshToken = () => {
       token: localStorage.getItem("refreshToken"),
     }),
   })
-  .then(checkResponse)
-   // !! Важно для обновления токена в мидлваре, чтобы запись
-   // была тут, а не в fetchWithRefresh
-  .then((refreshData) => {
-    if (!refreshData.success) {
-        return Promise.reject(refreshData);
-      }
+  .then(refreshData => {
     localStorage.setItem("refreshToken", refreshData.refreshToken); 
     localStorage.setItem("accessToken", refreshData.accessToken);
     return refreshData;
-  });
-};
-
-const getIngredientsRequest = () => {
-  return fetchWithCheck(`${BURGER_API_URL}/ingredients`, {
-    method: 'GET',
   })
 }
 
+const fetchWithRefresh = (endpoint: string, options: RequestInit) => {
+  return request(endpoint, options)
+    .catch(error => {
+      refreshToken()
+        .then(refreshData => {
+          if (error.message === "jwt expired") {
+            const headers = new Headers(options.headers as HeadersInit);
+            headers.set('authorization', refreshData.accessToken);
+            return request(endpoint, { ...options, headers });
+          } else {
+            return Promise.reject(error);
+          }
+        })
+    })
+}
+
 const getOrder = (data: string[]) => {
-  return fetchWithCheck(`${BURGER_API_URL}/orders`, {
+  return request('orders', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ingredients: data}),
@@ -66,7 +64,7 @@ const getOrder = (data: string[]) => {
 }
 
 const register = (email: string, password: string, name: string) => {
-  return fetchWithCheck(`${BURGER_API_AUTH_URL}/register`, {
+  return request('auth/register', {
     credentials: 'omit',
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -75,7 +73,7 @@ const register = (email: string, password: string, name: string) => {
 }
 
 const login = (email: string, password: string) => {
-  return fetchWithCheck(`${BURGER_API_AUTH_URL}/login`, {
+  return request('auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({email: email, password: password}),
@@ -83,7 +81,7 @@ const login = (email: string, password: string) => {
 }
 
 const logout = (token: string) => {
-  return fetchWithCheck(`${BURGER_API_AUTH_URL}/logout`, {
+  return request('auth/logout', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({token: token}),
@@ -91,7 +89,7 @@ const logout = (token: string) => {
 }
 
 const getUserDetails = (token: string) => {
-  return fetchWithRefresh(`${BURGER_API_AUTH_URL}/user`, {
+  return fetchWithRefresh('auth/user', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -101,7 +99,7 @@ const getUserDetails = (token: string) => {
 }
 
 const updateUserDetails = (token: string, userData: TUser) => {
-  return fetchWithRefresh(`${BURGER_API_AUTH_URL}/user`, {
+  return fetchWithRefresh('auth/user', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -112,7 +110,7 @@ const updateUserDetails = (token: string, userData: TUser) => {
 }
 
 const forgotPassword = (email: string) => {
-  return fetchWithCheck(`${BURGER_API_URL}/password-reset`, {
+  return request('password-reset', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({email: email}),
@@ -120,7 +118,7 @@ const forgotPassword = (email: string) => {
 }
 
 const resetPassword = (password: string, token: string) => {
-  return fetchWithCheck(`${BURGER_API_URL}/password-reset/reset`, {
+  return request('password-reset/reset', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({password: password, token: token}),
@@ -129,7 +127,7 @@ const resetPassword = (password: string, token: string) => {
 
 export const api = {
   getOrder,
-  getIngredientsRequest,
+  getIngredients,
   register,
   login,
   logout,

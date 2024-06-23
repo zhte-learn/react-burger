@@ -14,7 +14,7 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { addBun, addIngredient, moveIngredient, resetConstructor } from '../../services/burger-constructor/reducer';
 import { getOrderDetails, resetOrder } from '../../services/order/actions';
-import BurgerIngredient from '../../utils/ingredient-interface';
+import { BurgerIngredient } from '../../utils/custom-types';
 
 function BurgerConstructor() {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);

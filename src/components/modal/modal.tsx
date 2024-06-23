@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import modalStyles from './modal.module.css';
-import BurgerIngredient from "../../utils/ingredient-interface";
+import { BurgerIngredient } from '../../utils/custom-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from "../modal-overlay/modal-overlay";
 

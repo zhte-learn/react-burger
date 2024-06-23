@@ -1,4 +1,4 @@
-import BurgerIngredient from '../../utils/ingredient-interface';
+import { BurgerIngredient } from '../../utils/custom-types';
 import { createSlice, PayloadAction, nanoid  } from "@reduxjs/toolkit";
 
 interface BurgerConstructorState {

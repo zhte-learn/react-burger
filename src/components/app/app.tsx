@@ -26,11 +26,7 @@ function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
   const dispatch = useAppDispatch();
-  const { ingredients, 
-          ingredientsLoading, 
-          ingredientsRequestFailed, 
-          ingredientsError } 
-          = useAppSelector(state => state.ingredients);
+  const { ingredients, status, error } = useAppSelector(state => state.ingredients);
 
   React.useEffect(() => {
     dispatch(getIngredients());
@@ -44,14 +40,13 @@ function App() {
   return ( 
       <div className={styles.page}>
         <AppHeader />
-        {ingredientsRequestFailed 
-          ? (
+        {status === 'failed' ? (
             <>
               <div>Что-то пошло не так</div>
-              <div>{ingredientsError}</div>
+              <div>{error}</div>
             </>
             ) 
-          : ingredientsLoading 
+          : status === 'loading' 
             ? <Loader />
             : ingredients && ingredients.length 
               ? (

@@ -1,7 +1,7 @@
 import React from "react";
 import ingredientsStyles from './burger-ingredients.module.css';
-import IngredientsGroup from "./ingredients-group/ingredients-group";
-import BurgerIngredient from "../../utils/ingredient-interface";
+import IngredientsGroup from './ingredients-group/ingredients-group';
+import { BurgerIngredient } from '../../utils/custom-types';
 import { useAppSelector } from '../../services/hooks';
 
 function BurgerIngredients() {
