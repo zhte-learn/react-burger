@@ -1,0 +1,9 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.actions {
+  display: flex;
+}

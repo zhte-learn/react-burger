@@ -12,9 +12,8 @@
   border-radius: 30px;
 }
 
-.headerContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.closeIcon {
+  position: absolute;
+  top: 48px;
+  right: 40px;
 }
-

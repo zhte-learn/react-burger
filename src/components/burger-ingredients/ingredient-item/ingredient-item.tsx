@@ -1,22 +1,21 @@
 import React from "react";
 import { useDrag } from "react-dnd";
+import { Link, useLocation } from 'react-router-dom';
 
 import itemStyles from './ingredient-item.module.css';
 import PriceBlock from "../../price-block/price-block";
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import BurgerIngredient from "../../../utils/ingredient-interface";
-
-import { useAppSelector, useAppDispatch } from '../../../services/hooks';
-import { selectIngredient } from "../../../services/selected-ingredient/actions";
+import { BurgerIngredient } from '../../../utils/custom-types';
+import { useAppSelector } from '../../../services/hooks';
 
 interface IngredientItemProps {
   ingredient: BurgerIngredient,
-  onClick: () => void
 }
 
 function IngredientItem(props: IngredientItemProps) {
+  const ingredientId = props.ingredient._id;
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
-  const dispatch = useAppDispatch();
+  const location = useLocation();
 
   const getCounter = React.useMemo(() => {
     if(props.ingredient.type === 'bun' && bun && bun._id === props.ingredient._id) {
@@ -33,11 +32,6 @@ function IngredientItem(props: IngredientItemProps) {
   React.useEffect(() => {
     setCounter(getCounter);
   }, [bun, fillings]);
-  
-  function handleClick() {
-    dispatch(selectIngredient(props.ingredient));
-    props.onClick();
-  };
 
   const [{ isDragging }, dragRef] = useDrag({
     type: props.ingredient.type,
@@ -51,23 +45,27 @@ function IngredientItem(props: IngredientItemProps) {
 
   return (
     <>
-      <li 
+      <Link 
+        key={ingredientId}
+        // Тут мы формируем динамический путь для нашего ингредиента
+        to={`/ingredients/${ingredientId}`}
+        // а также сохраняем в свойство background роут,
+        // на котором была открыта наша модалка
+        state={{ background: location }}
         ref={dragRef}
         className={`${itemStyles.item} mb-8`}
-        onClick={handleClick}
         style={{opacity}}
       >
+
         <img src={props.ingredient.image} alt={props.ingredient.name} />
+        
         <PriceBlock size="small" price={props.ingredient.price} />
         <p className={`${itemStyles.name} pt-1 text text_type_main-small`}>
           {props.ingredient.name}
         </p>
-        {
-        counter > 0 
-          &&
-          <Counter count={counter} size="default" extraClass="m-1" />
-        }
-      </li>    
+
+        {counter > 0 && <Counter count={counter} size="default" extraClass="m-1" />}
+      </Link>    
     </>
   )
 }

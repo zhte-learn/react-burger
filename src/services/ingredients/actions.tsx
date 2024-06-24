@@ -1,15 +1,15 @@
-import { getIngredientsRequest } from '../../utils/api';
+import { api } from '../../utils/api';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { BurgerIngredient } from '../../utils/custom-types';
 
-export const getIngredients = createAsyncThunk(
+interface TIngredientsResponse {
+  success: boolean;
+  data: BurgerIngredient[];
+}
+
+export const getIngredients = createAsyncThunk<TIngredientsResponse, void>(
   "ingredients/getIngredients",
-  async (_, thunkAPI) => {
-    const response = await getIngredientsRequest();
-    if(response.success) {
-      const data = response.data;
-      return data;
-    } else {
-      console.error('Failed to fetch data');
-    }
+  async() => {
+    return await api.getIngredients();
   }
 );

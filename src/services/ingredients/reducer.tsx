@@ -1,19 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getIngredients } from "./actions";
-import BurgerIngredient from "../../utils/ingredient-interface";
+import { BurgerIngredient } from '../../utils/custom-types';
 
 interface IngredientsState {
   ingredients: BurgerIngredient[]; 
-  ingredientsLoading: boolean;
-  ingredientsRequestFailed: boolean,
-  ingredientsError: any;
+  status: string;
+  error: any;
 }
 
 const initialState: IngredientsState = {
   ingredients: [],
-  ingredientsLoading: false,
-  ingredientsRequestFailed: false,
-  ingredientsError: null,
+  status: 'idle',
+  error: null,
 };
 
 export const ingredientsSlice = createSlice({
@@ -23,18 +21,16 @@ export const ingredientsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getIngredients.fulfilled, (state, action) => {
-        state.ingredientsLoading = false;
-        state.ingredientsRequestFailed = false;
-        state.ingredients = action.payload;
+        state.status = 'success';
+        state.ingredients = action.payload.data;
       })
       .addCase(getIngredients.pending, (state) => {
-        state.ingredientsLoading = true;
-        state.ingredientsError = null;
+        state.status = 'loading';
+        state.error = null;
       })
       .addCase(getIngredients.rejected, (state, action) => {
-        state.ingredientsLoading = false;
-        state.ingredientsRequestFailed = true;
-        state.ingredientsError = action.payload;
+        state.status = 'failed';
+        state.error = action.error;
       })
   }
 })

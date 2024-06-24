@@ -1,22 +1,12 @@
 import React from "react";
 import ingredientsStyles from './burger-ingredients.module.css';
-import IngredientsGroup from "./ingredients-group/ingredients-group";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import Modal from '../modal/modal';
-import BurgerIngredient from "../../utils/ingredient-interface";
-import { useAppSelector, useAppDispatch } from '../../services/hooks';
+import IngredientsGroup from './ingredients-group/ingredients-group';
+import { BurgerIngredient } from '../../utils/custom-types';
+import { useAppSelector } from '../../services/hooks';
 
-import { selectIngredient } from '../../services/selected-ingredient/actions';
-
-interface BurgerIngredientsProps {
-  ingredients: BurgerIngredient[],
-}
-
-function BurgerIngredients( props: BurgerIngredientsProps ) {
+function BurgerIngredients() {
   const [activeTab, setActiveTab] = React.useState('bun');
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const { selectedIngredient } = useAppSelector(state => state.selectedIngredient);
-  const dispatch = useAppDispatch();
+  const { ingredients } = useAppSelector(state => state.ingredients);
   const containerScrollRef = React.useRef<HTMLDivElement>(null);
   const bunRef = React.useRef<HTMLDivElement>(null);
   const sauceRef = React.useRef<HTMLDivElement>(null);
@@ -24,11 +14,11 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
 
   const ingredientsByType = React.useMemo(() => {
     return { 
-      bun: getItemsByType(props.ingredients, "bun"),
-      sauce: getItemsByType(props.ingredients, "sauce"),
-      main: getItemsByType(props.ingredients, "main"),
+      bun: getItemsByType(ingredients, "bun"),
+      sauce: getItemsByType(ingredients, "sauce"),
+      main: getItemsByType(ingredients, "main"),
     };
-  }, [props.ingredients]);
+  }, [ingredients]);
 
   function getItemsByType(data: BurgerIngredient[], type: string) {
     return data.filter(item => item.type === type);
@@ -74,17 +64,7 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
     };
   }, []);
 
-  function handleClick() {
-    setIsModalOpen(true);
-  };
-
-  function closeModal() {
-    setIsModalOpen(false);
-    dispatch(selectIngredient(null));
-  }
-
   return(
-    <>
     <section className={`${ingredientsStyles.container} pl-5 pr-5 mt-10 mb-15`}>
       <h2 className={`${ingredientsStyles.title} text text_type_main-large mb-5`}>Соберите бургер</h2>
       <ul className={`${ingredientsStyles.nav} mb-10`}>
@@ -104,38 +84,19 @@ function BurgerIngredients( props: BurgerIngredientsProps ) {
           ref={bunRef}
           groupTitle={'Булки'}
           ingredients={ingredientsByType.bun}
-          onClick={handleClick}
         />
         <IngredientsGroup
           ref={sauceRef}
           groupTitle={'Соусы'} 
           ingredients={ingredientsByType.sauce}
-          onClick={handleClick}
         />
         <IngredientsGroup 
           ref={mainRef}
           groupTitle={'Начинки'} 
           ingredients={ingredientsByType.main}
-          onClick={handleClick}
         /> 
       </div>
     </section>
-    {(isModalOpen && selectedIngredient) &&
-      <Modal 
-        ingredient={selectedIngredient} 
-        onClose={closeModal}
-        title={"Детали ингредиента"}>  
-          <IngredientDetails 
-            image={selectedIngredient.image_large}
-            name={selectedIngredient.name}
-            fat={selectedIngredient.fat}
-            carbohydrates={selectedIngredient.carbohydrates}
-            calories={selectedIngredient.calories}
-            proteins={selectedIngredient.proteins}
-          />
-      </Modal>
-    }
-    </>
   )
 }
 

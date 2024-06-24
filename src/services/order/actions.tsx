@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getOrder } from '../../utils/api';
+import { api } from '../../utils/api';
 
 export const getOrderDetails = createAsyncThunk(
   "order/getOrderDetails",
   async (ingredientsIds: string[], thunkAPI) => {
     try {
-        return await getOrder(ingredientsIds);
+        return await api.getOrder(ingredientsIds);
     } catch (error: any) {
         thunkAPI.rejectWithValue(error.message);
     }

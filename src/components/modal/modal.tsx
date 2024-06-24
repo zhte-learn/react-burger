@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import modalStyles from './modal.module.css';
-import BurgerIngredient from "../../utils/ingredient-interface";
+import { BurgerIngredient } from '../../utils/custom-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
@@ -23,7 +23,6 @@ function Modal(props: ModalProps) {
         props.onClose();
       }
     }
-  
     document.addEventListener('keydown', handleEscapeKey);
       return () => document.removeEventListener('keydown', handleEscapeKey);
     }, [props.onClose]);
@@ -31,9 +30,8 @@ function Modal(props: ModalProps) {
   return ReactDOM.createPortal((
     <ModalOverlay onClose={props.onClose}>
       <div className={`${modalStyles.modal} pt-10 pb-10 pr-8 pl-8`}>
-        <div className={ modalStyles.headerContainer }>
-          <h2 className="text text_type_main-large">{ props.title }</h2>
-          <CloseIcon type="primary" onClick={ props.onClose }/>
+        <div className={modalStyles.closeIcon}>
+          <CloseIcon type="primary" onClick={props.onClose}/>
         </div>
         {props.children} 
       </div> 

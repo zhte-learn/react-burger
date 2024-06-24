@@ -1,5 +1,4 @@
-import { stat } from 'fs';
-import BurgerIngredient from '../../utils/ingredient-interface';
+import { BurgerIngredient } from '../../utils/custom-types';
 import { createSlice, PayloadAction, nanoid  } from "@reduxjs/toolkit";
 
 interface BurgerConstructorState {
@@ -11,14 +10,6 @@ const initialState: BurgerConstructorState = {
   bun: null,
   fillings: []
 }
-
-// const removeElementById = (array: BurgerIngredient[], id: string) => {
-//   const idx = array.findIndex((element: BurgerIngredient) => element._id === id);
-//   if (idx !== -1) {
-//     return [...array.slice(0, idx), ...array.slice(idx + 1)];
-//   }
-//   return array;
-// }
 
 export const burgerConstructorSlice = createSlice({
   name: "burgerConstructor",
@@ -55,3 +46,12 @@ export const burgerConstructorSlice = createSlice({
 })
 
 export const { addBun, addIngredient, moveIngredient, removeIngredient, resetConstructor } = burgerConstructorSlice.actions;
+
+
+// const removeElementById = (array: BurgerIngredient[], id: string) => {
+//   const idx = array.findIndex((element: BurgerIngredient) => element._id === id);
+//   if (idx !== -1) {
+//     return [...array.slice(0, idx), ...array.slice(idx + 1)];
+//   }
+//   return array;
+// }
