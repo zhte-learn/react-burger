@@ -1,7 +1,7 @@
-import React from "react";
+import { forwardRef} from 'react';
 import groupStyle from './ingredients-group.module.css';
 import { BurgerIngredient } from '../../../utils/custom-types';
-import IngredientItem from "../ingredient-item/ingredient-item";
+import IngredientItem from '../ingredient-item/ingredient-item';
 
 interface IngredientsGroupProps {
   groupTitle: string,
@@ -9,7 +9,7 @@ interface IngredientsGroupProps {
   mRef?: React.Ref<HTMLDivElement>;
 }
 
-const IngredientsGroup = React.forwardRef<HTMLDivElement, IngredientsGroupProps>((props, ref) => {
+const IngredientsGroup = forwardRef<HTMLDivElement, IngredientsGroupProps>((props, ref) => {
   return (
     <div ref={ref} className={ groupStyle.group }>
       <h3 className="text text_type_main-medium mb-6">{ props.groupTitle }</h3>

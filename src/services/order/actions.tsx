@@ -3,12 +3,8 @@ import { api } from '../../utils/api';
 
 export const getOrderDetails = createAsyncThunk(
   "order/getOrderDetails",
-  async (ingredientsIds: string[], thunkAPI) => {
-    try {
-        return await api.getOrder(ingredientsIds);
-    } catch (error: any) {
-        thunkAPI.rejectWithValue(error.message);
-    }
+  async(ingredientsIds: string[]) => {
+    return await api.getOrder(ingredientsIds);
   }
 );
 

@@ -1,4 +1,4 @@
-import React from "react";
+import { forwardRef } from 'react';
 import styles from './constructor-item-init.module.css';
 
 interface ConstructorItemInitProps {
@@ -8,12 +8,12 @@ interface ConstructorItemInitProps {
   mRef?: React.Ref<HTMLDivElement>;
 }
 
-const ConstructorItemInit = React.forwardRef<HTMLDivElement, ConstructorItemInitProps>((props, ref) => {
-  const shapeStyle = (props.position === 'top') ? styles.top
-                      : (props.position === 'bottom') ? styles.bottom
-                      : styles.middle;
+const ConstructorItemInit = forwardRef<HTMLDivElement, ConstructorItemInitProps>((props, ref) => {
+  const shapeStyle: string = (props.position === 'top') ? styles.top
+                          : (props.position === 'bottom') ? styles.bottom
+                          : styles.middle;
   
-  const onHoverStyle = (props.isHover) ? styles.onHover : '';
+  const onHoverStyle: string = (props.isHover) ? styles.onHover : '';
   
   return (
     <div ref={ref} className={`${styles.container} ${shapeStyle} ${onHoverStyle} pr-8 pl-6 mr-4 `}>

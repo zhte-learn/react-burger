@@ -5,7 +5,7 @@ import { BurgerIngredient } from '../../utils/custom-types';
 import { useAppSelector } from '../../services/hooks';
 
 function BurgerIngredients() {
-  const [activeTab, setActiveTab] = React.useState('bun');
+  const [activeTab, setActiveTab] = React.useState<string>('bun');
   const { ingredients } = useAppSelector(state => state.ingredients);
   const containerScrollRef = React.useRef<HTMLDivElement>(null);
   const bunRef = React.useRef<HTMLDivElement>(null);
@@ -20,11 +20,11 @@ function BurgerIngredients() {
     };
   }, [ingredients]);
 
-  function getItemsByType(data: BurgerIngredient[], type: string) {
+  function getItemsByType(data: BurgerIngredient[], type: string): BurgerIngredient[] {
     return data.filter(item => item.type === type);
   }
 
-  function getStyles(type: string) {
+  function getStyles(type: string): string {
     return `${ingredientsStyles.navItem} 
             ${activeTab === type ? ingredientsStyles.navItem_active : 'text_color_inactive'} 
             text text_type_main-small`;
@@ -53,7 +53,7 @@ function BurgerIngredients() {
   };
 
   React.useEffect(() => {
-    const content = containerScrollRef.current;
+    const content: HTMLDivElement | null = containerScrollRef.current;
     if (content) {
       content.addEventListener('scroll', handleScroll);
     }

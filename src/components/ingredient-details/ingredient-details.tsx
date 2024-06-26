@@ -1,13 +1,13 @@
+import { FC } from 'react';
 import { useParams } from 'react-router-dom';
-
 import styles from './ingredient-details.module.css';
 import { useAppSelector } from '../../services/hooks';
+import { BurgerIngredient } from '../../utils/custom-types';
 
-function IngredientDetails() {
+const IngredientDetails: FC = () => {
   const { ingredients} = useAppSelector(state => state.ingredients);
-
   const { ingredientId } = useParams<"ingredientId">();
-  const ingredient = ingredients.filter(item => item._id === ingredientId)[0];
+  const ingredient: BurgerIngredient = ingredients.filter(item => item._id === ingredientId)[0];
 
   return(
     <section className={styles.container}>
