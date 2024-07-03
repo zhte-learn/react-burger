@@ -1,4 +1,4 @@
-import { useEffect, FC } from "react";
+import { useEffect } from "react";
 import ReactDOM from 'react-dom';
 import modalStyles from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -13,7 +13,7 @@ interface ModalProps {
   children: React.ReactNode,
 }
 
-const Modal: FC<ModalProps> = ({ onClose, children }) => {
+const Modal = ({ onClose, children }: ModalProps): JSX.Element => {
   useEffect(() => {
     function handleEscapeKey(event: KeyboardEvent): void {
       if (event.code === KEY_NAME_ESC) {

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getOrderDetails, resetOrder } from './actions';
+import { getOrderDetails } from './actions';
 
 interface OrderState {
   orderNumber: string,

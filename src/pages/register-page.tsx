@@ -9,17 +9,16 @@ import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { register } from '../services/user/actions';
 import { clearStatus } from '../services/user/reducer';
 import { useForm } from '../hooks/use-form';
-import { TRegisterFormValues } from '../utils/custom-types';
+import { TUserForm } from '../utils/custom-types';
 
 export const RegisterPage = () => {
-  const [errorMessage, setErrorMessage] = React.useState('');
-
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
   const { status, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  const {values, handleChange, clearForm} = useForm<TRegisterFormValues>({ 
+  const {values, handleChange, clearForm} = useForm<TUserForm>({ 
     name: '', 
     email: '', 
     password: ''

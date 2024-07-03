@@ -1,4 +1,4 @@
-import { useEffect, FC } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import styles from './app.module.css';
 
@@ -21,7 +21,7 @@ import ProfileDetails from '../profile-details/profile-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
 
-const App: FC = () => {
+const App = (): JSX.Element => {
   const navigate = useNavigate();
   const location = useLocation();
   const background = location.state && location.state.background;

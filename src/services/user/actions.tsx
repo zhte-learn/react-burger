@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../utils/api';
-import { TUser, TRegisterResponse, TLoginResponse, TUpdateResponse } from '../../utils/custom-types';
+import { TUser, TResponseWithToken, TResponse, TUserResponse } from '../../utils/custom-types';
 import { setAuthChecked, setUser } from './reducer';
 
 interface RegisterArgs {
@@ -19,7 +19,7 @@ interface ResetPasswordArgs {
   token: string;
 }
 
-export const register = createAsyncThunk<TRegisterResponse, RegisterArgs>(
+export const register = createAsyncThunk<TResponseWithToken, RegisterArgs>(
   "auth/register",
   async ({ email, password, name }) => {
     const res = await api.register(email, password, name);
@@ -29,7 +29,7 @@ export const register = createAsyncThunk<TRegisterResponse, RegisterArgs>(
   }
 );
 
-export const login = createAsyncThunk<TLoginResponse, LoginArgs>(
+export const login = createAsyncThunk<TResponseWithToken, LoginArgs>(
   "auth/login",
   async ({ email, password }) => {
     const res = await api.login(email, password);
@@ -39,7 +39,7 @@ export const login = createAsyncThunk<TLoginResponse, LoginArgs>(
   }
 );
 
-export const logout = createAsyncThunk<void, void>(
+export const logout = createAsyncThunk<TResponse | void>(
   "user/logout",
   async() => {
     const token = localStorage.getItem("refreshToken");
@@ -52,7 +52,7 @@ export const logout = createAsyncThunk<void, void>(
   }
 );
 
-export const refreshToken = createAsyncThunk<void, void> (
+export const refreshToken = createAsyncThunk<TResponseWithToken | void> (
   "user/refreshToken",
   async() => {
     const token = localStorage.getItem("refreshToken");
@@ -64,7 +64,7 @@ export const refreshToken = createAsyncThunk<void, void> (
   }
 );
 
-export const updateUserDetails = createAsyncThunk<void, TUser>(
+export const updateUserDetails = createAsyncThunk<TUserResponse | void, TUser>(
   "auth/updateUserDetails",
   async(userData, { dispatch }) => {
     const token = localStorage.getItem("accessToken");
@@ -88,14 +88,14 @@ export const checkUserAuth = createAsyncThunk<void, void> (
   }
 );
 
-export const forgotPassword = createAsyncThunk<void, string>(
+export const forgotPassword = createAsyncThunk<TResponse, string>(
   "auth/forgotPassword",
   async (email, { dispatch }) => {
     return await api.forgotPassword(email);
   }
 );
 
-export const resetPassword = createAsyncThunk<void, ResetPasswordArgs>(
+export const resetPassword = createAsyncThunk<TResponse, ResetPasswordArgs>(
   "auth/resetPassword",
   async ({ password, token }) => {
     return await api.resetPassword(password, token);

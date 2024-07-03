@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect, FC } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ import { addBun, addIngredient, moveIngredient, resetConstructor } from '../../s
 import { getOrderDetails, resetOrder } from '../../services/order/actions';
 import { BurgerIngredient } from '../../utils/custom-types';
 
-const BurgerConstructor: FC = () => {
+const BurgerConstructor = (): JSX.Element => {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
   const { orderStatus, orderError } = useAppSelector(state => state.order);
   

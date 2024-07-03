@@ -9,16 +9,16 @@ import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { login } from '../services/user/actions';
 import { clearStatus } from '../services/user/reducer';
 import { useForm } from '../hooks/use-form';
-import { TLoginFormValues } from '../utils/custom-types';
+import { TLoginForm } from '../utils/custom-types';
 
 export const LoginPage = () => {
-  const {values, handleChange, clearForm} = useForm<TLoginFormValues>({  
+  const {values, handleChange, clearForm} = useForm<TLoginForm>({  
     email: '', 
-    password: ''
+    password: '',
   });
   const [ errorMessage, setErrorMessage ] = React.useState('');
   //to prevent redirection to the next page if state.status is success from previous page
-  const [ hasMount, setHasMount ] = React.useState(true);
+  const [ hasMount, setHasMount ] = React.useState<boolean>(true);
 
   const { status, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();

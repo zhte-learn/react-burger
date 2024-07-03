@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, FC } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './profile-details.module.css';
 import Loader from '../loader/loader';
 import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -7,12 +7,12 @@ import { TUser } from '../../utils/custom-types';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { updateUserDetails } from '../../services/user/actions';
 import { useForm } from '../../hooks/use-form';
-import { TProfileFormValues } from '../../utils/custom-types';
+import { TUserForm } from '../../utils/custom-types';
 
-const ProfileDetails: FC = () => {
+const ProfileDetails = (): JSX.Element => {
   const { user, status, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
-  const {values, setValues, handleChange} = useForm<TProfileFormValues>({ 
+  const {values, setValues, handleChange} = useForm<TUserForm>({ 
     name: user!.name, 
     email: user!.email, 
     password: user!.password ?? '*****',

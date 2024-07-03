@@ -9,19 +9,28 @@ import { LockIcon, DeleteIcon, DragIcon } from '@ya.praktikum/react-developer-bu
 import { useAppDispatch } from '../../../services/hooks';
 import { removeIngredient } from '../../../services/burger-constructor/reducer';
 
-interface ConstructorItemProps {
-  item: BurgerIngredient,
-  position: string,
-  index: number,
-  isHover: boolean,
-  mRef?: React.Ref<HTMLDivElement>,
-  moveItem?: (dragIndex: number, hoverIndex: number) => void,
+type ConstructorItemProps = {
+  item: BurgerIngredient;
+  position: string;
+  index: number;
+  isHover: boolean;
+  mRef?: React.Ref<HTMLDivElement>;
+  moveItem?: (dragIndex: number, hoverIndex: number) => void;
 }
 
-interface DragItem {
-  index: number
-  id: string
-  type: string
+type TDragObject = {
+  id: string;
+  index: number;
+  type: "bun" | "main" | "sause";
+}
+
+type TDropCollectedProps = {
+  handlerId: Identifier | null;
+  isHoverItem: boolean;
+}
+
+type TDragCollectedProps = {
+  isDragging: boolean;
 }
 
 const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props, ref) => {
@@ -38,14 +47,14 @@ const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props,
   const onHoverStyle: string = (props.isHover) ? itemStyles.onHover : '';
   const extraClass: string = (props.position === 'top' || props.position === 'bottom') ? 'mr-4' : '';
 
-  function handleDelete() {
+  function handleDelete(): void {
     const uniqueId = props.item.uniqueId || "";
     dispatch(removeIngredient(uniqueId));
   }
 
-  const sortRef = useRef<HTMLLIElement>(null);
+  const sortRef = useRef<HTMLLIElement | null>(null);
 
-  const [{ isHoverItem, handlerId }, drop] = useDrop<DragItem, void, {isHoverItem: boolean, handlerId: Identifier|null}>({
+  const [{ isHoverItem, handlerId }, drop] = useDrop<TDragObject, unknown, TDropCollectedProps>({
     accept: "draggable",
     collect(monitor) {
       return{
@@ -53,7 +62,7 @@ const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props,
         isHoverItem: monitor.isOver(),
       }
     },
-    hover(item: DragItem, monitor) {
+    hover(item: TDragObject, monitor) {
       if (!sortRef.current) {
         return;
       }
@@ -83,10 +92,10 @@ const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props,
     }
   })
 
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag<TDragObject, unknown, TDragCollectedProps>({
     type: "draggable",
     item: () => {
-      return { id: props.item._id, index: props.index }
+      return { id: props.item._id, index: props.index, type: props.item.type }
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),

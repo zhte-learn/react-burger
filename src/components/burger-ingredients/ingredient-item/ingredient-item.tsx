@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, FC } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ interface IngredientItemProps {
   ingredient: BurgerIngredient,
 }
 
-const IngredientItem: FC<IngredientItemProps> = ({ ingredient }) => {
+const IngredientItem = ({ ingredient }: IngredientItemProps): JSX.Element => {
   const ingredientId: string = ingredient._id;
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
   const location = useLocation();

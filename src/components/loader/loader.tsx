@@ -1,7 +1,6 @@
-import { FC } from 'react';
 import loaderStyles from './loader.module.css';
 
-const Loader: FC = () => {
+const Loader = (): JSX.Element => {
   return(
     <div className={`${loaderStyles.container} mt-6`}>
       <div className={loaderStyles.loader}></div> 

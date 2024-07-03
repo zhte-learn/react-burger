@@ -1,9 +1,8 @@
-import { FC } from 'react';
 import header from './header.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink } from 'react-router-dom';
 
-const AppHeader: FC = () => {
+const AppHeader = (): JSX.Element => {
   return (
     <header>
       <div className={header.container}>

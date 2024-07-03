@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { useAppSelector } from '../services/hooks';
 import { Navigate, useLocation } from "react-router-dom";
 import Loader from './loader/loader';
@@ -8,8 +7,7 @@ interface IProtectedProps {
   component: JSX.Element;
 }
 
-// const Protected = ({ onlyUnAuth = false, component }: IProtectedProps): JSX.Element  => {
-const Protected: FC<IProtectedProps> = ({ onlyUnAuth = false, component })  => {
+const Protected = ({ onlyUnAuth = false, component }: IProtectedProps): JSX.Element  => {
   const { isAuthChecked, user } = useAppSelector(state => state.user);
   const location = useLocation();
 

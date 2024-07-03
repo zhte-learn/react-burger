@@ -1,9 +1,8 @@
-import { FC } from 'react';
 import styles from './order-details.module.css';
 import successSign from '../../images/success.png';
 import { useAppSelector } from '../../services/hooks';
 
-const OrderDetails: FC = () => {
+const OrderDetails = (): JSX.Element => {
   const { orderNumber } = useAppSelector(state => state.order);
   
   return(

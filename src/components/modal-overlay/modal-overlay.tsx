@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import overlayStyles from './modal-overlay.module.css';
 
 interface ModalOverlayProps {
@@ -6,7 +5,7 @@ interface ModalOverlayProps {
   children: React.ReactNode,
 }
 
-const ModalOverlay: FC<ModalOverlayProps> = ({ onClose, children}) => {
+const ModalOverlay = ({ onClose, children }: ModalOverlayProps): JSX.Element => {
   function handleOverlayClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>): void {
     const target = e.target as HTMLElement;
     if(target.dataset.overlay) {
