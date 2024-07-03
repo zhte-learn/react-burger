@@ -1,7 +1,7 @@
 import styles from './price-block.module.css';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-interface PriceBlockProps {
+type PriceBlockProps = {
   price: number;
   size: string;
 }

@@ -11,7 +11,7 @@ import { clearStatus } from '../services/user/reducer';
 import { useForm } from '../hooks/use-form';
 import { TUserForm } from '../utils/custom-types';
 
-export const RegisterPage = () => {
+export const RegisterPage = (): JSX.Element => {
   const [errorMessage, setErrorMessage] = React.useState<string>('');
   const { status, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
@@ -29,12 +29,12 @@ export const RegisterPage = () => {
     dispatch(clearStatus());
   }, []);
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     handleChange(e);
     setErrorMessage(''); //remove error message if user starts typing
   }
   
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     dispatch(register(values));
     clearForm();

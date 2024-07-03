@@ -33,7 +33,7 @@ type TDragCollectedProps = {
   isDragging: boolean;
 }
 
-const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props, ref) => {
+const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props, ref): JSX.Element => {
   const dispatch = useAppDispatch();
 
   const name: string = (props.position === 'top') ? `${props.item.name} (верх)`

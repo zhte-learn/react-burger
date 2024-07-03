@@ -1,25 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../utils/api';
-import { TUser, TResponseWithToken, TResponse, TUserResponse } from '../../utils/custom-types';
+import { TUser, TResponseWithToken, TResponse, TUserResponse, TUserForm, TLoginForm, TResetForm } from '../../utils/custom-types';
 import { setAuthChecked, setUser } from './reducer';
 
-interface RegisterArgs {
-  email: string;
-  password: string;
-  name: string;
-}
-
-interface LoginArgs {
-  email: string;
-  password: string;
-}
-
-interface ResetPasswordArgs {
-  password: string;
-  token: string;
-}
-
-export const register = createAsyncThunk<TResponseWithToken, RegisterArgs>(
+export const register = createAsyncThunk<TResponseWithToken, TUserForm>(
   "auth/register",
   async ({ email, password, name }) => {
     const res = await api.register(email, password, name);
@@ -29,7 +13,7 @@ export const register = createAsyncThunk<TResponseWithToken, RegisterArgs>(
   }
 );
 
-export const login = createAsyncThunk<TResponseWithToken, LoginArgs>(
+export const login = createAsyncThunk<TResponseWithToken, TLoginForm>(
   "auth/login",
   async ({ email, password }) => {
     const res = await api.login(email, password);
@@ -95,7 +79,7 @@ export const forgotPassword = createAsyncThunk<TResponse, string>(
   }
 );
 
-export const resetPassword = createAsyncThunk<TResponse, ResetPasswordArgs>(
+export const resetPassword = createAsyncThunk<TResponse, TResetForm>(
   "auth/resetPassword",
   async ({ password, token }) => {
     return await api.resetPassword(password, token);

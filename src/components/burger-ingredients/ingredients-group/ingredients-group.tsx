@@ -3,13 +3,13 @@ import groupStyle from './ingredients-group.module.css';
 import { BurgerIngredient } from '../../../utils/custom-types';
 import IngredientItem from '../ingredient-item/ingredient-item';
 
-interface IngredientsGroupProps {
-  groupTitle: string,
-  ingredients: BurgerIngredient[],
+type IngredientsGroupProps = {
+  groupTitle: string;
+  ingredients: BurgerIngredient[];
   mRef?: React.Ref<HTMLDivElement>;
 }
 
-const IngredientsGroup = forwardRef<HTMLDivElement, IngredientsGroupProps>((props, ref) => {
+const IngredientsGroup = forwardRef<HTMLDivElement, IngredientsGroupProps>((props, ref): JSX.Element => {
   return (
     <div ref={ref} className={ groupStyle.group }>
       <h3 className="text text_type_main-medium mb-6">{ props.groupTitle }</h3>

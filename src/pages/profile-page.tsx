@@ -7,7 +7,7 @@ import { useAppDispatch } from '../services/hooks';
 import { logout } from '../services/user/actions';
 import { clearStatus } from '../services/user/reducer';
 
-export const ProfilePage = () => {
+export const ProfilePage = (): JSX.Element => {
   const location = useLocation();
   const dispatch = useAppDispatch();
 
@@ -16,7 +16,7 @@ export const ProfilePage = () => {
     dispatch(clearStatus());
   }, []);
   
-  function handleLogout() {
+  function handleLogout(): void {
     dispatch(logout());
   }
 

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getIngredients } from "./actions";
 import { BurgerIngredient } from '../../utils/custom-types';
 
-interface IngredientsState {
+type IngredientsState = {
   ingredients: BurgerIngredient[]; 
   status: string;
   error: any;

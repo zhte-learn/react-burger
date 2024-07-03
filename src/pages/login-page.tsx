@@ -11,12 +11,12 @@ import { clearStatus } from '../services/user/reducer';
 import { useForm } from '../hooks/use-form';
 import { TLoginForm } from '../utils/custom-types';
 
-export const LoginPage = () => {
+export const LoginPage = (): JSX.Element => {
   const {values, handleChange, clearForm} = useForm<TLoginForm>({  
     email: '', 
     password: '',
   });
-  const [ errorMessage, setErrorMessage ] = React.useState('');
+  const [ errorMessage, setErrorMessage ] = React.useState<string>('');
   //to prevent redirection to the next page if state.status is success from previous page
   const [ hasMount, setHasMount ] = React.useState<boolean>(true);
 
@@ -30,12 +30,12 @@ export const LoginPage = () => {
     dispatch(clearStatus());
   }, []);
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     handleChange(e);
     setErrorMessage(''); //remove error message if user starts typing
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     dispatch(login(values));
     setHasMount(false);

@@ -8,9 +8,9 @@ const modalRoot: HTMLElement | null = document.getElementById("modal-root");
 
 const KEY_NAME_ESC: string = 'Escape';
 
-interface ModalProps {
+type ModalProps = {
   onClose: () => void;
-  children: React.ReactNode,
+  children: React.ReactNode;
 }
 
 const Modal = ({ onClose, children }: ModalProps): JSX.Element => {

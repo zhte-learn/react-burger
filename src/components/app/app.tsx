@@ -33,7 +33,7 @@ const App = (): JSX.Element => {
     dispatch(checkUserAuth());
   }, []);
 
-  function handleCloseModal() {
+  function handleCloseModal(): void {
     navigate('/', { replace: true });
   }
 

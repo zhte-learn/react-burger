@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getOrderDetails } from './actions';
 
-interface OrderState {
-  orderNumber: string,
-  orderName: string,
-  orderStatus: string,
-  orderError: any,
+type OrderState = {
+  orderNumber: string;
+  orderName: string;
+  orderStatus: string;
+  orderError: any;
 }
 
 const initialState: OrderState = {

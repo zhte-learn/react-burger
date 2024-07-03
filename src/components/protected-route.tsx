@@ -2,7 +2,7 @@ import { useAppSelector } from '../services/hooks';
 import { Navigate, useLocation } from "react-router-dom";
 import Loader from './loader/loader';
 
-interface IProtectedProps {
+type IProtectedProps = {
   onlyUnAuth?: boolean;
   component: JSX.Element;
 }

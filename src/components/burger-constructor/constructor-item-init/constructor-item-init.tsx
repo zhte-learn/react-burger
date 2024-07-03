@@ -1,14 +1,14 @@
 import { forwardRef } from 'react';
 import styles from './constructor-item-init.module.css';
 
-interface ConstructorItemInitProps {
-  position: string,
-  isHover: boolean,
+type ConstructorItemInitProps = {
+  position: string;
+  isHover: boolean;
   text: string;
   mRef?: React.Ref<HTMLDivElement>;
 }
 
-const ConstructorItemInit = forwardRef<HTMLDivElement, ConstructorItemInitProps>((props, ref) => {
+const ConstructorItemInit = forwardRef<HTMLDivElement, ConstructorItemInitProps>((props, ref): JSX.Element => {
   const shapeStyle: string = (props.position === 'top') ? styles.top
                           : (props.position === 'bottom') ? styles.bottom
                           : styles.middle;
