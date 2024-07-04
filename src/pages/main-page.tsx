@@ -6,7 +6,7 @@ import styles from './styles.module.css';
 import BurgerConstructor from '../components/burger-constructor/burger-constructor';
 import BurgerIngredients from '../components/burger-ingredients/burger-ingredients';
 
-export const MainPage = () => {
+export const MainPage = (): JSX.Element => {
   return(
     <DndProvider backend={HTML5Backend}>
       <div className={ styles.container }>

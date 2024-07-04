@@ -9,17 +9,17 @@ import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { forgotPassword } from '../services/user/actions';
 import { clearStatus } from '../services/user/reducer';
 import { useForm } from '../hooks/use-form';
-import { TForgotFormValues } from '../utils/custom-types';
+import { TForgotForm } from '../utils/custom-types';
 
-export const ForgotPassword = () => {
-  const [ errorMessage, setErrorMessage ] = React.useState('');
+export const ForgotPassword = (): JSX.Element => {
+  const [ errorMessage, setErrorMessage ] = React.useState<string>('');
   //to prevent redirection to the next page if state.status is success from previous page
-  const [ hasMount, setHasMount ] = React.useState(true);
+  const [ hasMount, setHasMount ] = React.useState<boolean>(true);
 
   const { status, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
 
-  const {values, handleChange, clearForm} = useForm<TForgotFormValues>({ 
+  const {values, handleChange, clearForm} = useForm<TForgotForm>({ 
     email: '', 
   });
   
@@ -28,12 +28,12 @@ export const ForgotPassword = () => {
     dispatch(clearStatus());
   }, []);
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     handleChange(e);
     setErrorMessage(''); //remove error message if user starts typing
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>){
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
     dispatch(forgotPassword(values.email));
     setHasMount(false);

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -16,20 +16,20 @@ import { addBun, addIngredient, moveIngredient, resetConstructor } from '../../s
 import { getOrderDetails, resetOrder } from '../../services/order/actions';
 import { BurgerIngredient } from '../../utils/custom-types';
 
-function BurgerConstructor() {
+const BurgerConstructor = (): JSX.Element => {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
-  const { orderNumber, orderRequestFailed, orderLoading, orderError } = useAppSelector(state => state.order);
+  const { orderStatus, orderError } = useAppSelector(state => state.order);
   
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [totalPrice, setTotalPrice] = React.useState(0);
-  const [isDisabled, setIsDisabled] = React.useState(true);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const getTotalPrice = React.useMemo(() => {
-    let fillingsPrice = 0;
+  const getTotalPrice = useMemo<number>(() => {
+    let fillingsPrice: number = 0;
     
     if(fillings.length !== 0) {
       fillings.forEach(function(elem) {
@@ -43,25 +43,25 @@ function BurgerConstructor() {
     return fillingsPrice;
   }, [bun, fillings]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTotalPrice(getTotalPrice);
   }, [bun, fillings]);
 
-  function getIngredientsIds(ingredientsList: BurgerIngredient[]) {
+  function getIngredientsIds(ingredientsList: BurgerIngredient[]): string[] {
     return ingredientsList.map(item => item._id);
   }
 
-  const makeOrder = React.useCallback(() => {
-    const ingredientsList = []; // = [bun].concat(fillings);
+  const makeOrder: () => void = useCallback(() => {
+    const ingredientsList: BurgerIngredient[] = []; // = [bun].concat(fillings);
     if(bun && fillings.length > 0) {
       ingredientsList.push(bun);
       ingredientsList.concat(fillings);
-      const ingredientsIds = (getIngredientsIds(ingredientsList));
+      const ingredientsIds: string[] = (getIngredientsIds(ingredientsList));
       dispatch(getOrderDetails(ingredientsIds.concat(bun._id)));
     }
   }, [bun, fillings]);
 
-  function handleMakeOrder() {
+  function handleMakeOrder(): void {
     if(!localStorage.getItem("accessToken")) {
       navigate('/login', { replace: true, state: { from: location } });
     } else {
@@ -70,7 +70,7 @@ function BurgerConstructor() {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if(fillings.length > 0 && bun) {
       setIsDisabled(false);
     } else {
@@ -78,7 +78,7 @@ function BurgerConstructor() {
     }
   }, [bun, fillings]);
 
-  function onDropHandler(item: BurgerIngredient) {
+  function onDropHandler(item: BurgerIngredient): void {
     if(item.type === 'bun') {
       dispatch(addBun(item));
     } else {
@@ -110,11 +110,11 @@ function BurgerConstructor() {
     }),
   });
 
-  const moveItem = React.useCallback((dragIndex: number, hoverIndex: number) => {
+  const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
     dispatch(moveIngredient({dragIndex, hoverIndex}));
   }, []);
 
-  function closeModal() {
+  function closeModal(): void {
     setIsModalOpen(false);
     dispatch(resetOrder());
     dispatch(resetConstructor());
@@ -195,17 +195,9 @@ function BurgerConstructor() {
 
     {isModalOpen && (
       <Modal onClose={closeModal}>
-          {orderRequestFailed ? (
-            <>
-              <div>Что-то пошло не так</div>
-              <div>{ orderError }</div>
-            </>
-            ) : orderLoading ? (
-            <Loader />
-          ) : (
-            <OrderDetails orderNumber={orderNumber}/>
-          )
-        }
+        {orderStatus === 'failed' && <p className="text text_type_main-medium">{orderError.message}</p>}
+        {orderStatus === 'loading' && <Loader />}
+        {orderStatus === 'success' && <OrderDetails />}
       </Modal>
       )}
     </>

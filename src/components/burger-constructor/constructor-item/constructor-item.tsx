@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core'
 
@@ -9,43 +9,52 @@ import { LockIcon, DeleteIcon, DragIcon } from '@ya.praktikum/react-developer-bu
 import { useAppDispatch } from '../../../services/hooks';
 import { removeIngredient } from '../../../services/burger-constructor/reducer';
 
-interface ConstructorItemProps {
-  item: BurgerIngredient,
-  position: string,
-  index: number,
-  isHover: boolean,
-  mRef?: React.Ref<HTMLDivElement>,
-  moveItem?: (dragIndex: number, hoverIndex: number) => void,
+type ConstructorItemProps = {
+  item: BurgerIngredient;
+  position: string;
+  index: number;
+  isHover: boolean;
+  mRef?: React.Ref<HTMLDivElement>;
+  moveItem?: (dragIndex: number, hoverIndex: number) => void;
 }
 
-interface DragItem {
-  index: number
-  id: string
-  type: string
+type TDragObject = {
+  id: string;
+  index: number;
+  type: "bun" | "main" | "sause";
 }
 
-const ConstructorItem = React.forwardRef<HTMLDivElement, ConstructorItemProps>((props, ref) => {
+type TDropCollectedProps = {
+  handlerId: Identifier | null;
+  isHoverItem: boolean;
+}
+
+type TDragCollectedProps = {
+  isDragging: boolean;
+}
+
+const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props, ref): JSX.Element => {
   const dispatch = useAppDispatch();
 
-  const name = (props.position === 'top') ? `${props.item.name} (верх)`
-                : (props.position === 'bottom') ? `${props.item.name} (низ)`
-                : props.item.name;
+  const name: string = (props.position === 'top') ? `${props.item.name} (верх)`
+                      : (props.position === 'bottom') ? `${props.item.name} (низ)`
+                      : props.item.name;
   
-  const shapeStyle = (props.position === 'top') ? itemStyles.top
-                      : (props.position === 'bottom') ? itemStyles.bottom
-                      : itemStyles.middle;
+  const shapeStyle: string = (props.position === 'top') ? itemStyles.top
+                            : (props.position === 'bottom') ? itemStyles.bottom
+                            : itemStyles.middle;
   
-  const onHoverStyle = (props.isHover) ? itemStyles.onHover : '';
-  const extraClass = (props.position === 'top' || props.position === 'bottom') ? 'mr-4' : '';
+  const onHoverStyle: string = (props.isHover) ? itemStyles.onHover : '';
+  const extraClass: string = (props.position === 'top' || props.position === 'bottom') ? 'mr-4' : '';
 
-  function handleDelete() {
+  function handleDelete(): void {
     const uniqueId = props.item.uniqueId || "";
     dispatch(removeIngredient(uniqueId));
   }
 
-  const sortRef = React.useRef<HTMLLIElement>(null);
+  const sortRef = useRef<HTMLLIElement | null>(null);
 
-  const [{ isHoverItem, handlerId }, drop] = useDrop<DragItem, void, {isHoverItem: boolean, handlerId: Identifier|null}>({
+  const [{ isHoverItem, handlerId }, drop] = useDrop<TDragObject, unknown, TDropCollectedProps>({
     accept: "draggable",
     collect(monitor) {
       return{
@@ -53,21 +62,21 @@ const ConstructorItem = React.forwardRef<HTMLDivElement, ConstructorItemProps>((
         isHoverItem: monitor.isOver(),
       }
     },
-    hover(item: DragItem, monitor) {
+    hover(item: TDragObject, monitor) {
       if (!sortRef.current) {
         return;
       }
-    const dragIndex = item.index;
-    const hoverIndex = props.index;
+    const dragIndex: number = item.index;
+    const hoverIndex: number = props.index;
 
     if (dragIndex === hoverIndex) {
       return;
     }
 
-    const hoverBoundingRect = sortRef.current?.getBoundingClientRect();
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-    const clientOffset = monitor.getClientOffset();
-    const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+    const hoverBoundingRect: DOMRect = sortRef.current?.getBoundingClientRect();
+    const hoverMiddleY: number = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    const clientOffset: XYCoord | null = monitor.getClientOffset();
+    const hoverClientY: number = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
       return;
@@ -83,18 +92,18 @@ const ConstructorItem = React.forwardRef<HTMLDivElement, ConstructorItemProps>((
     }
   })
 
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag<TDragObject, unknown, TDragCollectedProps>({
     type: "draggable",
     item: () => {
-      return { id: props.item._id, index: props.index }
+      return { id: props.item._id, index: props.index, type: props.item.type }
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),
     }),
   });
 
-  const opacity = isDragging ? 0 : 1;
-  const itemHoverClass = (isHoverItem ? itemStyles.onHover : '');
+  const opacity: number = isDragging ? 0 : 1;
+  const itemHoverClass: string = (isHoverItem ? itemStyles.onHover : '');
   drag(drop(sortRef));
 
   return(

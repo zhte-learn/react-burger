@@ -9,16 +9,16 @@ import { useAppSelector, useAppDispatch } from '../services/hooks';
 import { resetPassword } from '../services/user/actions';
 import { clearStatus } from '../services/user/reducer';
 import { useForm } from '../hooks/use-form';
-import { TResetFormValues } from '../utils/custom-types';
+import { TResetForm } from '../utils/custom-types';
 
-export const ResetPassword = () => {
-  const [ errorMessage, setErrorMessage ] = React.useState('');
+export const ResetPassword = (): JSX.Element => {
+  const [ errorMessage, setErrorMessage ] = React.useState<string>('');
   //to prevent redirection to the next page if state.status is success from previous page
-  const [ hasMount, setHasMount ] = React.useState(true);
+  const [ hasMount, setHasMount ] = React.useState<boolean>(true);
 
   const dispatch = useAppDispatch();
   const { error, status } = useAppSelector(state => state.user);
-  const {values, handleChange, clearForm} = useForm<TResetFormValues>({ 
+  const {values, handleChange, clearForm} = useForm<TResetForm>({ 
     password: '',
     token: '',
   });
@@ -28,12 +28,12 @@ export const ResetPassword = () => {
     dispatch(clearStatus());
   }, []);
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     handleChange(e);
     setErrorMessage(''); //remove error message if user starts typing
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     dispatch(resetPassword(values));
     setHasMount(false);

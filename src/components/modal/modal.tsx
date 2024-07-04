@@ -1,39 +1,36 @@
-import React from "react";
+import { useEffect } from "react";
 import ReactDOM from 'react-dom';
 import modalStyles from './modal.module.css';
-import { BurgerIngredient } from '../../utils/custom-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-const modalRoot = document.getElementById("modal-root");
+const modalRoot: HTMLElement | null = document.getElementById("modal-root");
 
-const KEY_NAME_ESC = 'Escape';
+const KEY_NAME_ESC: string = 'Escape';
 
-interface ModalProps {
+type ModalProps = {
   onClose: () => void;
-  ingredient?: BurgerIngredient,
-  title?: string,
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-function Modal(props: ModalProps) {
-  React.useEffect(() => {
-    function handleEscapeKey(event: KeyboardEvent) {
+const Modal = ({ onClose, children }: ModalProps): JSX.Element => {
+  useEffect(() => {
+    function handleEscapeKey(event: KeyboardEvent): void {
       if (event.code === KEY_NAME_ESC) {
-        props.onClose();
+        onClose();
       }
     }
     document.addEventListener('keydown', handleEscapeKey);
       return () => document.removeEventListener('keydown', handleEscapeKey);
-    }, [props.onClose]);
+    }, [onClose]);
 
   return ReactDOM.createPortal((
-    <ModalOverlay onClose={props.onClose}>
+    <ModalOverlay onClose={onClose}>
       <div className={`${modalStyles.modal} pt-10 pb-10 pr-8 pl-8`}>
         <div className={modalStyles.closeIcon}>
-          <CloseIcon type="primary" onClick={props.onClose}/>
+          <CloseIcon type="primary" onClick={onClose}/>
         </div>
-        {props.children} 
+        {children} 
       </div> 
     </ModalOverlay>), 
     modalRoot!);

@@ -4,15 +4,19 @@ import IngredientsGroup from './ingredients-group/ingredients-group';
 import { BurgerIngredient } from '../../utils/custom-types';
 import { useAppSelector } from '../../services/hooks';
 
-function BurgerIngredients() {
-  const [activeTab, setActiveTab] = React.useState('bun');
+function BurgerIngredients(): JSX.Element {
+  const [activeTab, setActiveTab] = React.useState<string>('bun');
   const { ingredients } = useAppSelector(state => state.ingredients);
   const containerScrollRef = React.useRef<HTMLDivElement>(null);
   const bunRef = React.useRef<HTMLDivElement>(null);
   const sauceRef = React.useRef<HTMLDivElement>(null);
   const mainRef = React.useRef<HTMLDivElement>(null);
 
-  const ingredientsByType = React.useMemo(() => {
+  const ingredientsByType = React.useMemo<{
+    bun: BurgerIngredient[];
+    sauce: BurgerIngredient[];
+    main: BurgerIngredient[];
+  }>(() => {
     return { 
       bun: getItemsByType(ingredients, "bun"),
       sauce: getItemsByType(ingredients, "sauce"),
@@ -20,27 +24,27 @@ function BurgerIngredients() {
     };
   }, [ingredients]);
 
-  function getItemsByType(data: BurgerIngredient[], type: string) {
+  function getItemsByType(data: BurgerIngredient[], type: string): BurgerIngredient[] {
     return data.filter(item => item.type === type);
   }
 
-  function getStyles(type: string) {
+  function getStyles(type: string): string {
     return `${ingredientsStyles.navItem} 
             ${activeTab === type ? ingredientsStyles.navItem_active : 'text_color_inactive'} 
             text text_type_main-small`;
   }
 
-  const handleScroll = () => {
+  const handleScroll = (): void => {
     if (bunRef.current && sauceRef.current && mainRef.current && containerScrollRef.current) {
-      const containerTop = containerScrollRef.current.getBoundingClientRect().top;
-      const bunTop = bunRef.current.getBoundingClientRect().top;
-      const sauceTop = sauceRef.current.getBoundingClientRect().top;
-      const mainTop = mainRef.current.getBoundingClientRect().top;
-      const bunHeigth = bunRef.current.getBoundingClientRect().height;
-      const sauceHeight = sauceRef.current.getBoundingClientRect().height;
-      const scrollTop = containerScrollRef.current.scrollTop;
-      const sauceOffset = bunHeigth - scrollTop;
-      const mainOffset = (sauceHeight + bunHeigth) - scrollTop;
+      const containerTop: number = containerScrollRef.current.getBoundingClientRect().top;
+      const bunTop: number = bunRef.current.getBoundingClientRect().top;
+      const sauceTop: number = sauceRef.current.getBoundingClientRect().top;
+      const mainTop: number = mainRef.current.getBoundingClientRect().top;
+      const bunHeigth: number = bunRef.current.getBoundingClientRect().height;
+      const sauceHeight: number = sauceRef.current.getBoundingClientRect().height;
+      const scrollTop: number = containerScrollRef.current.scrollTop;
+      const sauceOffset: number = bunHeigth - scrollTop;
+      const mainOffset: number = (sauceHeight + bunHeigth) - scrollTop;
 
       if(containerTop === bunTop) {
         setActiveTab('bun');
@@ -53,7 +57,7 @@ function BurgerIngredients() {
   };
 
   React.useEffect(() => {
-    const content = containerScrollRef.current;
+    const content: HTMLDivElement | null = containerScrollRef.current;
     if (content) {
       content.addEventListener('scroll', handleScroll);
     }

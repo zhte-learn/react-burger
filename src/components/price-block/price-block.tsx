@@ -1,20 +1,19 @@
-import React from "react";
-import price from './price-block.module.css';
+import styles from './price-block.module.css';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-interface PriceBlockProps {
+type PriceBlockProps = {
   price: number;
   size: string;
 }
 
-function PriceBlock(props: PriceBlockProps) {
-  const textStyle = (props.size === 'small') 
+const PriceBlock = ({ price, size }: PriceBlockProps): JSX.Element => {
+  const textStyle = (size === 'small') 
     ? 'text text_type_digits-default'
     : 'text text_type_digits-medium';
 
   return(
-    <div className={`${ price.container } mr-5`}>
-      <p className={`${ textStyle } mr-2`}>{ props.price }</p>
+    <div className={`${ styles.container } mr-5`}>
+      <p className={`${ textStyle } mr-2`}>{ price }</p>
       <CurrencyIcon type="primary" />
     </div>
   )

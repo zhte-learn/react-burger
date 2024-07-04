@@ -2,12 +2,12 @@ import { useAppSelector } from '../services/hooks';
 import { Navigate, useLocation } from "react-router-dom";
 import Loader from './loader/loader';
 
-type TProtectedProps = {
+type IProtectedProps = {
   onlyUnAuth?: boolean;
   component: JSX.Element;
 }
 
-const Protected = ({ onlyUnAuth = false, component }: TProtectedProps): JSX.Element  => {
+const Protected = ({ onlyUnAuth = false, component }: IProtectedProps): JSX.Element  => {
   const { isAuthChecked, user } = useAppSelector(state => state.user);
   const location = useLocation();
 

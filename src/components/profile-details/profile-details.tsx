@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './profile-details.module.css';
 import Loader from '../loader/loader';
 import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -7,37 +7,37 @@ import { TUser } from '../../utils/custom-types';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { updateUserDetails } from '../../services/user/actions';
 import { useForm } from '../../hooks/use-form';
-import { TProfileFormValues } from '../../utils/custom-types';
+import { TUserForm } from '../../utils/custom-types';
 
-function ProfileDetails() {
+const ProfileDetails = (): JSX.Element => {
   const { user, status, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
-  const {values, setValues, handleChange} = useForm<TProfileFormValues>({ 
+  const {values, setValues, handleChange} = useForm<TUserForm>({ 
     name: user!.name, 
     email: user!.email, 
     password: user!.password ?? '*****',
   });
-  const [ isPasswordChanged, setIsPasswordChanged ] = React.useState(false);
-  const [ errorMessage, setErrorMessage ] = React.useState('');
+  const [ isPasswordChanged, setIsPasswordChanged ] = useState<boolean>(false);
+  const [ errorMessage, setErrorMessage ] = useState<string>('');
   
-  const isDataChanged = user?.email !== values.email || user?.name !== values.name || isPasswordChanged;
+  const isDataChanged: boolean = user?.email !== values.email || user?.name !== values.name || isPasswordChanged;
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     handleChange(e);
     setErrorMessage(''); //remove error message if user starts typing
   }
 
-  function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>): void {
     handleChange(e);
     setIsPasswordChanged(true);
     setErrorMessage(''); //remove error message if user starts typing
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
   }
 
-  function handleConfirm() {
+  function handleConfirm(): void {
     if(isPasswordChanged) {
       dispatch(updateUserDetails(values as TUser));
     } else {
@@ -45,16 +45,16 @@ function ProfileDetails() {
     }
   }
 
-  function handleReset() {
+  function handleReset(): void {
     setValues({name: user!.name, email: user!.email, password: '*****'})
   }
 
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const onIconClick = () => {
     setTimeout(() => inputRef.current!.focus(), 0);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if(error) {
       setErrorMessage(error.message);
     }

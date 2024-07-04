@@ -1,47 +1,47 @@
-import React from "react";
-import { useDrag } from "react-dnd";
+import { useMemo, useState, useEffect } from 'react';
+import { useDrag } from 'react-dnd';
 import { Link, useLocation } from 'react-router-dom';
 
 import itemStyles from './ingredient-item.module.css';
-import PriceBlock from "../../price-block/price-block";
+import PriceBlock from '../../price-block/price-block';
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { BurgerIngredient } from '../../../utils/custom-types';
 import { useAppSelector } from '../../../services/hooks';
 
-interface IngredientItemProps {
+type IngredientItemProps = {
   ingredient: BurgerIngredient,
 }
 
-function IngredientItem(props: IngredientItemProps) {
-  const ingredientId = props.ingredient._id;
+const IngredientItem = ({ ingredient }: IngredientItemProps): JSX.Element => {
+  const ingredientId: string = ingredient._id;
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
   const location = useLocation();
 
-  const getCounter = React.useMemo(() => {
-    if(props.ingredient.type === 'bun' && bun && bun._id === props.ingredient._id) {
+  const getCounter: number = useMemo<number>(() => {
+    if(ingredient.type === 'bun' && bun && bun._id === ingredient._id) {
       return 2;
-    } else if(props.ingredient.type !== 'bun') {
-      return fillings.filter((item) => item._id === props.ingredient._id).length;
+    } else if(ingredient.type !== 'bun') {
+      return fillings.filter((item) => item._id === ingredient._id).length;
     } else {
       return 0;
     }
-  }, [bun, fillings, props.ingredient]);
+  }, [bun, fillings, ingredient]);
 
-  const [counter, setCounter] = React.useState(0);
+  const [counter, setCounter] = useState<number>(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCounter(getCounter);
   }, [bun, fillings]);
 
   const [{ isDragging }, dragRef] = useDrag({
-    type: props.ingredient.type,
-    item: {ingredient: props.ingredient},
+    type: ingredient.type,
+    item: {ingredient: ingredient},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     })
   });
 
-  const opacity = isDragging ? 0.4 : 1;
+  const opacity: number = isDragging ? 0.4 : 1;
 
   return (
     <>
@@ -57,11 +57,11 @@ function IngredientItem(props: IngredientItemProps) {
         style={{opacity}}
       >
 
-        <img src={props.ingredient.image} alt={props.ingredient.name} />
+        <img src={ingredient.image} alt={ingredient.name} />
         
-        <PriceBlock size="small" price={props.ingredient.price} />
+        <PriceBlock size="small" price={ingredient.price} />
         <p className={`${itemStyles.name} pt-1 text text_type_main-small`}>
-          {props.ingredient.name}
+          {ingredient.name}
         </p>
 
         {counter > 0 && <Counter count={counter} size="default" extraClass="m-1" />}

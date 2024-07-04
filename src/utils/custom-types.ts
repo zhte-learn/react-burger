@@ -2,7 +2,7 @@ export type BurgerIngredient = {
   uniqueId?: string,
   _id: string;
   name: string;
-  type: string;
+  type: "bun" | "main" | "sause";
   proteins: number;
   fat: number;
   carbohydrates: number;
@@ -14,74 +14,28 @@ export type BurgerIngredient = {
   __v: number;
 }
 
-export type TIngredientsResponse = {
-  success: boolean;
-  data: BurgerIngredient[];
-}
-
 export type TUser = {
   name: string;
   email: string;
   password?: string;
 }
 
-export type TUserResponse = {
-  user: TUser
-}
-
-export type TRegisterResponse = {
-  success: boolean;
-  accessToken: string;
-  refreshToken: string;
-  user: TUser;
-  message: string;
-}
-
-export type TLoginResponse = {
-  success: boolean;
-  accessToken: string;
-  refreshToken: string;
-  user: TUser;
-  message: string;
-}
-
-export type TLogoutResponse = {
+export type TResponse = {
   success: boolean;
   message: string;
 }
 
-export type TUpdateResponse = {
-  success: boolean;
-  user: TUser;
-}
+export type TIngredientsResponse = Omit<TResponse, 'message'> & { data: Array<BurgerIngredient> };
+export type TOrderResponse = Omit<TResponse, 'message'> & { name: string; order: { number : string}; };
+export type TUserResponse = TResponse & { user: TUser };
+export type TResponseWithToken = TUserResponse & { accessToken: string; refreshToken: string; };
 
-export type TResetPasswordResponse = {
-  success: boolean;
-  message: string;
-}
-
-export type TRegisterFormValues = {
+export type TUserForm = {
   name: string;
   email: string;
   password: string;
 }
 
-export type TForgotFormValues = {
-  email: string;
-}
-
-export type TResetFormValues = {
-  password: string;
-  token: string;
-}
-
-export type TProfileFormValues = {
-  name: string;
-  email: string;
-  password: string;
-}
-
-export type TLoginFormValues = {
-  email: string;
-  password: string;
-}
+export type TForgotForm = Pick<TUserForm, "email">;
+export type TResetForm = Pick<TUserForm, "password"> & { token: string; };
+export type TLoginForm = Pick<TUserForm, "email" | "password">;

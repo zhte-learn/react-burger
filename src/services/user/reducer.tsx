@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction, SerializedError} from "@reduxjs/toolkit";
 import { TUser } from "../../utils/custom-types";
 import { register, 
         login, 
@@ -26,31 +26,31 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setAuthChecked: (state, action: PayloadAction<boolean>) => {
+    setAuthChecked: (state: TUserState, action: PayloadAction<boolean>) => {
       state.isAuthChecked = action.payload;
     },
-    setUser: (state, action) => {
+    setUser: (state: TUserState, action: PayloadAction<TUser | null>) => {
       state.user = action.payload;
     },
-    clearStatus: (state) => {
+    clearStatus: (state: TUserState) => {
       state.status = 'idle';
       state.error = null;
     }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(register.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state: TUserState, action: PayloadAction<{ user: TUser }>) => {
         state.user = {...action.payload.user, password: "*****"};
         state.status = "success";
         state.error = null;
       })
-      .addCase(register.pending, (state) => {
+      .addCase(register.pending, (state: TUserState) => {
         state.status = "loading";
         state.error = null;
       })
-      .addCase(register.rejected, (state, action) => {
+      .addCase(register.rejected, (state: TUserState, action) => {
         state.status = "failed";
-        state.error = action.error;
+        state.error = action.error as SerializedError;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.user = {...action.payload.user, password: "*****"};

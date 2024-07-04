@@ -1,18 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../utils/api';
+import { TOrderResponse } from '../../utils/custom-types';
 
-export const getOrderDetails = createAsyncThunk(
+export const getOrderDetails = createAsyncThunk<TOrderResponse, string[]>(
   "order/getOrderDetails",
-  async (ingredientsIds: string[], thunkAPI) => {
-    try {
-        return await api.getOrder(ingredientsIds);
-    } catch (error: any) {
-        thunkAPI.rejectWithValue(error.message);
-    }
+  async(ingredientsIds: string[]) => {
+    return await api.getOrder(ingredientsIds);
   }
 );
 
-export const resetOrder = createAsyncThunk(
+export const resetOrder = createAsyncThunk<void>(
   "order/resetOrder",
   async() => {
     return;
