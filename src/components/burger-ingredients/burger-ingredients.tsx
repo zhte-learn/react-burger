@@ -6,6 +6,7 @@ import { useAppSelector } from '../../services/hooks';
 
 function BurgerIngredients(): JSX.Element {
   const [activeTab, setActiveTab] = React.useState<string>('bun');
+  // @ts-ignore
   const { ingredients } = useAppSelector(state => state.ingredients);
   const containerScrollRef = React.useRef<HTMLDivElement>(null);
   const bunRef = React.useRef<HTMLDivElement>(null);

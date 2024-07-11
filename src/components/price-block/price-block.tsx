@@ -12,7 +12,7 @@ const PriceBlock = ({ price, size }: PriceBlockProps): JSX.Element => {
     : 'text text_type_digits-medium';
 
   return(
-    <div className={`${ styles.container } mr-5`}>
+    <div className={`${ styles.container }`}>
       <p className={`${ textStyle } mr-2`}>{ price }</p>
       <CurrencyIcon type="primary" />
     </div>

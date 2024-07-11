@@ -4,7 +4,7 @@ import { useAppSelector } from '../../services/hooks';
 import { BurgerIngredient } from '../../utils/custom-types';
 
 const IngredientDetails = (): JSX.Element => {
-  const { ingredients} = useAppSelector(state => state.ingredients);
+  const { ingredients } = useAppSelector(state => state.ingredients);
   const { ingredientId } = useParams<"ingredientId">();
   const ingredient: BurgerIngredient = ingredients.filter(item => item._id === ingredientId)[0];
 

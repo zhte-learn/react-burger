@@ -29,11 +29,11 @@
 
 .profileContainer {
   display: flex;
-  gap: 60px;
+  justify-content: space-between;
 }
 
 .profileNav {
-  width: 320px;
+  width: 30%;
 }
 
 .profileLink {

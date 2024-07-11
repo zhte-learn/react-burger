@@ -1,0 +1,17 @@
+.container {
+  width: 68%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  --scrollbar-color-thumb: #8585AD;
+  --scrollbar-color-track: #2F2F37;
+  --scrollbar-width: thin;
+  --scrollbar-width-legacy: 10px;
+  overflow: auto;
+  overflow-x: hidden;
+  scrollbar-color: #8585AD #2F2F37;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+}

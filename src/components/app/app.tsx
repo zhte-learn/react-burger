@@ -16,7 +16,7 @@ import { RegisterPage } from '../../pages/register-page';
 import { ForgotPassword } from '../../pages/forgot-password';
 import { ResetPassword } from '../../pages/reset-password';
 import { ProfilePage } from '../../pages/profile-page';
-import { OrderPage } from '../../pages/orders-page';
+import OrdersList from '../orders-list/orders-list';
 import ProfileDetails from '../profile-details/profile-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
@@ -61,7 +61,7 @@ const App = (): JSX.Element => {
                     <Route path='/reset-password' element={<OnlyUnAuth component={<ResetPassword/>}/>} />
                     <Route path='/profile' element={<OnlyAuth component={<ProfilePage/>}/>}>
                       <Route index element={<OnlyAuth component={<ProfileDetails/>}/>}/>
-                      <Route path='orders' element={<OnlyAuth component={<OrderPage/>}/>} />
+                      <Route path='orders' element={<OnlyAuth component={<OrdersList/>}/>} />
                     </Route>
                   </Routes>
 
