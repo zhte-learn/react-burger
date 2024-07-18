@@ -1,4 +1,4 @@
-export type BurgerIngredient = {
+export type TBurgerIngredient = {
   uniqueId?: string,
   _id: string;
   name: string;
@@ -25,7 +25,7 @@ export type TResponse = {
   message: string;
 }
 
-export type TIngredientsResponse = Omit<TResponse, 'message'> & { data: Array<BurgerIngredient> };
+export type TIngredientsResponse = Omit<TResponse, 'message'> & { data: Array<TBurgerIngredient> };
 export type TOrderResponse = Omit<TResponse, 'message'> & { name: string; order: { number : string}; };
 export type TUserResponse = TResponse & { user: TUser };
 export type TResponseWithToken = TUserResponse & { accessToken: string; refreshToken: string; };

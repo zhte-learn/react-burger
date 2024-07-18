@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction, SerializedError} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, SerializedError } from "@reduxjs/toolkit";
 import { TUser } from "../../utils/custom-types";
 import { register, 
         login, 

@@ -6,7 +6,7 @@ import styles from './burger-constructor.module.css';
 import ConstructorItem from './constructor-item/constructor-item';
 import ConstructorItemInit from './constructor-item-init/constructor-item-init';
 import Modal from '../modal/modal';
-import OrderDetails from '../order-details/order-details';
+import OrderConfirm from '../order-confirm/order-confirm';
 import Loader from '../loader/loader';
 import PriceBlock from '../price-block/price-block';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -14,7 +14,7 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { addBun, addIngredient, moveIngredient, resetConstructor } from '../../services/burger-constructor/reducer';
 import { getOrderDetails, resetOrder } from '../../services/order/actions';
-import { BurgerIngredient } from '../../utils/custom-types';
+import { TBurgerIngredient } from '../../utils/custom-types';
 
 const BurgerConstructor = (): JSX.Element => {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
@@ -47,12 +47,12 @@ const BurgerConstructor = (): JSX.Element => {
     setTotalPrice(getTotalPrice);
   }, [bun, fillings]);
 
-  function getIngredientsIds(ingredientsList: BurgerIngredient[]): string[] {
+  function getIngredientsIds(ingredientsList: TBurgerIngredient[]): string[] {
     return ingredientsList.map(item => item._id);
   }
 
   const makeOrder: () => void = useCallback(() => {
-    const ingredientsList: BurgerIngredient[] = []; // = [bun].concat(fillings);
+    const ingredientsList: TBurgerIngredient[] = []; // = [bun].concat(fillings);
     if(bun && fillings.length > 0) {
       ingredientsList.push(bun);
       ingredientsList.concat(fillings);
@@ -78,7 +78,7 @@ const BurgerConstructor = (): JSX.Element => {
     }
   }, [bun, fillings]);
 
-  function onDropHandler(item: BurgerIngredient): void {
+  function onDropHandler(item: TBurgerIngredient): void {
     if(item.type === 'bun') {
       dispatch(addBun(item));
     } else {
@@ -88,7 +88,7 @@ const BurgerConstructor = (): JSX.Element => {
 
   const [{ isHoverBunTop }, dropTargetBunTop] = useDrop({
     accept: 'bun',
-    drop: (item: { ingredient: BurgerIngredient }) => onDropHandler(item.ingredient),
+    drop: (item: { ingredient: TBurgerIngredient }) => onDropHandler(item.ingredient),
     collect: (monitor: DropTargetMonitor) => ({
       isHoverBunTop: monitor.isOver(),
     }),
@@ -96,7 +96,7 @@ const BurgerConstructor = (): JSX.Element => {
 
   const [{ isHoverBunBottom }, dropTargetBunBottom] = useDrop({
     accept: 'bun',
-    drop: (item: { ingredient: BurgerIngredient }) => onDropHandler(item.ingredient),
+    drop: (item: { ingredient: TBurgerIngredient }) => onDropHandler(item.ingredient),
     collect: (monitor: DropTargetMonitor) => ({
       isHoverBunBottom: monitor.isOver(),
     }),
@@ -104,7 +104,7 @@ const BurgerConstructor = (): JSX.Element => {
 
   const [{ isHoverFilling }, dropTargetFilling] = useDrop({
     accept: ['sauce', 'main'],
-    drop: (item: { ingredient: BurgerIngredient }) => onDropHandler(item.ingredient),
+    drop: (item: { ingredient: TBurgerIngredient }) => onDropHandler(item.ingredient),
     collect: (monitor: DropTargetMonitor) => ({
       isHoverFilling: monitor.isOver(),
     }),
@@ -116,6 +116,8 @@ const BurgerConstructor = (): JSX.Element => {
 
   function closeModal(): void {
     setIsModalOpen(false);
+    //remove fixed position of background when modal is closed
+    document.body.style.overflow = "unset";
     dispatch(resetOrder());
     dispatch(resetConstructor());
   }
@@ -153,7 +155,7 @@ const BurgerConstructor = (): JSX.Element => {
             {fillings.map((elem, index) => (
               <ConstructorItem 
                 key={elem.uniqueId}
-                item = {elem} 
+                item={elem} 
                 position={'middle'}
                 index={index}
                 isHover={isHoverFilling}
@@ -197,7 +199,7 @@ const BurgerConstructor = (): JSX.Element => {
       <Modal onClose={closeModal}>
         {orderStatus === 'failed' && <p className="text text_type_main-medium">{orderError.message}</p>}
         {orderStatus === 'loading' && <Loader />}
-        {orderStatus === 'success' && <OrderDetails />}
+        {orderStatus === 'success' && <OrderConfirm />}
       </Modal>
       )}
     </>

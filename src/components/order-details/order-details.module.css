@@ -1,9 +1,57 @@
-.orderContainer {
+.container {
+  width: 608px;
+  height: 80vh;
+  margin: 0 auto;
+  margin-top: 60px;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .orderNumber {
-  text-shadow: 0 0 32px rgb(51, 51, 255);
+  text-align: center;
+}
+
+.completeColor {
+  color: #00CCCC;
+}
+
+.ingredientsList {
+  height: 320px;
+  margin-bottom: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  --scrollbar-color-thumb: #8585AD;
+  --scrollbar-color-track: #2F2F37;
+  --scrollbar-width: thin;
+  --scrollbar-width-legacy: 24px;
+  overflow: auto;
+  overflow-x: hidden;
+  scrollbar-color: #8585AD #2F2F37;
+  scrollbar-width: auto;
+  scrollbar-gutter: stable;
+}
+
+.ingredientItem {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingredientDetails {
+  display: flex;
+  align-items: center;
+}
+
+.priceDetails {
+  display: flex;
+}
+
+.finalDetails {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

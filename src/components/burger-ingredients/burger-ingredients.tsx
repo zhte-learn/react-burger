@@ -1,7 +1,7 @@
 import React from "react";
 import ingredientsStyles from './burger-ingredients.module.css';
 import IngredientsGroup from './ingredients-group/ingredients-group';
-import { BurgerIngredient } from '../../utils/custom-types';
+import { TBurgerIngredient } from '../../utils/custom-types';
 import { useAppSelector } from '../../services/hooks';
 
 function BurgerIngredients(): JSX.Element {
@@ -14,9 +14,9 @@ function BurgerIngredients(): JSX.Element {
   const mainRef = React.useRef<HTMLDivElement>(null);
 
   const ingredientsByType = React.useMemo<{
-    bun: BurgerIngredient[];
-    sauce: BurgerIngredient[];
-    main: BurgerIngredient[];
+    bun: TBurgerIngredient[];
+    sauce: TBurgerIngredient[];
+    main: TBurgerIngredient[];
   }>(() => {
     return { 
       bun: getItemsByType(ingredients, "bun"),
@@ -25,7 +25,7 @@ function BurgerIngredients(): JSX.Element {
     };
   }, [ingredients]);
 
-  function getItemsByType(data: BurgerIngredient[], type: string): BurgerIngredient[] {
+  function getItemsByType(data: TBurgerIngredient[], type: string): TBurgerIngredient[] {
     return data.filter(item => item.type === type);
   }
 

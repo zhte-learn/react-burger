@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 
 const AppHeader = (): JSX.Element => {
   return (
-    <header>
+    <header className={header.header}>
       <div className={header.container}>
         <ul className={header.nav}>
           <NavLink to='/' className={`${header.navItem} pl-5 pr-5`}>
@@ -17,7 +17,7 @@ const AppHeader = (): JSX.Element => {
               </>
             )}
           </NavLink>
-          <NavLink to='/' className={`${header.navItem} ${header.orders} pl-5 pr-5`}>
+          <NavLink to='/feed' className={`${header.navItem} ${header.orders} pl-5 pr-5`}>
             {({ isActive }) => (
               <>
                 <ListIcon type={isActive ? 'primary' : 'secondary'} />

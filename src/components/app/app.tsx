@@ -16,9 +16,11 @@ import { RegisterPage } from '../../pages/register-page';
 import { ForgotPassword } from '../../pages/forgot-password';
 import { ResetPassword } from '../../pages/reset-password';
 import { ProfilePage } from '../../pages/profile-page';
+import { FeedPage } from '../../pages/feed-page';
 import OrdersList from '../orders-list/orders-list';
 import ProfileDetails from '../profile-details/profile-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import OrderDetails from '../order-details/order-details';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
 
 const App = (): JSX.Element => {
@@ -34,7 +36,9 @@ const App = (): JSX.Element => {
   }, []);
 
   function handleCloseModal(): void {
-    navigate('/', { replace: true });
+    navigate(background.pathname, { replace: true });
+    //remove fixed position of background when modal is closed
+    document.body.style.overflow = "unset";
   }
 
   return ( 
@@ -55,6 +59,8 @@ const App = (): JSX.Element => {
                     <Route path='/' element={<MainPage />} />
                     <Route path='/ingredients/:ingredientId'
                       element={<IngredientDetails />} />
+                    <Route path='/profile/orders/:id'
+                      element={<OrderDetails />} />
                     <Route path='/login' element={<OnlyUnAuth component={<LoginPage/>}/>} />
                     <Route path='/register' element={<OnlyUnAuth component={<RegisterPage/>}/>} />
                     <Route path='/forgot-password' element={<OnlyUnAuth component={<ForgotPassword/>}/>} />
@@ -63,18 +69,31 @@ const App = (): JSX.Element => {
                       <Route index element={<OnlyAuth component={<ProfileDetails/>}/>}/>
                       <Route path='orders' element={<OnlyAuth component={<OrdersList/>}/>} />
                     </Route>
+                    <Route path='/feed' element={<FeedPage/>} />
                   </Routes>
 
                   {background && (
                     <Routes>
-                      <Route
-                        path='/ingredients/:ingredientId'
-                        element={
-                          <Modal onClose={handleCloseModal}>
-                            <IngredientDetails />
-                          </Modal>
-                        }
-                      />
+                      {background.pathname === '/' &&
+                        <Route
+                          path='/ingredients/:ingredientId'
+                          element={
+                            <Modal onClose={handleCloseModal}>
+                              <IngredientDetails />
+                            </Modal>
+                          }
+                        />
+                      }
+                      {background.pathname === '/feed' &&
+                        <Route
+                          path='/feed/:number'
+                          element={
+                            <Modal onClose={handleCloseModal}>
+                              <OrderDetails />
+                            </Modal>
+                          }
+                        />
+                      }
                     </Routes>
                   )}
                 </main>

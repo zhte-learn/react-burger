@@ -64,3 +64,35 @@
 .buttonExit:hover {
   color: #d3d3df;
 }
+
+.feedContainer {
+  width: 1240px;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+.feedContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.feedData {
+
+}
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.columnWrapper {
+  width: 48%;
+}
+
+.activeColor {
+  color: #00CCCC
+}
+
+.shadow {
+  text-shadow: 0 0 32px rgb(51, 51, 255);
+}

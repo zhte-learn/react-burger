@@ -1,11 +1,11 @@
 import { forwardRef} from 'react';
 import groupStyle from './ingredients-group.module.css';
-import { BurgerIngredient } from '../../../utils/custom-types';
+import { TBurgerIngredient } from '../../../utils/custom-types';
 import IngredientItem from '../ingredient-item/ingredient-item';
 
 type IngredientsGroupProps = {
   groupTitle: string;
-  ingredients: BurgerIngredient[];
+  ingredients: TBurgerIngredient[];
   mRef?: React.Ref<HTMLDivElement>;
 }
 
