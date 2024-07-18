@@ -7,7 +7,7 @@ import { useAppDispatch } from '../services/hooks';
 import { logout } from '../services/user/actions';
 import { clearStatus } from '../services/user/reducer';
 
-export const ProfilePage = (): JSX.Element => {
+const ProfilePage = (): JSX.Element => {
   const location = useLocation();
   const dispatch = useAppDispatch();
 
@@ -21,7 +21,7 @@ export const ProfilePage = (): JSX.Element => {
   }
 
   return(
-    <section className={`${styles.profileContainer} pl-5 pr-5 mt-20`}>
+    <section className={`${styles.profileContainer}`}>
       <nav className={styles.profileNav}>
         <NavLink 
           to='/profile'
@@ -63,3 +63,5 @@ export const ProfilePage = (): JSX.Element => {
     </section>
   )
 }
+
+export default ProfilePage;

@@ -70,8 +70,7 @@ function BurgerIngredients(): JSX.Element {
   }, []);
 
   return(
-    <section className={`${ingredientsStyles.container} pl-5 pr-5 mt-10 mb-15`}>
-      <h2 className={`${ingredientsStyles.title} text text_type_main-large mb-5`}>Соберите бургер</h2>
+    <section className={`${ingredientsStyles.container}`}>
       <ul className={`${ingredientsStyles.nav} mb-10`}>
         <li className={getStyles('bun')}>
           Булки

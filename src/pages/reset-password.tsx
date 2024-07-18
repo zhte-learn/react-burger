@@ -11,7 +11,7 @@ import { clearStatus } from '../services/user/reducer';
 import { useForm } from '../hooks/use-form';
 import { TResetForm } from '../utils/custom-types';
 
-export const ResetPassword = (): JSX.Element => {
+const ResetPassword = (): JSX.Element => {
   const [ errorMessage, setErrorMessage ] = React.useState<string>('');
   //to prevent redirection to the next page if state.status is success from previous page
   const [ hasMount, setHasMount ] = React.useState<boolean>(true);
@@ -99,3 +99,5 @@ export const ResetPassword = (): JSX.Element => {
     </section>
   )
 }
+
+export default ResetPassword;

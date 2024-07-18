@@ -113,7 +113,7 @@ const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props,
       }
       
       <div ref={ref} className={`${itemStyles.container} ${shapeStyle} ${onHoverStyle} pr-8 pl-6 ml-1`}>
-        <div className={`${itemStyles.details} pt-4 pb-4 pr-8`}>
+        <div className={`${itemStyles.details} pt-4 pb-4`}>
           <img 
             className={`${itemStyles.image}`} 
             src={props.item.image_mobile} 

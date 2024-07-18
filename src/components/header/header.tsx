@@ -5,9 +5,9 @@ import { NavLink } from 'react-router-dom';
 const AppHeader = (): JSX.Element => {
   return (
     <header className={header.header}>
-      <div className={header.container}>
+      <div className={`${header.container} pr-5 pl-5`}>
         <ul className={header.nav}>
-          <NavLink to='/' className={`${header.navItem} pl-5 pr-5`}>
+          <NavLink to='/' className={`${header.navItem}`}>
             {({ isActive }) => (
               <>
                 <BurgerIcon type={isActive ? 'primary' : 'secondary'} />
@@ -17,7 +17,7 @@ const AppHeader = (): JSX.Element => {
               </>
             )}
           </NavLink>
-          <NavLink to='/feed' className={`${header.navItem} ${header.orders} pl-5 pr-5`}>
+          <NavLink to='/feed' className={`${header.navItem} ${header.orders}`}>
             {({ isActive }) => (
               <>
                 <ListIcon type={isActive ? 'primary' : 'secondary'} />
@@ -27,10 +27,10 @@ const AppHeader = (): JSX.Element => {
               </>
             )}
           </NavLink>
-          <NavLink to='/' className={`${header.navItem} ${header.logo} pl-5 pr-5`}>
+          <NavLink to='/' className={`${header.navItem} ${header.logo}`}>
             <Logo />  
           </NavLink>
-          <NavLink to='/profile' className={`${header.navItem} ${header.login} pl-5 pr-5`}>
+          <NavLink to='/profile' className={`${header.navItem} ${header.login}`}>
             {({ isActive }) => (
               <>
                 <ProfileIcon type={isActive ? 'primary' : 'secondary'} />

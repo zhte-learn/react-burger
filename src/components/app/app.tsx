@@ -10,13 +10,13 @@ import { getIngredients } from '../../services/ingredients/actions';
 import { checkUserAuth } from '../../services/user/actions';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 
-import { LoginPage } from '../../pages/login-page';
-import { MainPage } from '../../pages/main-page';
-import { RegisterPage } from '../../pages/register-page';
-import { ForgotPassword } from '../../pages/forgot-password';
-import { ResetPassword } from '../../pages/reset-password';
-import { ProfilePage } from '../../pages/profile-page';
-import { FeedPage } from '../../pages/feed-page';
+import LoginPage from '../../pages/login-page';
+import MainPage from '../../pages/main-page';
+import RegisterPage from '../../pages/register-page';
+import ForgotPassword from '../../pages/forgot-password';
+import ResetPassword from '../../pages/reset-password';
+import ProfilePage from '../../pages/profile-page';
+import FeedPage from '../../pages/feed-page';
 import OrdersList from '../orders-list/orders-list';
 import ProfileDetails from '../profile-details/profile-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
@@ -27,6 +27,7 @@ const App = (): JSX.Element => {
   const navigate = useNavigate();
   const location = useLocation();
   const background = location.state && location.state.background;
+  console.log(background)
   const dispatch = useAppDispatch();
   const { ingredients, status, error } = useAppSelector(state => state.ingredients);
 
@@ -54,12 +55,14 @@ const App = (): JSX.Element => {
             ? <Loader />
             : ingredients && ingredients.length 
               ? (
-                <main className={styles.mainContainer}>
+                <main className={`${styles.main} pr-5 pl-5`}>
                   <Routes location={background || location}>
                     <Route path='/' element={<MainPage />} />
                     <Route path='/ingredients/:ingredientId'
                       element={<IngredientDetails />} />
-                    <Route path='/profile/orders/:id'
+                    <Route path='/feed/:number'
+                      element={<OrderDetails />} />
+                    <Route path='/profile/orders/:number'
                       element={<OrderDetails />} />
                     <Route path='/login' element={<OnlyUnAuth component={<LoginPage/>}/>} />
                     <Route path='/register' element={<OnlyUnAuth component={<RegisterPage/>}/>} />
@@ -87,6 +90,16 @@ const App = (): JSX.Element => {
                       {background.pathname === '/feed' &&
                         <Route
                           path='/feed/:number'
+                          element={
+                            <Modal onClose={handleCloseModal}>
+                              <OrderDetails />
+                            </Modal>
+                          }
+                        />
+                      }
+                      {background.pathname === '/profile/orders' &&
+                        <Route
+                          path='/profile/orders/:number'
                           element={
                             <Modal onClose={handleCloseModal}>
                               <OrderDetails />

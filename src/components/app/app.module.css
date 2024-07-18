@@ -5,9 +5,12 @@
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
-  /* background-color: #1C1C21; */
   color: #ffffff;
   font-family: 'JetBrains Mono', Arial, sans-serif;
-  width: 100vw;
   min-height: 100vh;
+}
+
+.main {
+  max-width: 1240px;
+  margin: 0 auto;
 }

@@ -1,19 +1,24 @@
-.container {
-  width: 1240px;
-  height: 100vh;
-  margin: 0 auto;
+.columns {
   display: flex;
   justify-content: space-between;
 }
 
+.columnWrapper {
+  width: 48%;
+}
+
+.title {
+  padding: 0;
+}
+
 .authContainer {
   width: 480px;
-  box-sizing: border-box;
   margin: 0 auto;
   margin-top: 10%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .form {
@@ -28,12 +33,14 @@
 }
 
 .profileContainer {
+  margin: 0 auto;
+  margin-top: 5%;
   display: flex;
-  justify-content: space-between;
+  gap: 60px;
 }
 
 .profileNav {
-  width: 30%;
+  width: 28%;
 }
 
 .profileLink {
@@ -65,28 +72,22 @@
   color: #d3d3df;
 }
 
-.feedContainer {
-  width: 1240px;
+.ordersNumbers {
+  max-height: 340px;
+  max-width: 290px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.feedHeight {
+  height: 800px;
+}
+
+.ingredientsHeight {
   height: 100vh;
-  margin: 0 auto;
-}
-
-.feedContent {
-  display: flex;
-  justify-content: space-between;
-}
-
-.feedData {
-
-}
-
-.columns {
-  display: flex;
-  justify-content: space-between;
-}
-
-.columnWrapper {
-  width: 48%;
 }
 
 .activeColor {

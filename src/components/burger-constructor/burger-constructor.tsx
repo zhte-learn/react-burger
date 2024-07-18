@@ -124,7 +124,7 @@ const BurgerConstructor = (): JSX.Element => {
 
   return(
     <>
-    <section className={`${styles.container} pt-25 pl-4 pr-4 mb-15`}>
+    <section className={`${styles.container} pt-25 mb-15`}>
       <>
         {bun ? (
           <ConstructorItem 

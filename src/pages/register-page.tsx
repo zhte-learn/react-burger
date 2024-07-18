@@ -11,7 +11,7 @@ import { clearStatus } from '../services/user/reducer';
 import { useForm } from '../hooks/use-form';
 import { TUserForm } from '../utils/custom-types';
 
-export const RegisterPage = (): JSX.Element => {
+const RegisterPage = (): JSX.Element => {
   const [errorMessage, setErrorMessage] = React.useState<string>('');
   const { status, error } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
@@ -107,3 +107,5 @@ export const RegisterPage = (): JSX.Element => {
     </section>
   )
 }
+
+export default RegisterPage;
