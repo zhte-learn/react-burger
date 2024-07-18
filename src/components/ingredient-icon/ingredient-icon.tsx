@@ -7,13 +7,13 @@ import { useAppSelector } from '../../services/hooks';
 //   return ingredient ? ingredient.image_mobile : "";
 // }
 
-type IngredientIconProps = {
+type TIngredientIconProps = {
   id: string;
   isLast?: boolean;
   hiddenNumber?: number;
 }
 
-const IngredientIcon = ({ id, isLast, hiddenNumber }: IngredientIconProps): JSX.Element => {
+const IngredientIcon = ({ id, isLast, hiddenNumber }: TIngredientIconProps): JSX.Element => {
   const { ingredientsMap } = useAppSelector(state => state.ingredients);
 
   return (
