@@ -35,3 +35,7 @@
   background: linear-gradient(to right, #801AB2 0%, #4C4CFF 100%);
   border-radius: 50%; 
 }
+
+.completeColor {
+  color: #00CCCC;
+}

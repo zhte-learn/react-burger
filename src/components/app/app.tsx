@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import styles from './app.module.css';
 
@@ -22,19 +22,39 @@ import ProfileDetails from '../profile-details/profile-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
+import { wsConnect, wsDisconnect } from '../../services/feed/actions';
+import { wsConnectAuth, wsDisconnectAuth } from '../../services/feed-profile/actions';
+
+const FEED_SERVER_URL = "wss://norma.nomoreparties.space/orders/all";
+const FEED_PROFILE_SERVER_URL = "wss://norma.nomoreparties.space/orders";
 
 const App = (): JSX.Element => {
   const navigate = useNavigate();
   const location = useLocation();
   const background = location.state && location.state.background;
-  console.log(background)
   const dispatch = useAppDispatch();
   const { ingredients, status, error } = useAppSelector(state => state.ingredients);
+  const { user } = useAppSelector(state => state.user);
+
+  const [ isSocket, setIsSocket ] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(getIngredients());
     dispatch(checkUserAuth());
+    dispatch(wsConnect(FEED_SERVER_URL));
   }, []);
+
+  useEffect(() => {
+    //prevent disconnection if user details were changed
+    //disconnect only when user is null
+    if(user && !isSocket) {
+      dispatch(wsConnectAuth(FEED_PROFILE_SERVER_URL));
+      setIsSocket(true);
+    } else if(!user && isSocket) {
+      dispatch(wsDisconnectAuth());
+      setIsSocket(false);
+    }
+  }, [user]);
 
   function handleCloseModal(): void {
     navigate(background.pathname, { replace: true });
@@ -70,7 +90,7 @@ const App = (): JSX.Element => {
                     <Route path='/reset-password' element={<OnlyUnAuth component={<ResetPassword/>}/>} />
                     <Route path='/profile' element={<OnlyAuth component={<ProfilePage/>}/>}>
                       <Route index element={<OnlyAuth component={<ProfileDetails/>}/>}/>
-                      <Route path='orders' element={<OnlyAuth component={<OrdersList/>}/>} />
+                      <Route path='orders' element={<OnlyAuth component={<OrdersList page='profile'/>}/>} />
                     </Route>
                     <Route path='/feed' element={<FeedPage/>} />
                   </Routes>

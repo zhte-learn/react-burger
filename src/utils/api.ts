@@ -1,5 +1,5 @@
 const BURGER_API_URL = 'https://norma.nomoreparties.space/api/';
-import { TUser, TResponse, TUserResponse, TIngredientsResponse, TOrderResponse, TResponseWithToken } from "./custom-types";
+import { TUser, TResponse, TUserResponse, TIngredientsResponse, TOrderResponse, TConfirmOrderResponse, TResponseWithToken } from "./custom-types";
 
 const checkResponse = <T>(res: Response): Promise<T> => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
@@ -33,7 +33,6 @@ const refreshToken = (): Promise<TResponseWithToken> => {
     }),
   })
   .then(refreshData => {
-    console.log(refreshData)
     localStorage.setItem("refreshToken", refreshData.refreshToken); 
     localStorage.setItem("accessToken", refreshData.accessToken);
     return refreshData;
@@ -60,11 +59,18 @@ const fetchWithRefresh = <T>(endpoint: string, options: RequestInit): Promise<T>
     });
 }
 
-const getOrder = (data: string[]): Promise<TOrderResponse> => {
-  return request<TOrderResponse>('orders', {
+const makeOrder = (data: string[]): Promise<TConfirmOrderResponse> => {
+  return request<TConfirmOrderResponse>('orders', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ingredients: data}),
+  })
+}
+
+const getOrder = (orderNumber: string): Promise<TOrderResponse> => {
+  return request<TOrderResponse>(`orders/${orderNumber}`, {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'}
   })
 }
 
@@ -131,6 +137,7 @@ const resetPassword = (password: string, token: string): Promise<TResponse> => {
 }
 
 export const api = {
+  makeOrder,
   getOrder,
   getIngredients,
   register,

@@ -1,8 +1,11 @@
 import header from './header.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink } from 'react-router-dom';
+import { useAppSelector } from '../../services/hooks';
 
 const AppHeader = (): JSX.Element => {
+  const { user } = useAppSelector(state => state.user);
+
   return (
     <header className={header.header}>
       <div className={`${header.container} pr-5 pl-5`}>
@@ -35,7 +38,7 @@ const AppHeader = (): JSX.Element => {
               <>
                 <ProfileIcon type={isActive ? 'primary' : 'secondary'} />
                 <p className={`text text_type_main-small pl-2 ${isActive ? '' : 'text_color_inactive'}`}>
-                  Личный кабинет
+                  {(user) ? user.name :'Личный кабинет'}
                 </p>
               </>
             )}

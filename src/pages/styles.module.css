@@ -73,6 +73,9 @@
 }
 
 .ordersNumbers {
+  margin-bottom: 0;
+  padding: 0;
+  list-style-type: none;
   max-height: 340px;
   max-width: 290px;
   display: flex;
@@ -80,6 +83,10 @@
   flex-wrap: wrap;
   gap: 10px;
   overflow: hidden;
+}
+
+.orderNumber {
+  width: 30%;
 }
 
 .feedHeight {
