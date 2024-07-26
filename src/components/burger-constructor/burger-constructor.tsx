@@ -18,11 +18,7 @@ import { TBurgerIngredient } from '../../utils/custom-types';
 
 const BurgerConstructor = (): JSX.Element => {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
-  console.log(bun)
-  console.log(fillings)
-
   const { orderStatus, orderError } = useAppSelector(state => state.order);
-  
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();

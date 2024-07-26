@@ -47,7 +47,6 @@ export const orderSlice = createSlice({
         state.orderError = null;
       })
       .addCase(getOrderByNumber.rejected, (state: TOrderState, action) => {
-        console.log(state.orderError);
         state.orderStatus = "failed";
         state.orderError = action.error as SerializedError;
       })
