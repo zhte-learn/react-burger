@@ -1,11 +1,12 @@
 import React from "react";
 import ingredientsStyles from './burger-ingredients.module.css';
 import IngredientsGroup from './ingredients-group/ingredients-group';
-import { BurgerIngredient } from '../../utils/custom-types';
+import { TBurgerIngredient } from '../../utils/custom-types';
 import { useAppSelector } from '../../services/hooks';
 
 function BurgerIngredients(): JSX.Element {
   const [activeTab, setActiveTab] = React.useState<string>('bun');
+  // @ts-ignore
   const { ingredients } = useAppSelector(state => state.ingredients);
   const containerScrollRef = React.useRef<HTMLDivElement>(null);
   const bunRef = React.useRef<HTMLDivElement>(null);
@@ -13,9 +14,9 @@ function BurgerIngredients(): JSX.Element {
   const mainRef = React.useRef<HTMLDivElement>(null);
 
   const ingredientsByType = React.useMemo<{
-    bun: BurgerIngredient[];
-    sauce: BurgerIngredient[];
-    main: BurgerIngredient[];
+    bun: TBurgerIngredient[];
+    sauce: TBurgerIngredient[];
+    main: TBurgerIngredient[];
   }>(() => {
     return { 
       bun: getItemsByType(ingredients, "bun"),
@@ -24,7 +25,7 @@ function BurgerIngredients(): JSX.Element {
     };
   }, [ingredients]);
 
-  function getItemsByType(data: BurgerIngredient[], type: string): BurgerIngredient[] {
+  function getItemsByType(data: TBurgerIngredient[], type: string): TBurgerIngredient[] {
     return data.filter(item => item.type === type);
   }
 
@@ -69,8 +70,7 @@ function BurgerIngredients(): JSX.Element {
   }, []);
 
   return(
-    <section className={`${ingredientsStyles.container} pl-5 pr-5 mt-10 mb-15`}>
-      <h2 className={`${ingredientsStyles.title} text text_type_main-large mb-5`}>Соберите бургер</h2>
+    <section className={`${ingredientsStyles.container}`}>
       <ul className={`${ingredientsStyles.nav} mb-10`}>
         <li className={getStyles('bun')}>
           Булки

@@ -1,13 +1,16 @@
 import header from './header.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink } from 'react-router-dom';
+import { useAppSelector } from '../../services/hooks';
 
 const AppHeader = (): JSX.Element => {
+  const { user } = useAppSelector(state => state.user);
+
   return (
-    <header>
-      <div className={header.container}>
+    <header className={header.header}>
+      <div className={`${header.container} pr-5 pl-5`}>
         <ul className={header.nav}>
-          <NavLink to='/' className={`${header.navItem} pl-5 pr-5`}>
+          <NavLink to='/' className={`${header.navItem}`}>
             {({ isActive }) => (
               <>
                 <BurgerIcon type={isActive ? 'primary' : 'secondary'} />
@@ -17,7 +20,7 @@ const AppHeader = (): JSX.Element => {
               </>
             )}
           </NavLink>
-          <NavLink to='/' className={`${header.navItem} ${header.orders} pl-5 pr-5`}>
+          <NavLink to='/feed' className={`${header.navItem} ${header.orders}`}>
             {({ isActive }) => (
               <>
                 <ListIcon type={isActive ? 'primary' : 'secondary'} />
@@ -27,15 +30,15 @@ const AppHeader = (): JSX.Element => {
               </>
             )}
           </NavLink>
-          <NavLink to='/' className={`${header.navItem} ${header.logo} pl-5 pr-5`}>
+          <NavLink to='/' className={`${header.navItem} ${header.logo}`}>
             <Logo />  
           </NavLink>
-          <NavLink to='/profile' className={`${header.navItem} ${header.login} pl-5 pr-5`}>
+          <NavLink to='/profile' className={`${header.navItem} ${header.login}`}>
             {({ isActive }) => (
               <>
                 <ProfileIcon type={isActive ? 'primary' : 'secondary'} />
                 <p className={`text text_type_main-small pl-2 ${isActive ? '' : 'text_color_inactive'}`}>
-                  Личный кабинет
+                  {(user) ? user.name :'Личный кабинет'}
                 </p>
               </>
             )}

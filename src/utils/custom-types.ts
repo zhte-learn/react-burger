@@ -1,4 +1,4 @@
-export type BurgerIngredient = {
+export type TBurgerIngredient = {
   uniqueId?: string,
   _id: string;
   name: string;
@@ -25,10 +25,11 @@ export type TResponse = {
   message: string;
 }
 
-export type TIngredientsResponse = Omit<TResponse, 'message'> & { data: Array<BurgerIngredient> };
-export type TOrderResponse = Omit<TResponse, 'message'> & { name: string; order: { number : string}; };
+export type TIngredientsResponse = Omit<TResponse, 'message'> & { data: Array<TBurgerIngredient> };
+export type TConfirmOrderResponse = Omit<TResponse, 'message'> & { name: string; order: { number : string}; };
 export type TUserResponse = TResponse & { user: TUser };
 export type TResponseWithToken = TUserResponse & { accessToken: string; refreshToken: string; };
+export type TOrderResponse = Omit<TResponse, 'message'> & { orders: TOrder[]};
 
 export type TUserForm = {
   name: string;
@@ -39,3 +40,13 @@ export type TUserForm = {
 export type TForgotForm = Pick<TUserForm, "email">;
 export type TResetForm = Pick<TUserForm, "password"> & { token: string; };
 export type TLoginForm = Pick<TUserForm, "email" | "password">;
+
+export type TOrder = {
+  ingredients: string[];
+  _id: string;
+  status: string;
+  number: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

@@ -5,11 +5,11 @@ import { Link, useLocation } from 'react-router-dom';
 import itemStyles from './ingredient-item.module.css';
 import PriceBlock from '../../price-block/price-block';
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { BurgerIngredient } from '../../../utils/custom-types';
+import { TBurgerIngredient } from '../../../utils/custom-types';
 import { useAppSelector } from '../../../services/hooks';
 
 type IngredientItemProps = {
-  ingredient: BurgerIngredient,
+  ingredient: TBurgerIngredient,
 }
 
 const IngredientItem = ({ ingredient }: IngredientItemProps): JSX.Element => {

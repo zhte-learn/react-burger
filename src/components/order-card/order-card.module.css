@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background-color: #232328;
+  text-decoration: none;
+  color: #F2F2F3;
+}
+
+.orderData {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.orderMain {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingredientsGroup {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.ingredientItem {
+  position: relative;
+  width: 66px;
+  height: 66px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #801AB2 0%, #4C4CFF 100%);
+  border-radius: 50%; 
+}
+
+.completeColor {
+  color: #00CCCC;
+}

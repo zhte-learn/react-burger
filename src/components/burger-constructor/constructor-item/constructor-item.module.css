@@ -20,8 +20,10 @@
 }
 
 .controls {
+  min-width: 130px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .image {

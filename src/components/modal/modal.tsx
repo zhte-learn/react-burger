@@ -22,7 +22,12 @@ const Modal = ({ onClose, children }: ModalProps): JSX.Element => {
     }
     document.addEventListener('keydown', handleEscapeKey);
       return () => document.removeEventListener('keydown', handleEscapeKey);
-    }, [onClose]);
+  }, [onClose]);
+
+  //prevent background scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+  }, []);
 
   return ReactDOM.createPortal((
     <ModalOverlay onClose={onClose}>

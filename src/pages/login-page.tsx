@@ -11,7 +11,7 @@ import { clearStatus } from '../services/user/reducer';
 import { useForm } from '../hooks/use-form';
 import { TLoginForm } from '../utils/custom-types';
 
-export const LoginPage = (): JSX.Element => {
+const LoginPage = (): JSX.Element => {
   const {values, handleChange, clearForm} = useForm<TLoginForm>({  
     email: '', 
     password: '',
@@ -98,3 +98,5 @@ export const LoginPage = (): JSX.Element => {
     </section>
   )
 }
+
+export default LoginPage;

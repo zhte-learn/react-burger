@@ -1,12 +1,12 @@
-import { BurgerIngredient } from '../../utils/custom-types';
-import { createSlice, PayloadAction, nanoid  } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, SerializedError, nanoid } from "@reduxjs/toolkit";
+import { TBurgerIngredient } from '../../utils/custom-types';
 
-type BurgerConstructorState = {
-  bun: null | BurgerIngredient;
-  fillings: BurgerIngredient[];
+type TBurgerConstructorState = {
+  bun: null | TBurgerIngredient;
+  fillings: TBurgerIngredient[];
 }
 
-const initialState: BurgerConstructorState = {
+const initialState: TBurgerConstructorState = {
   bun: null,
   fillings: []
 }
@@ -15,23 +15,22 @@ export const burgerConstructorSlice = createSlice({
   name: "burgerConstructor",
   initialState,
   reducers: {
-    addBun: (state, action: PayloadAction<BurgerIngredient>) => {
+    addBun: (state: TBurgerConstructorState, action: PayloadAction<TBurgerIngredient>) => {
       state.bun = action.payload;
     },
     addIngredient: {
-      reducer: (state, action: PayloadAction<BurgerIngredient>) => {
+      reducer: (state: TBurgerConstructorState, action: PayloadAction<TBurgerIngredient>) => {
         state.fillings.push(action.payload);
       },
-      prepare: (ingredient: BurgerIngredient) => {
+      prepare: (ingredient: TBurgerIngredient) => {
         const id = nanoid();
         return {payload: { ...ingredient, uniqueId: id}};
       }
     },
-    removeIngredient: (state, action: PayloadAction<string>) => {
-      //state.fillings = removeElementById(state.fillings, action.payload);
+    removeIngredient: (state: TBurgerConstructorState, action: PayloadAction<string>) => {
       state.fillings = state.fillings.filter(item => item.uniqueId !== action.payload);
     },
-    moveIngredient: (state, action: PayloadAction<{dragIndex: number, hoverIndex: number}>) => {
+    moveIngredient: (state: TBurgerConstructorState, action: PayloadAction<{dragIndex: number, hoverIndex: number}>) => {
       const {dragIndex, hoverIndex} = action.payload;
       const updatedIngredients = [...state.fillings];
       const movedItem = updatedIngredients.splice(dragIndex, 1)[0];
@@ -46,12 +45,3 @@ export const burgerConstructorSlice = createSlice({
 })
 
 export const { addBun, addIngredient, moveIngredient, removeIngredient, resetConstructor } = burgerConstructorSlice.actions;
-
-
-// const removeElementById = (array: BurgerIngredient[], id: string) => {
-//   const idx = array.findIndex((element: BurgerIngredient) => element._id === id);
-//   if (idx !== -1) {
-//     return [...array.slice(0, idx), ...array.slice(idx + 1)];
-//   }
-//   return array;
-// }

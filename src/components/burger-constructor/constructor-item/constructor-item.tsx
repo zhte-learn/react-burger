@@ -4,13 +4,13 @@ import type { Identifier, XYCoord } from 'dnd-core'
 
 import itemStyles from './constructor-item.module.css';
 import PriceBlock from '../../price-block/price-block';
-import { BurgerIngredient } from '../../../utils/custom-types';
+import { TBurgerIngredient } from '../../../utils/custom-types';
 import { LockIcon, DeleteIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppDispatch } from '../../../services/hooks';
 import { removeIngredient } from '../../../services/burger-constructor/reducer';
 
 type ConstructorItemProps = {
-  item: BurgerIngredient;
+  item: TBurgerIngredient;
   position: string;
   index: number;
   isHover: boolean;
@@ -113,7 +113,7 @@ const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props,
       }
       
       <div ref={ref} className={`${itemStyles.container} ${shapeStyle} ${onHoverStyle} pr-8 pl-6 ml-1`}>
-        <div className={`${itemStyles.details} pt-4 pb-4 pr-8`}>
+        <div className={`${itemStyles.details} pt-4 pb-4`}>
           <img 
             className={`${itemStyles.image}`} 
             src={props.item.image_mobile} 
