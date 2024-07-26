@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction, SerializedError } from "@reduxjs/toolkit";
-import { placeOrder } from './actions';
+import { placeOrder, getOrderByNumber } from './actions';
+import { TOrder } from "../../utils/custom-types";
 
 type TOrderState = {
   orderNumber: string;
   orderName: string;
   orderStatus: string;
   orderError: any;
+  currentOrder: TOrder | null;
 }
 
 const initialState: TOrderState = {
@@ -13,6 +15,7 @@ const initialState: TOrderState = {
   orderName: "",
   orderStatus: "idle",
   orderError: null,
+  currentOrder: null,
 }
 
 export const orderSlice = createSlice({
@@ -32,6 +35,19 @@ export const orderSlice = createSlice({
         state.orderError = null;
       })
       .addCase(placeOrder.rejected, (state: TOrderState, action) => {
+        state.orderStatus = "failed";
+        state.orderError = action.error as SerializedError;
+      })
+      .addCase(getOrderByNumber.fulfilled, (state: TOrderState, action: PayloadAction<{orders: TOrder[]}>) => {
+        state.orderStatus = "success";
+        state.currentOrder = action.payload.orders[0];
+      })
+      .addCase(getOrderByNumber.pending, (state: TOrderState) => {
+        state.orderStatus = "loading";
+        state.orderError = null;
+      })
+      .addCase(getOrderByNumber.rejected, (state: TOrderState, action) => {
+        console.log(state.orderError);
         state.orderStatus = "failed";
         state.orderError = action.error as SerializedError;
       })

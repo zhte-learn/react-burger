@@ -1,53 +1,44 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './order-details.module.css';
 import IngredientIcon from '../ingredient-icon/ingredient-icon';
 import PriceBlock from '../price-block/price-block';
 import { FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useAppSelector } from '../../services/hooks';
-import { countIngredients, countTotalPrice, getOrderByNumber, getDays } from '../../utils/handlers';
-import { TOrder } from '../../utils/custom-types';
-
-import { api } from '../../utils/api';
+import { useAppSelector, useAppDispatch} from '../../services/hooks';
+import { getOrderByNumber } from '../../services/order/actions';
+import { countIngredients, countTotalPrice, getOrderByNumber as getOrder, getDays } from '../../utils/handlers';
 import Loader from '../loader/loader';
 
 const OrderDetails = (): JSX.Element => {
   const { ingredientsMap } = useAppSelector(state => state.ingredients);
   const { number } = useParams<"number">();
-  const feed = useAppSelector(state => state.feed);
-  const orders = feed.orders;
+  const dispatch = useAppDispatch();
+  
+  const order = useAppSelector(state => {
+    let orders = state.feed.orders;
+    let currentOrder = getOrder(orders, number!);
+    if(currentOrder) {
+      return currentOrder;
+    }
 
-  const [ isLoading, setIsLoading ] = useState<boolean>(true);
-  const [ order, setOrder ] = useState<TOrder | null>(null);
-  const [ isOrder, setIsOrder ] = useState<boolean>(true);
+    orders = state.feedProfile.orders;
+    currentOrder = getOrder(orders, number!);
+    if(currentOrder) {
+      return currentOrder;
+    }
 
-  const fetchOrder = async () => {
-    return await api.getOrder(number!);
-  };
+    return state.order.currentOrder;
+  })
 
   useEffect(() => {
-    const orderInFeed = getOrderByNumber(orders, number!);
-    if(orderInFeed) {
-      setOrder(orderInFeed);
-      setIsLoading(false);
-    } else {
-      fetchOrder()
-        .then(res => {
-          if(res.orders.length > 0) {
-            setOrder(res.orders[0]);
-            setIsLoading(false);
-          } else {
-            setIsOrder(false);
-            setIsLoading(false);
-          }
-        })
-        .catch(err => console.log(err));
+    if(!order) {
+      dispatch(getOrderByNumber(number!.toString()));
     }
   }, []);
 
   return (
     <>
-      {isLoading && <Loader />}
+      {(!order && order != undefined) && <Loader />}
 
       {order && (
         <div className={styles.container}>
@@ -87,9 +78,8 @@ const OrderDetails = (): JSX.Element => {
           </div>
         </div>
       )}
-      {(!isOrder) && (
-        <p className="text text_type_main-medium mt-6">Sorry, order #{number} doesn't exist</p>
-      )}
+      
+      {order === undefined && <p className="text text_type_main-medium mt-6">Sorry, order #{number} doesn't exist</p>}
     </>
   )
 }

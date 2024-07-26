@@ -11,24 +11,19 @@ const OrdersList = ({ page }: TOrderListProps): JSX.Element => {
   const { ingredientsMap } = useAppSelector(state => state.ingredients);
   const feed = useAppSelector(state => (page === 'feed' ? state.feed : state.feedProfile));
   const orders = feed.orders;
-  console.log(feed);
 
   function isOrderValid(order: TOrder) {
-    console.log("before " + order.number);
     //check invalid options in a list of ingredients
     const isNullOrEmpty = order.ingredients.some(el => (el === null || el === ''));
     if(isNullOrEmpty) {
-      console.log("isNullOrEmpty " + order.number);
       return false;
     }
 
     if(!order.number || !order.createdAt || !order.status) {
-      console.log("!order.number || !order.createdAt || !order.status " + order.number);
       return false;
     }
 
     if(order.ingredients.length < 3) {
-      console.log("order.ingredients.length < 3 " + order.number);
       return false;
     }
 
@@ -36,14 +31,11 @@ const OrdersList = ({ page }: TOrderListProps): JSX.Element => {
     const firstIngredient = order.ingredients[0];
     const lastIngredient = order.ingredients[order.ingredients.length - 1];
     if(ingredientsMap[firstIngredient].type != 'bun' || ingredientsMap[lastIngredient].type != 'bun') {
-      console.log("ingredientsMap[firstIngredient].type != 'bun' " + order.number);
       return false;
     }
     if(ingredientsMap[firstIngredient].name != ingredientsMap[lastIngredient].name) {
-      console.log("ingredientsMap[firstIngredient].name != ingredientsMap[lastIngredient].name " + order.number);
       return false;
     }
-    console.log("after " + order.number);
     return true;
   }
 
