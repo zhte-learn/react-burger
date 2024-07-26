@@ -13,11 +13,14 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { addBun, addIngredient, moveIngredient, resetConstructor } from '../../services/burger-constructor/reducer';
-import { getOrderDetails, resetOrder } from '../../services/order/actions';
+import { placeOrder, resetOrder } from '../../services/order/actions';
 import { TBurgerIngredient } from '../../utils/custom-types';
 
 const BurgerConstructor = (): JSX.Element => {
   const { bun, fillings } = useAppSelector(state => state.burgerConstructor);
+  console.log(bun)
+  console.log(fillings)
+
   const { orderStatus, orderError } = useAppSelector(state => state.order);
   
   const dispatch = useAppDispatch();
@@ -51,21 +54,25 @@ const BurgerConstructor = (): JSX.Element => {
     return ingredientsList.map(item => item._id);
   }
 
-  const makeOrder: () => void = useCallback(() => {
+  function makeOrder(token: string) {
     const ingredientsList: TBurgerIngredient[] = []; // = [bun].concat(fillings);
     if(bun && fillings.length > 0) {
       ingredientsList.push(bun);
-      ingredientsList.concat(fillings);
+      fillings.forEach(el => {
+        ingredientsList.push(el);
+      })
+      ingredientsList.push(bun);
       const ingredientsIds: string[] = (getIngredientsIds(ingredientsList));
-      dispatch(getOrderDetails(ingredientsIds.concat(bun._id)));
+      dispatch(placeOrder({ ingredients: ingredientsIds, token: token}));
     }
-  }, [bun, fillings]);
+  };
 
   function handleMakeOrder(): void {
-    if(!localStorage.getItem("accessToken")) {
+    const token = localStorage.getItem("accessToken");
+    if(!token) {
       navigate('/login', { replace: true, state: { from: location } });
     } else {
-      makeOrder();
+      makeOrder(token);
       setIsModalOpen(true);
     }
   };

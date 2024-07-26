@@ -22,6 +22,10 @@ export const socketMiddleware = (
 ): Middleware<{}, RootState> => {
   return ({dispatch}) => {
     let socket: WebSocket | null;
+    let isConnected = false;
+    let reconnectTimer = 0;
+    let url = '';
+
     const {
       connect,
       disconnect,
@@ -32,18 +36,24 @@ export const socketMiddleware = (
       onError
     } = wsActions;
 
-    // const dispatch = useAppDispatch();
-
-    let isConnected = false;
-    let reconnectTimer = 0;
-    let url = '';
-
     return next => action => {
+      
       if(connect.match(action)) {
-        socket = new WebSocket(action.payload);
         url = action.payload;
         isConnected = true;
+        const token = localStorage.getItem("accessToken");
 
+        if(withTokenRefresh && token) {
+          //const accessToken = token.split('Bearer')[1].trim();
+          //socket = new WebSocket(`${action.payload}?token=${token}`);
+          //socket = new WebSocket(url, ["access_token", token]);
+          const urlWithToken = new URL(url);
+          urlWithToken.searchParams.set("token", token.replace("Bearer ", ""));
+          socket = new WebSocket(urlWithToken);
+        } else {
+          socket = new WebSocket(url);
+        }
+        
         socket.onopen = () => {
           dispatch(onOpen());
         }

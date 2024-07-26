@@ -10,13 +10,13 @@ const LIMIT = 6;
 
 type TOrderCardProps = {
   orderNumber: string;
+  page: string;
 }
 
-const OrderCard = ({ orderNumber }: TOrderCardProps): JSX.Element => {
+const OrderCard = ({ orderNumber, page }: TOrderCardProps): JSX.Element => {
   const location = useLocation();
-
   const { ingredientsMap } = useAppSelector(state => state.ingredients);
-  const feed = useAppSelector(state => state.feed);
+  const feed = useAppSelector(state => (page === 'feed' ? state.feed : state.feedProfile));
   const orders = feed.orders; 
   const order = getOrderByNumber(orders, orderNumber);
   let capacity = LIMIT + 1;

@@ -1,11 +1,5 @@
 import styles from './ingredient-icon.module.css';
-//import { BurgerIngredient } from '../../utils/custom-types';
 import { useAppSelector } from '../../services/hooks';
-
-// function getImageUrl(id: string, ingredients: BurgerIngredient[]): string {
-//   const ingredient = ingredients.find(elem => elem._id === id);
-//   return ingredient ? ingredient.image_mobile : "";
-// }
 
 type TIngredientIconProps = {
   id: string;
@@ -21,11 +15,10 @@ const IngredientIcon = ({ id, isLast, hiddenNumber }: TIngredientIconProps): JSX
       <div className={styles.imageBorder}>
         <img 
           className={styles.image} 
-          //src={getImageUrl(id, ingredients)} 
           src={ingredientsMap[id].image_mobile}
-          style={{...(isLast && {opacity: 0.6})}}
+          style={{...(isLast && (hiddenNumber! > 0) && {opacity: 0.6})}}
         />
-        {isLast && (
+        {(isLast && (hiddenNumber! > 0)) && (
           <p className={`${styles.adds} text text_type_digits-default`}>{`+${hiddenNumber}`}</p>
         )}
       </div>

@@ -2,8 +2,10 @@ import { configureStore, ThunkDispatch } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { rootReducer } from './reducers';
 import { socketMiddleware } from './middleware/socket-middleware';
-import { wsOpen, wsClose, wsError, wsMessage, TWsInternalActions } from './feed/reducer';
 import { wsConnect, wsDisconnect, TWsExternalActions } from './feed/actions';
+import { wsOpen, wsClose, wsError, wsMessage, TWsInternalActions } from './feed/reducer';
+import { wsConnectAuth, wsDisconnectAuth } from './feed-profile/actions';
+import { wsOpenAuth, wsCloseAuth, wsErrorAuth, wsMessageAuth } from './feed-profile/reducer';
 
 const feedMiddleware = socketMiddleware({
   connect: wsConnect,
@@ -15,12 +17,12 @@ const feedMiddleware = socketMiddleware({
 });
 
 const feedProfileMiddleWare = socketMiddleware({
-  connect: wsConnect,
-  disconnect: wsDisconnect,
-  onOpen: wsOpen,
-  onClose: wsClose,
-  onError: wsError,
-  onMessage: wsMessage,
+  connect: wsConnectAuth,
+  disconnect: wsDisconnectAuth,
+  onOpen: wsOpenAuth,
+  onClose: wsCloseAuth,
+  onError: wsErrorAuth,
+  onMessage: wsMessageAuth,
 }, true);
 
 export const store = configureStore({

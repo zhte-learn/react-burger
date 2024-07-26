@@ -2,10 +2,15 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../utils/api';
 import { TConfirmOrderResponse } from '../../utils/custom-types';
 
-export const getOrderDetails = createAsyncThunk<TConfirmOrderResponse, string[]>(
-  "order/getOrderDetails",
-  async(ingredientsIds: string[]) => {
-    return await api.makeOrder(ingredientsIds);
+type TPlaceOrderRequest = {
+  ingredients: string[],
+  token: string,
+}
+
+export const placeOrder = createAsyncThunk<TConfirmOrderResponse, TPlaceOrderRequest>(
+  "order/placeOrder",
+  async({ ingredients, token }) => {
+    return await api.makeOrder(ingredients, token);
   }
 );
 

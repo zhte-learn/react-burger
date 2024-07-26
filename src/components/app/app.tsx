@@ -50,10 +50,11 @@ const App = (): JSX.Element => {
     if(user && !isSocket) {
       dispatch(wsConnectAuth(FEED_PROFILE_SERVER_URL));
       setIsSocket(true);
-    } else if(!user && isSocket) {
-      dispatch(wsDisconnectAuth());
-      setIsSocket(false);
-    }
+    } 
+    // else if(!user && isSocket) {
+    //   dispatch(wsDisconnectAuth());
+    //   setIsSocket(false);
+    // }
   }, [user]);
 
   function handleCloseModal(): void {

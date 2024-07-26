@@ -59,11 +59,16 @@ const fetchWithRefresh = <T>(endpoint: string, options: RequestInit): Promise<T>
     });
 }
 
-const makeOrder = (data: string[]): Promise<TConfirmOrderResponse> => {
+const makeOrder = (data: string[], token: string): Promise<TConfirmOrderResponse> => {
   return request<TConfirmOrderResponse>('orders', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ingredients: data}),
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      ingredients: data,
+    }),
   })
 }
 
