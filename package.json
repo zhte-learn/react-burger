@@ -45,6 +45,8 @@
   },
   "devDependencies": {
     "@types/uuid": "^9.0.8",
-    "globals": "^15.3.0"
+    "fetch-mock": "^10.1.1",
+    "globals": "^15.3.0",
+    "redux-mock-store": "^1.5.4"
   }
 }
