@@ -192,6 +192,7 @@ const BurgerConstructor = (): JSX.Element => {
           htmlType="button" type="primary" size="large"
           disabled={isDisabled}
           onClick={handleMakeOrder}
+          extraClass={"button-confirm"}
         >
           Оформить заказ
         </Button>

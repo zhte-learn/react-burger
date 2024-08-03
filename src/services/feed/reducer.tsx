@@ -9,7 +9,7 @@ export type TFeedState = {
   connectionError: string | null,
 }
 
-const initialState: TFeedState = {
+export const initialState: TFeedState = {
   status: "connecting",
   orders: [],
   total: "",

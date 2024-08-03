@@ -9,14 +9,14 @@ type TIngredientsState = {
   ingredientsMap: {[id: string]: TBurgerIngredient};
 }
 
-const initialState: TIngredientsState = {
+export const initialState: TIngredientsState = {
   ingredients: [],
   status: 'idle',
   error: null,
   ingredientsMap: {},
 };
 
-function createMap(ingredients: TBurgerIngredient[]) {
+export function createMap(ingredients: TBurgerIngredient[]) {
   const dict: {[id: string]: TBurgerIngredient} = {};
   ingredients.forEach(item => {
     dict[item._id] = item;

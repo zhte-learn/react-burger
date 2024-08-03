@@ -55,6 +55,7 @@ const IngredientItem = ({ ingredient }: IngredientItemProps): JSX.Element => {
         ref={dragRef}
         className={`${itemStyles.item} mb-8`}
         style={{opacity}}
+        data-testid={`ingredient-item-${ingredientId}`}
       >
 
         <img src={ingredient.image} alt={ingredient.name} />

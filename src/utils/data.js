@@ -7,7 +7,7 @@ export const orders = [
    {orderId: "034540", burgerName: "Black Hole Singularity острый бургер", status: "done", ingredientIds: ["643d69a5c3f7b9001cfa093c", "643d69a5c3f7b9001cfa0941", "643d69a5c3f7b9001cfa093e"], price: 2370},
 ];
 
-export const data = [
+export const ingredients = [
   {
      "_id":"60666c42cc7b410027a1a9b1",
      "name":"Краторная булка N-200i",
