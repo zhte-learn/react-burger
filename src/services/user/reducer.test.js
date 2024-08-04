@@ -1,5 +1,12 @@
 import { initialState, userSlice, setAuthChecked, setUser, clearStatus } from "./reducer";
-import { register, login, logout, updateUserDetails, checkUserAuth } from "./actions";
+import { register, 
+        login, 
+        logout, 
+        updateUserDetails, 
+        checkUserAuth, 
+        forgotPassword,
+        resetPassword,
+      } from "./actions";
 
 const mockUser = {
   name: "Tom",
@@ -119,6 +126,48 @@ describe("user reducer", () => {
 
   test("update user detail failed", () => {
     const action = { type: updateUserDetails.rejected.type, error: { message: "Test" } };
+    const state = userSlice.reducer(initialState, action);
+    expect(state).toEqual({...initialState, status: "failed", error: { message: "Test" }});
+  })
+
+  test("checking if user is signed in failed", () => {
+    const action = { type: checkUserAuth.rejected.type, error: { message: "Test" } };
+    const state = userSlice.reducer(initialState, action);
+    expect(state).toEqual({...initialState, status: "failed", error: { message: "Test" }});
+  })
+
+  test("forgot password procedure fulfilled", () => {
+    const action = { type: forgotPassword.fulfilled.type };
+    const state = userSlice.reducer(initialState, action);
+    expect(state).toEqual({...initialState, status: "success"});
+  })
+
+  test("forgot password procedure pending", () => {
+    const action = { type: forgotPassword.pending.type };
+    const state = userSlice.reducer(initialState, action);
+    expect(state).toEqual({...initialState, status: "loading"});
+  })
+
+  test("forgot password procedure failed", () => {
+    const action = { type: forgotPassword.rejected.type, error: { message: "Test" } };
+    const state = userSlice.reducer(initialState, action);
+    expect(state).toEqual({...initialState, status: "failed", error: { message: "Test" }});
+  })
+
+  test("reset password procedure fulfilled", () => {
+    const action = { type: resetPassword.fulfilled.type };
+    const state = userSlice.reducer(initialState, action);
+    expect(state).toEqual({...initialState, status: "success"});
+  })
+
+  test("reset password procedure pending", () => {
+    const action = { type: resetPassword.pending.type };
+    const state = userSlice.reducer(initialState, action);
+    expect(state).toEqual({...initialState, status: "loading"});
+  })
+
+  test("reset password procedure failed", () => {
+    const action = { type: resetPassword.rejected.type, error: { message: "Test" } };
     const state = userSlice.reducer(initialState, action);
     expect(state).toEqual({...initialState, status: "failed", error: { message: "Test" }});
   })
