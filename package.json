@@ -1,6 +1,7 @@
 {
   "name": "react-burger",
   "version": "0.1.0",
+  "homepage": "https://zhte-learn.github.io/react-burger",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.5",
@@ -25,6 +26,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -48,6 +51,7 @@
     "@types/uuid": "^9.0.8",
     "cypress": "^13.13.2",
     "fetch-mock": "^10.1.1",
+    "gh-pages": "^6.1.1",
     "globals": "^15.3.0",
     "redux-mock-store": "^1.5.4"
   }
