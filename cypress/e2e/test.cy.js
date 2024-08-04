@@ -53,7 +53,7 @@ describe('Application', () => {
   });
 
   it("should create order with drag element and drop when user is logged in", () => {
-    cy.visit("http://localhost:3000/login");
+    cy.visit("http://localhost:3000/#/login");
     cy.prepareLogin("cat@mail.ru", "123");
     cy.prepareBurger3(bunId, ingredientId1, ingredientId2);
     cy.checkIngredientsAdded("Краторная булка N-200i", "Биокотлета из марсианской Магнолии", "Соус Spicy-X");

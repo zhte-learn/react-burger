@@ -29,16 +29,3 @@ export function getOrderByNumber(orders: TOrder[], orderNumer: string) {
   }
 }
 
-export function getDays(order: TOrder) {
-  const today = new Date();
-  const orderDate = new Date(order.createdAt);
-  const days = today.getDate() - orderDate.getDate();
-  return new Date(
-    orderDate.getFullYear(),
-    orderDate.getMonth(),
-    orderDate.getDate() - days,
-    orderDate.getHours(),
-    orderDate.getMinutes() - 1,
-    0,
-  )
-}
