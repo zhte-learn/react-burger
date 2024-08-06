@@ -5,7 +5,7 @@ const ingredientId2 = "643d69a5c3f7b9001cfa0942"; // "Соус Spicy-X"
 describe('Application', () => {
   beforeEach(() => {
     cy.intercept("GET", "ingredients", { fixture: "ingredients" });
-    cy.visit("http://localhost:3000/");
+    cy.visit('/');
   });
 
   it("should display the same ingredient data in the modal as the one clicked", () => {
@@ -53,7 +53,8 @@ describe('Application', () => {
   });
 
   it("should create order with drag element and drop when user is logged in", () => {
-    cy.visit("http://localhost:3000/#/login");
+    //cy.visit("http://localhost:3000/#/login");
+    cy.visit('login');
     cy.prepareLogin("cat@mail.ru", "123");
     cy.prepareBurger3(bunId, ingredientId1, ingredientId2);
     cy.checkIngredientsAdded("Краторная булка N-200i", "Биокотлета из марсианской Магнолии", "Соус Spicy-X");
