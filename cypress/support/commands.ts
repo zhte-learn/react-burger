@@ -34,6 +34,14 @@ declare namespace Cypress {
   interface Chainable<Subject> {
     checkCounterValue(ingredientName: string, counterValue: string): Chainable<any>;
   }
+
+  interface Chainable<Subject> {
+    checkModalIsVisible(className: string): Chainable<any>;
+  }
+
+  interface Chainable<Subject> {
+    checkModalIsNotExist(className: string): Chainable<any>;
+  }
 };
 
 // -- This is a parent command --
@@ -86,6 +94,14 @@ Cypress.Commands.add('checkCounterValue', (ingredientName: string, counterValue:
     .closest('[class^="ingredient-item_item"]')
     .find('.counter')
     .should("have.text", counterValue);
+});
+
+Cypress.Commands.add('checkModalIsVisible', (modalClass: string) => { 
+  cy.get(modalClass).should("be.visible");
+});
+
+Cypress.Commands.add('checkModalIsNotExist', (modalClass: string) => { 
+  cy.get(modalClass).should('not.exist');
 });
 
 //
