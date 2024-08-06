@@ -10,7 +10,7 @@ type TOrderState = {
   currentOrder: TOrder | null;
 }
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   orderNumber: "",
   orderName: "",
   orderStatus: "idle",

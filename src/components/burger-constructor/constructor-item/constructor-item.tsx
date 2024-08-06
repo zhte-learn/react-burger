@@ -47,6 +47,8 @@ const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props,
   const onHoverStyle: string = (props.isHover) ? itemStyles.onHover : '';
   const extraClass: string = (props.position === 'top' || props.position === 'bottom') ? 'mr-4' : '';
 
+  const testDataAttribute: string = props.item.type === 'bun' ? 'drop-zone-bun' : 'drop-zone-fillings';
+
   function handleDelete(): void {
     const uniqueId = props.item.uniqueId || "";
     dispatch(removeIngredient(uniqueId));
@@ -107,7 +109,13 @@ const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props,
   drag(drop(sortRef));
 
   return(
-    <li ref={sortRef} style={{opacity}} data-handler-id={handlerId} className={`${itemStyles.item} ${extraClass} ${itemHoverClass}`}>
+    <li 
+      ref={sortRef} 
+      style={{opacity}} 
+      data-handler-id={handlerId} 
+      className={`${itemStyles.item} ${extraClass} ${itemHoverClass}`}
+      data-testid={testDataAttribute}
+    >
       {
         props.position === 'middle' && <DragIcon type="primary" />
       }
@@ -124,11 +132,13 @@ const ConstructorItem = forwardRef<HTMLDivElement, ConstructorItemProps>((props,
 
         <div className={itemStyles.controls}>
           <PriceBlock size={'small'} price={props.item.price}/>
-          { 
-            props.position === 'middle'
-            ? <DeleteIcon type="primary" onClick={handleDelete}/>
-            : <LockIcon type="secondary" />
-          }
+          <div className='delete-lock-item'>
+            { 
+              props.position === 'middle'
+              ? <DeleteIcon type="primary" onClick={handleDelete}/>
+              : <LockIcon type="secondary" />
+            }
+          </div>
         </div>
       </div>
     </li>

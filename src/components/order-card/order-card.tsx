@@ -4,7 +4,7 @@ import PriceBlock from '../price-block/price-block';
 import IngredientIcon from '../ingredient-icon/ingredient-icon';
 import styles from './order-card.module.css';
 import { FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
-import { countIngredients, countTotalPrice, getOrderByNumber, getDays } from '../../utils/handlers';
+import { countIngredients, countTotalPrice, getOrderByNumber } from '../../utils/handlers';
 
 const LIMIT = 6;
 
@@ -21,6 +21,14 @@ const OrderCard = ({ orderNumber, page }: TOrderCardProps): JSX.Element => {
   const order = getOrderByNumber(orders, orderNumber);
   let capacity = LIMIT + 1;
 
+  const today: Date = new Date();
+  const orderDate: Date = new Date(order!.createdAt);
+
+  function getDifferenceInDays(): number {
+    const differenceInMilliseconds: number = today.getTime() - orderDate.getTime();
+    return Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+  }
+
   return (
     <>
     {order &&
@@ -31,10 +39,49 @@ const OrderCard = ({ orderNumber, page }: TOrderCardProps): JSX.Element => {
       >
         <div className={styles.orderData}>
           <p className='orderNumber text text_type_digits-default'>{`#${orderNumber}`}</p>
-          <FormattedDate
-            className='text text_type_main-small text_color_inactive'
-            date={getDays(order)}
-          />
+          
+          {getDifferenceInDays() == 0 &&
+            <FormattedDate
+              date={
+                new Date(
+                  today.getFullYear(),
+                  today.getMonth(),
+                  today.getDate(),
+                  today.getHours(),
+                  today.getMinutes() - 1,
+                  0,
+                )
+              }
+            />
+          }
+          {getDifferenceInDays() == 1 &&
+            <FormattedDate
+              date={
+                new Date(
+                  today.getFullYear(),
+                  today.getMonth(),
+                  today.getDate() - 1,
+                  today.getHours(),
+                  today.getMinutes() - 1,
+                  0,
+                )
+              }
+            />
+          }
+          {getDifferenceInDays() > 1 &&
+            <FormattedDate
+              date={
+                new Date(
+                  today.getFullYear(),
+                  today.getMonth(),
+                  today.getDate() - getDifferenceInDays(),
+                  today.getHours(),
+                  today.getMinutes() - 1,
+                  0,
+                )
+              }
+            />
+          }
         </div>
 
         <h3 className='text text_type_main-medium mt-6'>{order.name}</h3>

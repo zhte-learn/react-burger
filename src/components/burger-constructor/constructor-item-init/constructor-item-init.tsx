@@ -14,9 +14,17 @@ const ConstructorItemInit = forwardRef<HTMLDivElement, ConstructorItemInitProps>
                           : styles.middle;
   
   const onHoverStyle: string = (props.isHover) ? styles.onHover : '';
+
+  const testDataAttribute: string = (props.position === 'middle') 
+                                    ? 'drop-zone-fillings'
+                                    : 'drop-zone-bun'
   
   return (
-    <div ref={ref} className={`${styles.container} ${shapeStyle} ${onHoverStyle} pr-8 pl-6 mr-4 `}>
+    <div 
+      ref={ref}
+      data-testid={testDataAttribute} 
+      className={`${styles.container} ${shapeStyle} ${onHoverStyle} pr-8 pl-6 mr-4 `}
+    >
       <p className={`${styles.text} text text_type_main-small pt-6 pb-6`}>
         {props.text}
       </p>

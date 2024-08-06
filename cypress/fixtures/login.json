@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "accessToken": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NzJjYThlODU2Nzc3MDAxYmIxYzE3NSIsImlhdCI6MTcyMjYxNjEyOCwiZXhwIjoxNzIyNjE3MzI4fQ.gyfHo_LgPTtFnycLRSvWTE0KmkrFhs7o5qeBinEhsL0",
+  "refreshToken": "ca9216bfd2fe66abb2bf98cbdccd6fbc94a89706ac678f1ff67fec0ea160e5305654d06668525ab1",
+  "user": {
+      "email": "cat@inbox.ru",
+      "name": "cat"
+  }
+}
+

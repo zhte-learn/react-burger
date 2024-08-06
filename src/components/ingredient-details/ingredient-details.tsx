@@ -18,7 +18,7 @@ const IngredientDetails = (): JSX.Element => {
         alt={ingredient.name} 
       />
 
-      <h3 className={`${styles.title} text text_type_main-medium`}>
+      <h3 className={`${styles.title} test-title text text_type_main-medium`}>
         {ingredient.name}
       </h3>
 

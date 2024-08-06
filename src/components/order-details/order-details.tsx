@@ -6,7 +6,7 @@ import PriceBlock from '../price-block/price-block';
 import { FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppSelector, useAppDispatch} from '../../services/hooks';
 import { getOrderByNumber } from '../../services/order/actions';
-import { countIngredients, countTotalPrice, getOrderByNumber as getOrder, getDays } from '../../utils/handlers';
+import { countIngredients, countTotalPrice, getOrderByNumber as getOrder } from '../../utils/handlers';
 import Loader from '../loader/loader';
 
 const OrderDetails = (): JSX.Element => {
@@ -29,6 +29,14 @@ const OrderDetails = (): JSX.Element => {
 
     return state.order.currentOrder;
   })
+
+  const today: Date = new Date();
+  const orderDate: Date = new Date(order!.createdAt);
+
+  function getDifferenceInDays(): number {
+    const differenceInMilliseconds: number = today.getTime() - orderDate.getTime();
+    return Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+  }
 
   useEffect(() => {
     if(!order) {
@@ -67,10 +75,48 @@ const OrderDetails = (): JSX.Element => {
           </ul>
 
           <div className={`${styles.finalDetails} mt-10`}>
-            <FormattedDate
-              className='text text_type_main-small text_color_inactive'
-              date={getDays(order)}
-            />
+            {getDifferenceInDays() == 0 &&
+              <FormattedDate
+                date={
+                  new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    today.getDate(),
+                    today.getHours(),
+                    today.getMinutes() - 1,
+                    0,
+                  )
+                }
+              />
+            }
+            {getDifferenceInDays() == 1 &&
+              <FormattedDate
+                date={
+                  new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    today.getDate() - 1,
+                    today.getHours(),
+                    today.getMinutes() - 1,
+                    0,
+                  )
+                }
+              />
+            }
+            {getDifferenceInDays() > 1 &&
+              <FormattedDate
+                date={
+                  new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    today.getDate() - getDifferenceInDays(),
+                    today.getHours(),
+                    today.getMinutes() - 1,
+                    0,
+                  )
+                }
+              />
+            }
             <PriceBlock 
               price={countTotalPrice(countIngredients(order.ingredients), ingredientsMap)} 
               size={'small'}
