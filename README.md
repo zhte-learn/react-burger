@@ -1,5 +1,4 @@
-# Study project by Yandex.Practicum
-# React SPA with Redux, TypeScript, WebSocket
+# Study project by Yandex.Practicum: React SPA with Redux, TypeScript, WebSocket
 
 This project is a Single Page Application (SPA) built using React and Redux for state management, React Router for routing, and WebSocket for real-time communication.
 The application also uses TypeScript for type safety and includes testing with Cypress and Jest to ensure the functionality and reliability of the codebase.
