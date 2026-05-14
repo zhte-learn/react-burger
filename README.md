@@ -3,9 +3,6 @@
 This project is a Single Page Application (SPA) built using React and Redux for state management, React Router for routing, and WebSocket for real-time communication.
 The application also uses TypeScript for type safety and includes testing with Cypress and Jest to ensure the functionality and reliability of the codebase.
 
-**The app is available**
-https://zhte-learn.github.io/react-burger/
-
 ## Features
 Dynamic Routing with React Router
 State Management with Redux
